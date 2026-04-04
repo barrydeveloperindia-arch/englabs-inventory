@@ -1,0 +1,8 @@
+Name,Role,Pin,ContractType,NINumber,TaxCode,HourlyRate,EmergencyContact,Phone
+Gaurav Panchal,Manager,1000,Full-time,AB123456C,1257L,15.5,Jane Doe: 07700900000,7700123456
+Salil Anand,Cashier,1001,Part-time,CD123456D,1257L,16.5,Bob Smith: 07700900001,7700123456
+Bharat Anand,Stock Staff,1002,Zero-hour,EF123456E,1257L,17.5,Charlie: 07700900002,7700123456
+Parth,Stock Staff,1003,Full-time,AB123456F,1257L,18.5,Jane Doe: 07700900000,7700123456
+Paras,Stock Staff,1004,Full-time,CD123456G,1257L,19.5,Bob Smith: 07700900001,7700123456
+Nisha,Stock Staff,1005,Full-time,EF123456H,1257L,20.5,Charlie: 07700900002,7700123456
+Narayan,Stock Staff,1006,Full-time,AB123456I,1257L,21.5,Jane Doe: 07700900000,7700123456

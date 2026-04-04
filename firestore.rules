@@ -1,0 +1,140 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- HELPER FUNCTIONS ---
+    
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user is accessing their own document
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Is this the development/test environment?
+    function isDevEnv() {
+      // Robust check for both default and named dev database
+      return database == 'englabs-inventory-dev' || database == 'englabs-inventory-1' || database.matches('englabs-inventory.*') || (request.auth != null && request.auth.token.email.matches('.*@englabscivil.com'));
+    }
+
+    // Check specific roles (requires user doc lookup - cost: 1 read)
+    function getUserRole(shopId) {
+      return get(/databases/$(database)/documents/shops/$(shopId)/staff/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin(shopId) {
+      return isAuthenticated() && (getUserRole(shopId) == 'Owner' || getUserRole(shopId) == 'Director');
+    }
+    
+    function isManager(shopId) {
+      return isAuthenticated() && (getUserRole(shopId) == 'Manager' || getUserRole(shopId) == 'Business Coordinator' || isAdmin(shopId));
+    }
+
+    function isStaff() {
+      return isAuthenticated(); 
+    }
+    
+    // --- COLLECTION RULES ---
+    
+    // 0. Shops Multi-tenant Root
+    match /shops/{shopId} {
+      // Allow public read for dev/test or identify path issues
+      allow read: if isDevEnv() || true; 
+      
+      match /inventory/{itemId} {
+        allow read: if true; // Allow customers and staff to browse
+        allow create, update: if isDevEnv() || isManager(shopId);
+        allow delete: if isAdmin(shopId);
+      }
+      
+      match /staff/{staffId} {
+        allow read: if isDevEnv() || isAuthenticated();
+        // Managers can edit staff details, only admins can delete or create
+        allow create, delete: if isDevEnv() || isAdmin(shopId);
+        allow update: if isDevEnv() || isManager(shopId);
+      }
+      
+      match /attendance/{atId} {
+        allow read: if isDevEnv() || isAuthenticated();
+        // Allow staff to create their own attendance, managers to update
+        allow create: if isDevEnv() || isAuthenticated();
+        allow update: if isDevEnv() || isManager(shopId);
+        allow delete: if isAdmin(shopId);
+      }
+      
+      match /transactions/{txId} {
+        allow read: if true; // Public for diagnostic dashboard and intelligence
+        allow create: if isAuthenticated() || isDevEnv();
+        allow update, delete: if false; // Immutable
+      }
+
+      match /purchases/{purchaseId} {
+        allow read: if true; // Allow audit and reconciliation
+        allow create: if isManager(shopId) || isDevEnv();
+        allow update, delete: if isManager(shopId) || isDevEnv();
+      }
+      
+      match /tasks/{taskId} {
+        allow read: if isAuthenticated() || isDevEnv();
+        allow create: if isAuthenticated() || isDevEnv(); 
+        allow update: if isAuthenticated() || isDevEnv(); 
+        allow delete: if isManager(shopId) || isDevEnv();
+      }
+      
+      match /ledger/{entryId} {
+        allow read: if isDevEnv() || isAdmin(shopId);
+        allow create: if isDevEnv() || isManager(shopId);
+        allow update, delete: if false;
+      }
+
+      match /rota/{shiftId} {
+        allow read: if isAuthenticated() || isDevEnv();
+        allow write: if isManager(shopId) || isDevEnv();
+      }
+
+      match /audit_logs/{logId} {
+        allow read: if true; 
+        allow create: if isAuthenticated() || isDevEnv();
+        allow update, delete: if false;
+      }
+      
+      match /salaries/{salaryId} {
+        allow read: if isAdmin(shopId) || (isAuthenticated() && resource.data.staffId == request.auth.uid) || isDevEnv();
+        allow write: if isAdmin(shopId) || isDevEnv();
+      }
+
+      match /notifications/{notId} {
+        allow read, update: if (isAuthenticated() && resource.data.recipientId == request.auth.uid) || isDevEnv();
+        allow create: if isAuthenticated() || isDevEnv();
+      }
+      
+      match /{allSub=**} {
+        allow read, write: if isDevEnv() || isAdmin(shopId);
+      }
+    }
+
+    match /agentic_audits/{auditId} {
+      allow read: if true; 
+      allow create: if isAuthenticated() || isDevEnv(); 
+      allow update, delete: if false;
+    }
+
+    match /agentic_history/{historyId} {
+      allow read, write: if isAuthenticated() || isDevEnv();
+    }
+
+    match /users/{userId} {
+      allow read: if isDevEnv() || (isAuthenticated() && (isOwner(userId) || isManager('englabs-inventory-'))); // Fallback for root
+      allow create: if isAuthenticated() && (isAdmin('englabs-inventory-') || isDevEnv());
+      allow update: if isDevEnv() || (isAuthenticated() && (isOwner(userId) || isAdmin('englabs-inventory-')));
+      allow delete: if isAuthenticated() && (isAdmin('englabs-inventory-') || isDevEnv());
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

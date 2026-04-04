@@ -1,0 +1,63 @@
+name: iOS Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_ios:
+    name: Build iOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Web Assets
+        run: npm run build
+
+      - name: Sync Capacitor
+        run: npx cap sync ios
+
+      - name: Setup CocoaPods
+        run: |
+          cd ios/App
+          pod install
+
+      - name: Build xArchive (Unsigned Verification)
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \
+            -clean archive \
+            -archivePath build/App.xcarchive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      # TO GENERATE A SIGNED IPA FOR INSTALLATION:
+      # You must set up Apple Developer Certificates.
+      # We recommend using a specific Action if you have the certificates:
+      # uses: yukiarrr/ios-build-action@v1.5.0
+      # with:
+      #   project-path: ios/App/App.xcodeproj
+      #   p12-base64: ${{ secrets.IOS_P12_BASE64 }}
+      #   mobileprovision-base64: ${{ secrets.IOS_MOBILE_PROVISION_BASE64 }}
+      #   code-signing-identity: "iPhone Distribution"
+      #   team-id: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Upload Unsigned Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-xcarchive
+          path: ios/App/build/App.xcarchive

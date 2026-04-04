@@ -1,0 +1,106 @@
+
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2025-05-20",
+    "tags": ["App_Documentation", "Staff_Master", "Attendance", "Payroll", "Face_Recognition"],
+    "system_id": "HOP-IN-MASTER-OS",
+    "compliance": "UK HMRC 2024/25"
+  },
+  "app_overview": {
+    "name": "ENGLABS INVENTORY Staff Master",
+    "mission": "Centralized workforce intelligence and payroll compliance system.",
+    "core_value": "Automate attendance-to-payroll pipeline using neural vision and HMRC-aligned logic."
+  },
+  "system_architecture": {
+    "pattern": "Centralized Repository Pattern",
+    "primary_source": "Staff_Master",
+    "interaction": "Modules (Attendance, Payroll, Registry) perform stateless reads/writes to the Staff_Master directory via a singular API abstraction layer."
+  },
+  "folder_structure": {
+    "root": "/Staff_Master",
+    "sub_directories": [
+      { "path": "/Registry", "content": "Personnel metadata, contracts, and ID documents." },
+      { "path": "/Biometrics", "content": "Neural face embeddings and verification signatures." },
+      { "path": "/Attendance", "content": "Daily activity logs (JSON format)." },
+      { "path": "/Payroll", "content": "Monthly HMRC RTI records and payslip data." },
+      { "path": "/Audit", "content": "Cryptographic logs of all personnel changes." }
+    ]
+  },
+  "modules": [
+    {
+      "name": "Attendance Engine",
+      "logic": "Asynchronous event-driven logging based on neural triggers.",
+      "inputs": ["Camera Stream", "Manual Override"],
+      "outputs": ["AttendanceRecord JSON"]
+    },
+    {
+      "name": "Neural Vision Core",
+      "logic": "Facial landmark extraction and similarity scoring (Cosine Similarity).",
+      "threshold": 0.85
+    },
+    {
+      "name": "Payroll Processor",
+      "logic": "Aggregate attendance hours -> Apply UK Tax Brackets -> Deduct NI/Pension -> Generate RTI."
+    }
+  ],
+  "attendance_flow": {
+    "hardware": "Android Front Camera",
+    "process": [
+      "Continuous frame capture (30fps).",
+      "Face detection (Boundary Box).",
+      "Embedding extraction via Neural Core.",
+      "Query Staff_Master/Biometrics for UID match.",
+      "Action Trigger: If first match of day -> Create Clock-In. If subsequent match -> Update Clock-Out."
+    ],
+    "status_definitions": {
+      "Present": "Verified check-in within 15min of shift start.",
+      "Late": "Verified check-in after 15min of shift start.",
+      "Absent": "No check-in detected by shift midpoint.",
+      "Half Day": "Check-out before 50% shift duration."
+    }
+  },
+  "financial_logic": {
+    "hours_calculation": "Total_Minutes = (Clock_Out - Clock_In). Hours = Total_Minutes / 60.",
+    "overtime_logic": "OT_Hours = Max(0, Hours - Shift_Standard). Rate = 1.5x Base_Hourly.",
+    "uk_payroll_24_25": {
+      "personal_allowance": 12570,
+      "income_tax_basic": 0.20,
+      "ni_employee_class1": 0.08,
+      "pension_ee_min": 0.05
+    }
+  },
+  "synchronization": {
+    "rule": "Local-First with Cloud Persistence.",
+    "frequency": "Real-time for attendance; Daily for registry snapshots.",
+    "conflict_resolution": "Timestamp-priority (Last Write Wins)."
+  },
+  "security_privacy": {
+    "data_masking": ["NI Number", "Bank Details"],
+    "consent": "Explicit GDPR opt-in required for biometric storage.",
+    "encryption": "AES-256 for all PII (Personally Identifiable Information)."
+  },
+  "database_schema": {
+    "staff_member": {
+      "id": "UUID",
+      "name": "String",
+      "ni_number": "String (Encrypted)",
+      "tax_code": "String",
+      "hourly_rate": "Float",
+      "biometric_id": "String (Reference)"
+    },
+    "attendance_record": {
+      "id": "UUID",
+      "staff_id": "UUID",
+      "date": "DateISO",
+      "clock_in": "TimeISO",
+      "clock_out": "TimeISO",
+      "hours": "Float"
+    }
+  },
+  "error_handling": {
+    "no_match": "Retry 3 times, then request manual PIN fallback.",
+    "camera_fail": "Trigger system alert; notify Manager; enable manual entry mode.",
+    "sync_timeout": "Queue data locally; retry on heartbeat restoration."
+  }
+}

@@ -1,0 +1,269 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ENTERPRISE SPACING SCALE (in px/rem) */
+    --space-xs: 4px;
+    /* 0.25rem */
+    --space-sm: 8px;
+    /* 0.5rem */
+    --space-md: 16px;
+    /* 1rem */
+    --space-lg: 24px;
+    /* 1.5rem */
+    --space-xl: 32px;
+    /* 2rem */
+    --space-2xl: 48px;
+    /* 3rem */
+
+    /* COLOR TOKENS - LIGHT MODE (EDS - ENGLABS Design System) */
+    --color-primary-50: 240 248 255;
+    --color-primary-100: 224 242 254;
+    --color-primary-500: 11 68 109; /* ENGLABS Navy */
+    --color-primary-600: 9 54 87;   /* Hover Dark Navy */
+    --color-primary-700: 7 40 65;   /* Active Darker Navy */
+
+    --color-success-500: 87 214 164; /* ENGLABS Mint */
+    --color-warning-500: 245 158 11; /* Amber 500 */
+    --color-error-500: 239 68 68;   /* Red 500 */
+
+    --color-neutral-50: 249 250 251; /* Gray 50 */
+    --color-neutral-100: 243 244 246; /* Gray 100 */
+    --color-neutral-200: 229 231 235; /* Gray 200 */
+    --color-neutral-500: 107 114 128; /* Gray 500 */
+    --color-neutral-900: 15 23 42;    /* Slate 900 */
+
+    /* SEMANTIC MAPPING */
+    --color-surface-void: var(--color-neutral-50);
+    --color-surface-elevated: 255 255 255;
+    --color-surface-highlight: var(--color-neutral-200);
+
+    --color-ink-base: var(--color-neutral-900);
+    --color-ink-muted: var(--color-neutral-500);
+
+    /* ACCESSIBILITY & UTILITY */
+    --focus-ring-color: rgb(var(--color-primary-500) / 0.5);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    /* DARK MODE OVERRIDES */
+    --color-surface-void: 17 24 39;
+    --color-surface-elevated: 31 41 55;
+    --color-surface-highlight: 55 65 81;
+
+    --color-ink-base: 249 250 251;
+    --color-ink-muted: 156 163 175;
+
+    --color-primary-500: 81 209 169;
+    /* Use Success (Mint) for high contrast highlights in dark mode */
+    --color-primary-600: 7 48 74;
+    /* Keep Navy for main actions */
+  }
+
+  body {
+    background-color: rgb(var(--color-surface-void));
+    color: rgb(var(--color-ink-base));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    background-color: rgb(var(--color-primary-500));
+    color: white;
+  }
+
+  /* FORCED FOCUS STATES FOR ACCESSIBILITY */
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(var(--color-surface-void)), 0 0 0 4px rgb(var(--color-primary-500));
+    transition-property: box-shadow;
+    transition-duration: 200ms;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    background-color: rgb(var(--color-primary-600));
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-primary:hover {
+    background-color: rgb(var(--color-primary-700));
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .card-enterprise {
+    background-color: rgb(var(--color-surface-elevated));
+    border: 1px solid rgb(var(--color-surface-highlight));
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-enterprise:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .input-enterprise {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background-color: rgb(var(--color-surface-elevated));
+    border: 1px solid rgb(var(--color-surface-highlight));
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    outline: none;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .input-enterprise:focus {
+    border-color: rgb(var(--color-primary-500));
+    box-shadow: 0 0 0 1px rgb(var(--color-primary-500));
+  }
+}
+
+/* Custom Scrollbar for Enterprise feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(var(--color-neutral-300));
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(var(--color-neutral-400));
+}
+
+.dark ::selection {
+  background-color: rgb(var(--color-primary-500));
+  color: white;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgb(var(--color-neutral-700));
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(var(--color-neutral-600));
+}
+
+/* --- MIGRATED FROM INDEX.HTML --- */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes scan {
+  0% { top: 0%; }
+  100% { top: 100%; }
+}
+
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: rgba(99, 102, 241, 0.8);
+  box-shadow: 0 0 15px 5px rgba(99, 102, 241, 0.5);
+  animation: scan 2s linear infinite;
+}
+
+@keyframes float-up {
+  0% { transform: translateY(20px); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-100px); opacity: 0; }
+}
+
+@keyframes text-reveal {
+  0% { letter-spacing: 1em; filter: blur(12px); opacity: 0; }
+  100% { letter-spacing: -0.05em; filter: blur(0); opacity: 1; }
+}
+
+.animate-float-up {
+  animation: float-up 3s ease-in-out infinite;
+}
+
+.animate-text-reveal {
+  animation: text-reveal 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@media print {
+  body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body > #root > div > *:not(.print-container) {
+    display: none !important;
+  }
+  .print-container {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 999999 !important;
+    background: white !important;
+  }
+  .print-section {
+    visibility: visible !important;
+    display: flex !important;
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    box-shadow: none !important;
+    border: 1px solid #eee !important;
+  }
+  .id-card-print {
+    width: 86mm !important;
+    height: 120mm !important;
+    border-radius: 5mm !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  @page {
+    margin: 0;
+    size: A4 portrait;
+  }
+}

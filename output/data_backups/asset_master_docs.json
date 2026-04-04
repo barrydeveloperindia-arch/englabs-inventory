@@ -1,0 +1,88 @@
+{
+    "metadata": {
+        "version": "1.0",
+        "last_updated": "2026-01-18",
+        "tags": [
+            "Asset_Master",
+            "Inventory",
+            "Sync",
+            "Compliance",
+            "Stock_Control"
+        ],
+        "system_id": "HOP-IN-ASSET-OS",
+        "compliance": "UK VAT 2024/25"
+    },
+    "app_overview": {
+        "name": "ENGLABS INVENTORY Asset Master",
+        "mission": "Centralized inventory authority and lifecycle management.",
+        "core_value": "Bridge physical shelf scans with digital financial records via an authorized sync pipeline."
+    },
+    "system_architecture": {
+        "pattern": "Master Registry Pattern",
+        "primary_source": "Asset_Master",
+        "interaction": "Headless scanners writes to unverified buffer; Admin verifies to Master Registry."
+    },
+    "folder_structure": {
+        "root": "/Asset_Master",
+        "sub_directories": [
+            {
+                "path": "/Registry",
+                "content": "Live authorized product definitions (JSON/Firestore)."
+            },
+            {
+                "path": "/Buffer",
+                "content": "Unverified incoming scans (CSV/Staging)."
+            },
+            {
+                "path": "/Media",
+                "content": "Product images and assets."
+            },
+            {
+                "path": "/Audit",
+                "content": "Price change logs and stock adjustments."
+            }
+        ]
+    },
+    "lifecycle_flow": {
+        "stages": [
+            {
+                "status": "UNVERIFIED",
+                "description": "Raw scan data. Not visible in sales channels."
+            },
+            {
+                "status": "LIVE",
+                "description": "Authorized by Admin. VAT and Pricing confirmed. Visible in POS."
+            },
+            {
+                "status": "FLAGGED",
+                "description": "Issues detected (Expiry risk, Price mismatch)."
+            },
+            {
+                "status": "ARCHIVED",
+                "description": "Discontinued items."
+            }
+        ],
+        "transition_rules": {
+            "authorize": "Admin must confirm Name, Category (VAT), and Price.",
+            "sync": "External updates (CSV) only update Stock/Price for LIVE items. They cannot revert Name/Category without Admin override."
+        }
+    },
+    "financial_logic": {
+        "vat_rules": {
+            "standard": 0.20,
+            "zero_rated": [
+                "Grains",
+                "Dairy",
+                "Bakery",
+                "Essentials"
+            ],
+            "exempt": 0.00
+        },
+        "margin_protection": "Alert if Selling_Price < Cost_Price * 1.2"
+    },
+    "synchronization": {
+        "protocol": "Smart Merge",
+        "conflict_resolution": "Master Registry (LIVE) data takes precedence over raw scan metadata (Name/Category). Stock levels follow latest scan.",
+        "script": "autoUpdateInventory.js"
+    }
+}

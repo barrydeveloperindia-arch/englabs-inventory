@@ -1,0 +1,53 @@
+{
+    "info": {
+        "name": "Dashboard API Validation",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get Dashboard Data",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code is 200\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "",
+                            "pm.test(\"Response time < 300ms\", function () {",
+                            "    pm.expect(pm.response.responseTime).to.be.below(300);",
+                            "});",
+                            "",
+                            "pm.test(\"Attendance field exists\", function () {",
+                            "    let json = pm.response.json();",
+                            "    pm.expect(json).to.have.property(\"attendance\");",
+                            "});",
+                            "",
+                            "pm.test(\"Values not null\", function () {",
+                            "    let json = pm.response.json();",
+                            "    pm.expect(json.attendance).to.not.eql(null);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/dashboard",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "dashboard"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}

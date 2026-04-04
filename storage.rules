@@ -1,0 +1,64 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    function isPDF() {
+      return request.resource.contentType == 'application/pdf';
+    }
+    
+    function isSmallFile() {
+      return request.resource.size < 5 * 1024 * 1024; // 5MB limit
+    }
+
+    // Prohibit overwrites to prevent data loss/tampering
+    function isNewFile() {
+      return resource == null;
+    }
+
+    // User Profile Photos
+    match /users/{userId}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() 
+                   && request.auth.uid == userId 
+                   && isImage() 
+                   && isSmallFile();
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Inventory Photos (Staff can upload)
+    match /inventory/{fileName} {
+      allow read: if isAuthenticated();
+      // Only Managers/Staff can upload - simulating robust RBAC via custom claims if available
+      // For now, allow all auth users to upload inventory photos (practicality)
+      allow write: if isAuthenticated() 
+                   && isImage() 
+                   && isSmallFile();
+    }
+    
+    // Task/Check Photos
+    match /checks/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isImage() && isSmallFile();
+    }
+    
+    // Receipt/Document Scans
+    match /receipts/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && (isImage() || isPDF()) && isSmallFile();
+    }
+
+    // Default deny
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

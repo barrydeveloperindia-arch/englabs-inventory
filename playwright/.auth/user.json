@@ -1,0 +1,18 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "theme",
+          "value": "light"
+        },
+        {
+          "name": "firebase:authUser:AIzaSyAyzMBc68JbPs7CaysjR1n7ItyYsCPSJmQ:[DEFAULT]",
+          "value": "{\"uid\":\"RByXWxKtMGcVZT13C7ojJaLyS6i2\",\"email\":\"gaurav@englabs.com\",\"emailVerified\":false,\"isAnonymous\":false,\"providerData\":[{\"providerId\":\"password\",\"uid\":\"gaurav@englabs.com\",\"displayName\":null,\"email\":\"gaurav@englabs.com\",\"phoneNumber\":null,\"photoURL\":null}],\"stsTokenManager\":{\"refreshToken\":\"AMf-vBwro9LWhyz-sW_2KCNyIz-cz7-2oV-tAT_73-27D93jISZ1Kf8vp0cRg0xkAMIIRqSh2mc7EXCGzKqn_x8fCDTXUZEYsUdhdN2Yh2JhbKsrQ8eN_4idd_JyJXg5GtH6Eb-pDstiVz-kSgExEUFnhtCtEnynUSHUef43pMekdH_8kK8ZQYGGw2rfHU4NLf17ATZ0XYoCmVnlSKAXcJb3DwF-jJgtOLtSOxU2vNXeyoWwqT8nY98\",\"accessToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6ImY1MzMwMzNhMTMzYWQyM2EyYzlhZGNmYzE4YzRlM2E3MWFmYWY2MjkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaG9wLWluLWV4cHJlc3MtYjU4ODMiLCJhdWQiOiJob3AtaW4tZXhwcmVzcy1iNTg4MyIsImF1dGhfdGltZSI6MTc3MTU3ODUyOSwidXNlcl9pZCI6IlJCeVhXeEt0TUdjVlpUMTNDN29qSmFMeVM2aTIiLCJzdWIiOiJSQnlYV3hLdE1HY1ZaVDEzQzdvakphTHlTNmkyIiwiaWF0IjoxNzcxNTc4NTI5LCJleHAiOjE3NzE1ODIxMjksImVtYWlsIjoiZ2F1cmF2QGhvcGluZXhwcmVzcy5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiZ2F1cmF2QGhvcGluZXhwcmVzcy5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.MPaSshUUKL_GrJHDngpFZ-cIFD3effA8x_Cn5M24Kz-Ep_Ta7mcr-DHTVH72nG-WF1OBRryT6kHB6txBFezxJhYlSMtPFwt05Pr9cVfD5UIJ7G5K3E-ulSemclh7_zQINXzRqrg7ksVpsYywvXkZIh_nH6o6TJn5BFHi334oKXs6yPegTotaI06QK1mUX1xYi37UJFCG81jAc4MNpiZu4LFVcJBIG-E73GIG8GRsUyzVBGNn0xvPlVLC0QRjyUzdb1JDazR3J0z6gS8BHb3MVnzUcjI49a3W2sM9wUZg1DR9R84KsHOcbr2w_k8r7bi1lXRrSlZIvwoU0y8jsQBExw\",\"expirationTime\":1771582126801},\"createdAt\":\"1769918732747\",\"lastLoginAt\":\"1771578529679\",\"apiKey\":\"AIzaSyAyzMBc68JbPs7CaysjR1n7ItyYsCPSJmQ\",\"appName\":\"[DEFAULT]\"}"
+        }
+      ]
+    }
+  ]
+}
