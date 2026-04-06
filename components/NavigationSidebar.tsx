@@ -60,47 +60,21 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
     const navGroups: NavGroup[] = [
         {
-            category: 'Inventory Engine',
+            category: 'Core System',
             items: [
-                { id: 'dashboard', label: 'Master Monitor', icon: LayoutDashboard },
-                { id: 'materials-master', label: 'Materials Master', icon: Package },
-                { id: 'inventory', label: 'Stock Console', icon: Truck },
-                { id: 'sales', label: 'Point of Sale', icon: ShoppingCart },
-                { id: 'purchases', label: 'Procurement', icon: FileText, roleLimit: ['Owner', 'Director', 'Manager'] },
-                { id: 'command-center', label: 'Shop Camera', icon: Camera, roleLimit: ['Owner', 'Director', 'Manager', 'Business Coordinator'] },
-                { id: 'tesla-mode', label: 'Tesla Mode', icon: Zap },
-                { id: 'smart-intake', label: 'AI Intake', icon: Bot, roleLimit: ['Owner', 'Director', 'Manager'] },
-            ]
-        },
-        {
-            category: 'Project Engine',
-            items: [
-                { id: 'projects-office', label: 'Projects Office', icon: Briefcase },
-                { id: 'project', label: 'Operation Desk', icon: Activity },
-                { id: 'staff', label: 'Workforce', icon: Users },
-                { id: 'skills', label: 'Skill Set', icon: Lightbulb },
-            ]
-        },
-        {
-            category: 'QA & Reliability',
-            items: [
-                { id: 'test-center', label: 'Test Ops', icon: FlaskConical },
-                { id: 'system-health', label: 'Health', icon: Activity },
-            ]
-        },
-        {
-            category: 'HQ Financials',
-            items: [
-                { id: 'financials', label: 'Ledger', icon: Landmark, roleLimit: ['Owner', 'Director', 'Business Coordinator'] },
-                { id: 'sales-ledger', label: 'Analytics', icon: LineChart, roleLimit: ['Owner', 'Director', 'Manager'] },
-                { id: 'suppliers', label: 'Suppliers', icon: Truck, roleLimit: ['Owner', 'Director', 'Manager'] },
+                { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+                { id: 'inventory', label: 'Inventory', icon: Package },
+                { id: 'vendors', label: 'Vendors', icon: Truck },
+                { id: 'purchases', label: 'Purchases', icon: ShoppingCart },
+                { id: 'stock', label: 'Stock Ops', icon: Activity },
+                { id: 'reports', label: 'Reports', icon: LineChart },
+                { id: 'documents', label: 'Documents', icon: FileText },
             ]
         }
     ];
 
     const footerItems = [
         { id: 'support', label: 'Support', icon: HelpCircle },
-        { id: 'about-us', label: 'Settings', icon: Settings },
     ];
 
     const [isShort, setIsShort] = useState(window.innerHeight < 500);

@@ -70,7 +70,11 @@ describe('🧭 HR Navigation & Roles', () => {
         vi.useRealTimers();
 
         // 1. Enter Staff View
-        fireEvent.click(await screen.findByText(/Personnel Management|Workforce/i));
+        try {
+            fireEvent.click(await screen.findByText(/Staff Registry|Personnel Management|Workforce/i));
+        } catch (e) {
+            fireEvent.click(await screen.findByText(/Personnel Management|Workforce/i));
+        }
 
         // 2. Wait for Owner Role
         await waitFor(() => {
@@ -78,23 +82,23 @@ describe('🧭 HR Navigation & Roles', () => {
         });
 
         // 3. Verify Default Tab (Dashboard)
-        expect(screen.getByTestId('tab-attendance')).toHaveClass('bg-indigo-600');
+        expect(screen.getByTestId('tab-attendance')).toHaveClass('bg-primary-600');
         expect(screen.getByText(/Terminal Session/i)).toBeInTheDocument();
 
         // 4. Click Team
         fireEvent.click(screen.getByTestId('tab-registry'));
-        await waitFor(() => expect(screen.getByTestId('tab-registry')).toHaveClass('bg-indigo-600'));
-        expect(screen.getByText(/Total Workforce/i)).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByTestId('tab-registry')).toHaveClass('bg-primary-600'));
+        expect(screen.getByText(/Total Workforce|Workforce Ledger/i)).toBeInTheDocument();
 
         // 5. Click Calendar
         fireEvent.click(screen.getByTestId('tab-calendar'));
-        await waitFor(() => expect(screen.getByTestId('tab-calendar')).toHaveClass('bg-indigo-600'));
+        await waitFor(() => expect(screen.getByTestId('tab-calendar')).toHaveClass('bg-primary-600'));
         // Calendar has specific headers
         expect(screen.getByText(/Personnel/i)).toBeInTheDocument(); // Table Header
 
         // 6. Click Payroll
         fireEvent.click(screen.getByTestId('tab-payroll'));
-        await waitFor(() => expect(screen.getByTestId('tab-payroll')).toHaveClass('bg-indigo-600'));
+        await waitFor(() => expect(screen.getByTestId('tab-payroll')).toHaveClass('bg-primary-600'));
         expect(screen.getByTestId('payroll-table')).toBeInTheDocument();
     });
 });

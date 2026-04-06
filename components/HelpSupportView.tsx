@@ -32,7 +32,7 @@ const DOCUMENTATION: Record<string, DocContent> = {
       "Generate the Daily Sales CSV export for external accounting backup.",
       "Review high-variance stock items and log adjustments if necessary."
     ],
-    notes: "Critical: Any variance exceeding £5.00 must be reported to the Shop Manager immediately."
+    notes: "Critical: Any variance exceeding ₹5.00 must be reported to the Shop Manager immediately."
   },
   "HMRC Payroll Submission Guide": {
     title: "HMRC Payroll & RTI Submission Guide",

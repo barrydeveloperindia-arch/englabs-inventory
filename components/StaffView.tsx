@@ -4017,7 +4017,7 @@ function StaffView({
           <div ref={navScrollRef} className="flex bg-white px-2 py-2 rounded-2xl shadow-sm border border-neutral-100 flex-wrap justify-center gap-y-2 md:gap-y-0 md:flex-nowrap md:justify-start md:overflow-x-auto max-w-full scroll-smooth no-scrollbar flex-1 items-center">
             {[
               { id: 'attendance', label: isAdmin ? 'Dashboard' : 'Attendance' },
-              { id: 'registry', label: 'Master Register' },
+              { id: 'registry', label: 'Staff Registry' },
               { id: 'calendar', label: 'Availability' },
               ...(canPlanRota ? [{ id: 'rota', label: 'Rota Planner' }] : []),
               ...(canViewCompliance ? [{ id: 'compliance', label: 'Compliance' }] : []),

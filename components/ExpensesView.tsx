@@ -41,7 +41,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, setExpenses, logA
       category: formData.category || 'Other'
     };
     setExpenses(prev => [...prev, newExp]);
-    logAction('Expense Logged', 'expenses', `Authorized £${newExp.amount} payment for ${newExp.description} (${newExp.category}).`, 'Warning');
+    logAction('Expense Logged', 'expenses', `Authorized ₹${newExp.amount} payment for ${newExp.description} (${newExp.category}).`, 'Warning');
     setFormData({ ...formData, description: '', amount: 0 });
   };
 
@@ -74,7 +74,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, setExpenses, logA
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Value (£)</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Value (₹)</label>
                 <input
                   type="number"
                   placeholder="0.00"
@@ -131,7 +131,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, setExpenses, logA
 
               <div className="text-right">
                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Outgoings</p>
-                <p className="text-2xl font-black font-mono text-primary-600">£{filteredExpenses.reduce((acc, e) => acc + e.amount, 0).toLocaleString()}</p>
+                <p className="text-2xl font-black font-mono text-primary-600">₹{filteredExpenses.reduce((acc, e) => acc + e.amount, 0).toLocaleString()}</p>
               </div>
             </div>
           </div>
@@ -161,14 +161,14 @@ const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, setExpenses, logA
                         <p className="text-[10px] font-black uppercase text-primary-600 tracking-widest mt-1">{exp.category}</p>
                       </td>
                       <td className="px-8 py-6">
-                        <span className="text-xl font-black font-mono text-primary-600">£{exp.amount.toFixed(2)}</span>
+                        <span className="text-xl font-black font-mono text-primary-600">₹{exp.amount.toFixed(2)}</span>
                       </td>
                       <td className="px-8 py-6 text-right">
                         <button
                           onClick={() => {
                             if (confirm('Authorize removal of expense entry?')) {
                               setExpenses(prev => prev.filter(e => e.id !== exp.id));
-                              logAction('Expense Deletion', 'expenses', `Permanently removed expense record: ${exp.description} (£${exp.amount}).`, 'Critical');
+                              logAction('Expense Deletion', 'expenses', `Permanently removed expense record: ${exp.description} (₹${exp.amount}).`, 'Critical');
                             }
                           }}
                           className="p-3 text-slate-200 hover:text-rose-500 transition-all hidden group-hover:block"
@@ -194,7 +194,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, setExpenses, logA
                         <p className="font-black text-ink-base uppercase text-sm">{exp.description}</p>
                         <p className="text-[10px] text-slate-400 font-mono mt-1">{new Date(exp.date).toLocaleDateString('en-GB')}</p>
                       </div>
-                      <span className="text-xl font-black font-mono text-primary-600">£{exp.amount.toFixed(2)}</span>
+                      <span className="text-xl font-black font-mono text-primary-600">₹{exp.amount.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between items-center border-t border-slate-100 pt-3">
                       <span className="px-2 py-1 bg-primary-50 text-primary-600 text-[9px] font-black uppercase rounded">{exp.category}</span>
@@ -202,7 +202,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = ({ expenses, setExpenses, logA
                         onClick={() => {
                           if (confirm('Authorize removal of expense entry?')) {
                             setExpenses(prev => prev.filter(e => e.id !== exp.id));
-                            logAction('Expense Deletion', 'expenses', `Permanently removed expense record: ${exp.description} (£${exp.amount}).`, 'Critical');
+                            logAction('Expense Deletion', 'expenses', `Permanently removed expense record: ${exp.description} (₹${exp.amount}).`, 'Critical');
                           }
                         }}
                         className="text-slate-300 hover:text-rose-500 font-black text-lg p-2"

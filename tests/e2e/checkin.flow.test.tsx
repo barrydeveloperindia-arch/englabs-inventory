@@ -4,6 +4,15 @@ import React from 'react';
 import { AccessTerminal } from '../../components/AccessTerminal';
 import { StaffMember, UserRole } from '../../types';
 
+// Mock html5-qrcode to prevent Vitest JSDOM environment from hanging
+vi.mock('html5-qrcode', () => ({
+    Html5QrcodeScanner: vi.fn(),
+    Html5Qrcode: vi.fn(() => ({
+        start: vi.fn(),
+        stop: vi.fn(),
+        clear: vi.fn()
+    }))
+}));
 /**
  * 🚆 E2E SIMULATION: CHECK-IN / CHECK-OUT FLOW
  * ------------------------------------------------------------------

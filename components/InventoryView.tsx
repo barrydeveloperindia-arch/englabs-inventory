@@ -15,7 +15,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { InventoryItem, UserRole, ViewType, Supplier, LedgerEntry } from '../types';
 import { LayoutGrid, List, Search, Filter, AlertTriangle, CheckCircle, Package, Scan, Download, Upload as UploadIcon, Cloud, Plus, ShieldCheck } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { cn, getAutoImageForAsset } from '../lib/utils';
 import { SHOP_INFO, INITIAL_CATEGORIES, PRODUCT_TAXONOMY } from '../constants';
 import { Html5Qrcode } from "html5-qrcode";
 import { addInventoryItem, updateInventoryItem } from '../lib/firestore';
@@ -62,6 +62,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [showShopMateModal, setShowShopMateModal] = useState(false);
   const [activeSubTab, setActiveSubTab] = useState<'registry' | 'audit'>('registry');
+  const [pendingInvoiceItems, setPendingInvoiceItems] = useState<any[] | null>(null);
 
   // Performance Optimization: Pagination
   const [paginationLimit, setPaginationLimit] = useState(50);
@@ -76,6 +77,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
   const canEdit = hasPermission(userRole, 'inventory.update');
   const canExport = hasPermission(userRole, 'reports.export');
   const modalFileInputRef = useRef<HTMLInputElement>(null);
+  const invoiceInputRef = useRef<HTMLInputElement>(null);
   const scannerRef = useRef<Html5Qrcode | null>(null);
 
   const filterCategories = ['All', ...INITIAL_CATEGORIES];
@@ -392,15 +394,17 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     if (aiFiles.length > 0) {
       if (!confirm(`Analyze ${aiFiles.length} visual documents (PDF/Images) with Gemini AI?`)) return;
 
+      setIsImporting(true);
       try {
         const { scanInvoiceMedia } = await import('../lib/ai_pdf_scanner');
 
+        const allParsedItems: any[] = [];
         for (const file of aiFiles) {
           try {
             logAction('AI Analysis', 'inventory', `Analyzing document: ${file.name}`, 'Info');
             const data = await scanInvoiceMedia(file);
 
-            // Process AI Results
+            // Process AI Results into Review State
             for (const item of data.items as any[]) {
               // Try to match existing item
               const existing = inventory.find(i =>
@@ -409,47 +413,35 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                 (i.name.toLowerCase() === item.description.toLowerCase()) // Fuzzy name match for AI
               );
 
-              if (existing) {
-                // UPDATE
-                await updateInventoryItem(userId, existing.id, {
-                  stock: (existing.stock || 0) + item.amount,
-                  lastBuyPrice: item.total / item.amount,
-                  updatedAt: new Date().toISOString()
-                });
-                updatedCount++;
-              } else {
-                // CREATE
-                const newItem: InventoryItem = {
-                  id: crypto.randomUUID(),
-                  name: item.description,
-                  category: item.category || 'Unclassified',
-                  brand: data.supplier || 'Generic',
-                  stock: item.amount,
-                  price: 0, // Needs manual check usually
-                  costPrice: item.total / item.amount,
-                  vatRate: data.vat > 0 ? 20 : 0,
-                  barcode: item.barcode || '',
-                  sku: item.sku || generateSKU(item.category || 'Unclassified', inventory),
-                  minStock: 5,
-                  status: 'UNVERIFIED',
-                  unitType: 'pcs',
-                  packSize: '1',
-                  origin: 'Import',
-                  shelfLocation: 'Inward',
-                  supplierId: data.supplier || '',
-                  updatedAt: new Date().toISOString()
-                };
-                await addInventoryItem(userId, newItem);
-                createdCount++;
-              }
+              allParsedItems.push({
+                id: crypto.randomUUID(),
+                isNew: !existing,
+                existingId: existing?.id,
+                name: existing ? existing.name : item.description,
+                quantity: item.amount || 1,
+                rate: item.amount > 0 ? (item.total / item.amount) : 0,
+                unit: existing ? existing.unitType : 'pcs',
+                category: existing ? existing.category : (item.category || 'Unclassified'),
+                barcode: item.barcode || '',
+                sku: existing ? existing.sku : (item.sku || generateSKU(item.category || 'Unclassified', inventory)),
+                brand: existing ? existing.brand : (data.supplier || 'Generic')
+              });
             }
           } catch (err: any) {
             console.error(err);
             logAction('AI Failed', 'inventory', `Failed to process ${file.name}: ${err.message}`, 'Warning');
           }
         }
+        
+        if (allParsedItems.length > 0) {
+           setPendingInvoiceItems(allParsedItems);
+        } else {
+           alert("No recognizable items extracted.");
+        }
       } catch (err) {
         alert("AI Scanner Module Failure. Check connection.");
+      } finally {
+        setIsImporting(false);
       }
     }
 
@@ -616,6 +608,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                   status: 'LIVE',
                   origin: 'Import',
                   supplierId: '',
+                  imageUrl: getAutoImageForAsset(finalName || 'Unknown Item'),
                   updatedAt: new Date().toISOString()
                 };
                 batch.set(ref, newItem);
@@ -666,6 +659,63 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
     setShowShopMateModal(false);
   };
 
+  const handleConfirmInvoiceItems = async () => {
+    if (!pendingInvoiceItems) return;
+    setIsSaving(true);
+    let createdCount = 0;
+    let updatedCount = 0;
+
+    try {
+      for (const item of pendingInvoiceItems) {
+        if (!item.isNew && item.existingId) {
+           const existing = inventory.find(i => i.id === item.existingId);
+           if (existing) {
+              await updateInventoryItem(userId, existing.id, {
+                 name: item.name,
+                 category: item.category,
+                 unitType: item.unit,
+                 costPrice: item.rate,
+                 stock: (existing.stock || 0) + item.quantity,
+                 updatedAt: new Date().toISOString()
+              });
+              updatedCount++;
+           }
+        } else {
+           const newItem: InventoryItem = {
+              id: item.id || crypto.randomUUID(),
+              name: item.name,
+              category: item.category || 'Unclassified',
+              brand: item.brand || 'Generic',
+              stock: item.quantity,
+              price: 0,
+              costPrice: item.rate,
+              vatRate: 20,
+              barcode: item.barcode || '',
+              sku: item.sku || generateSKU(item.category || 'Unclassified', inventory),
+              minStock: 5,
+              status: 'LIVE',
+              unitType: item.unit || 'pcs',
+              packSize: '1',
+              origin: 'Import',
+              shelfLocation: 'Inward',
+              supplierId: '',
+              imageUrl: getAutoImageForAsset(item.name),
+              updatedAt: new Date().toISOString()
+           };
+           await addInventoryItem(userId, newItem);
+           createdCount++;
+        }
+      }
+      logAction('Invoice Processed', 'inventory', `Created ${createdCount}, Updated ${updatedCount} items from OCR`, 'Info');
+      setPendingInvoiceItems(null);
+      alert(`✅ Invoice extraction saved successfully!\nAdded: ${createdCount}\nUpdated: ${updatedCount}`);
+    } catch(err) {
+      alert("Failed to save extracted invoice items.");
+      console.error(err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
 
   const handleSave = async () => {
@@ -722,7 +772,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
         origin: editingItem.origin || 'Import',
         supplierId: editingItem.supplierId || '',
         costPrice: editingItem.costPrice || 0,
-        imageUrl: imageUrl || null,
+        imageUrl: (imageUrl && !imageUrl.includes('englabs_logo') && !imageUrl.includes('placeholder')) ? imageUrl : getAutoImageForAsset(editingItem.name),
 
         status: "LIVE",
         authorizedAt: new Date().toISOString(),
@@ -985,6 +1035,10 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
               </div>
 
               <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+                <input type="file" ref={invoiceInputRef} className="hidden" accept=".pdf,image/png,image/jpeg,image/jpg" multiple onChange={handleImportFile} />
+                <button onClick={() => invoiceInputRef.current?.click()} className="flex-1 xl:flex-none border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-400 bg-white dark:bg-neutral-800 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-emerald-500 hover:text-emerald-600 transition-all flex items-center justify-center gap-3 h-14 shadow-sm">
+                  <UploadIcon size={18} /> Invoice AI
+                </button>
                 <button onClick={() => setShowShopMateModal(true)} className="flex-1 xl:flex-none border border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-400 bg-white dark:bg-neutral-800 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-primary-500 hover:text-primary-600 transition-all flex items-center justify-center gap-3 h-14">
                   <Cloud size={18} /> Cloud Sync
                 </button>
@@ -1143,29 +1197,40 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                               <img src={item.imageUrl || item.photo || item.photoUrl || PLACEHOLDER_IMAGE} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onError={(e) => (e.target as any).src = PLACEHOLDER_IMAGE} />
                               <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
                                 <span className={cn("px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest text-white shadow-xl", health === 'good' ? "bg-emerald-500" : health === 'out' ? "bg-neutral-950" : "bg-amber-500")}>
-                                  {health === 'out' ? 'DEFICIT' : `${item.stock} UNITS`}
+                                  {health === 'out' ? 'DEFICIT' : `${item.stock} ${(item.unitType && item.unitType !== 'pcs') ? item.unitType : 'UNITS'}`}
                                 </span>
                               </div>
                             </div>
                             <div className="p-6 flex-1 flex flex-col gap-4">
-                              <div>
-                                <h3 className="font-black text-neutral-900 dark:text-white leading-tight uppercase line-clamp-2 text-sm">{item.brand} {item.name}</h3>
-                                <p className="text-[10px] text-neutral-400 font-mono mt-1 tracking-wider">{item.sku}</p>
-                                <div className="flex flex-col gap-2 items-start">
-                                  <div className="flex items-center gap-1">
-                                    {[...Array(5)].map((_, i) => (
-                                      <svg key={i} className={cn("w-3 h-3 transition-colors", (item.rating || 0) / 2 > i ? "text-amber-400 fill-amber-400" : "text-neutral-200 dark:text-neutral-700")} viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                      </svg>
-                                    ))}
-                                    <span className="text-[10px] font-black text-neutral-400 ml-1">{(item.rating || 0).toFixed(1)}</span>
+                                <div className="flex flex-col h-full justify-between">
+                                  <div>
+                                    <div className="flex justify-between items-center mb-3">
+                                      <span className="text-[8px] font-black bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400 px-2 py-1 rounded border border-primary-100 dark:border-primary-800/50 uppercase tracking-widest truncate max-w-[70%]">{item.category || 'NO CATEGORY'}</span>
+                                      <span className="text-[9px] text-neutral-400 font-mono font-bold">{item.sku}</span>
+                                    </div>
+                                    <h3 className="font-black text-neutral-900 dark:text-white leading-snug uppercase line-clamp-2 text-[13px]">
+                                      {(item.brand && !item.name.toLowerCase().includes(item.brand.toLowerCase())) ? `${item.brand} ` : ''}{item.name}
+                                    </h3>
+                                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2">
+                                      <span className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">
+                                        Min Stock: <span className={cn("font-black", (item.stock || 0) <= (item.minStock || 0) ? "text-rose-500 bg-rose-50 px-1 rounded" : "text-neutral-700 dark:text-neutral-300")}>{item.minStock || 0}</span>
+                                      </span>
+                                      {item.shelfLocation && (
+                                        <>
+                                          <span className="w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700"></span>
+                                          <span className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest truncate max-w-[100px]">Loc: {item.shelfLocation}</span>
+                                        </>
+                                      )}
+                                    </div>
                                   </div>
-                                  <div className="flex justify-between items-end w-full">
-                                    <span className="text-2xl font-black text-neutral-900 dark:text-white tracking-tighter">{SHOP_INFO.currency}{(item.price || 0).toFixed(2)}</span>
-                                    <button onClick={() => setEditingItem({ ...item })} className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-white/5 flex items-center justify-center text-neutral-600 dark:text-white hover:bg-primary-600 hover:text-white transition-all">✎</button>
+                                  <div className="flex justify-between items-end mt-4 pt-4 border-t border-neutral-100 dark:border-white/10">
+                                    <div className="flex flex-col">
+                                      <span className="text-[8px] font-black text-neutral-400 uppercase tracking-widest mb-0.5">Asset Value</span>
+                                      <span className="text-xl font-black text-neutral-900 dark:text-white tracking-tighter leading-none">{SHOP_INFO.currency}{(item.price || 0).toFixed(2)}</span>
+                                    </div>
+                                    <button onClick={() => setEditingItem({ ...item })} className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-white/5 flex items-center justify-center text-neutral-600 dark:text-white hover:bg-neutral-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all shadow-sm">✎</button>
                                   </div>
                                 </div>
-                              </div>
                             </div>
                           </div>
                         );
@@ -1196,7 +1261,9 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                                           <span className="text-[8px] font-black bg-neutral-900 text-white px-2 py-0.5 rounded uppercase">{item.sku}</span>
                                           <span className="text-[8px] font-black bg-primary-100 text-primary-700 px-2 py-0.5 rounded uppercase">{item.category}</span>
                                         </div>
-                                        <h5 className="font-black text-sm uppercase text-neutral-900 dark:text-white">{item.brand} {item.name}</h5>
+                                        <h5 className="font-black text-sm uppercase text-neutral-900 dark:text-white">
+                                          {(item.brand && !item.name.toLowerCase().includes(item.brand.toLowerCase())) ? `${item.brand} ` : ''}{item.name}
+                                        </h5>
                                         <div className="flex items-center gap-2 mt-1">
                                           <div className="flex items-center">
                                             {[...Array(5)].map((_, i) => (
@@ -1328,7 +1395,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Unit Value (£)</label>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Unit Value (₹)</label>
                         <input type="number" step="0.01" value={editingItem?.price || 0} onChange={e => editingItem && setEditingItem({ ...editingItem, price: Number(e.target.value) })} className="w-full bg-surface-elevated text-ink-base border border-surface-highlight p-4 rounded-xl font-black uppercase text-sm outline-none focus:border-primary" />
                       </div>
                     </div>
@@ -1345,15 +1412,17 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                         </select>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">VAT Band</label>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">GST Slab</label>
                         <select
-                          value={editingItem?.vatRate || 20}
-                          onChange={e => editingItem && setEditingItem({ ...editingItem, vatRate: Number(e.target.value) as 0 | 5 | 20 })}
+                          value={editingItem?.vatRate || 18}
+                          onChange={e => editingItem && setEditingItem({ ...editingItem, vatRate: Number(e.target.value) as 0 | 5 | 12 | 18 | 28 })}
                           className="w-full bg-surface-elevated border border-surface-highlight text-ink-base p-5 rounded-xl font-black uppercase text-sm outline-none focus:border-primary appearance-none cursor-pointer"
                         >
-                          <option value={0}>0% (Zero Rated)</option>
-                          <option value={5}>5% (Reduced Rate)</option>
-                          <option value={20}>20% (Standard Rate)</option>
+                          <option value={0}>0% (Exempt)</option>
+                          <option value={5}>5%</option>
+                          <option value={12}>12%</option>
+                          <option value={18}>18% (Standard GST)</option>
+                          <option value={28}>28% (Luxury)</option>
                         </select>
                       </div>
                     </div>
@@ -1452,6 +1521,111 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
           </div>
         )
       }
+
+      {/* INVOICE AI REVIEW MODAL */}
+      {pendingInvoiceItems && (
+        <div className="fixed inset-0 z-[150] bg-slate-900/95 backdrop-blur-xl flex items-center justify-center p-4">
+          <div className="bg-surface-elevated w-full max-w-6xl rounded-[3rem] shadow-2xl overflow-hidden flex flex-col h-[90vh]">
+            <div className="bg-emerald-600 p-8 text-white flex justify-between items-center shrink-0 shadow-lg">
+              <div>
+                <h3 className="font-black uppercase tracking-tight text-3xl">AI Extraction Review</h3>
+                <p className="text-xs font-bold uppercase opacity-80 mt-1">Verify And Adjust Scanned Inventory Items Before Finalizing</p>
+              </div>
+              <button onClick={() => setPendingInvoiceItems(null)} className="text-4xl font-light hover:rotate-90 transition-all px-4">✕</button>
+            </div>
+            
+            <div className="flex-1 overflow-auto p-8">
+              <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/10 rounded-3xl overflow-hidden shadow-sm">
+                <table className="w-full text-left">
+                  <thead className="bg-neutral-50 dark:bg-white/5 border-b border-neutral-200 dark:border-white/10">
+                    <tr>
+                      <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">Match Status</th>
+                      <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-neutral-400 w-[20%]">Name</th>
+                      <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-neutral-400 w-[20%]">Category</th>
+                      <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">Qty</th>
+                      <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">Rate</th>
+                      <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">Unit</th>
+                      <th className="px-6 py-4 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-100 dark:divide-white/5">
+                    {pendingInvoiceItems.map((item, idx) => (
+                      <tr key={item.id} className="hover:bg-neutral-50 dark:hover:bg-white/5">
+                        <td className="px-6 py-4">
+                          {item.isNew ? (
+                            <span className="px-3 py-1 bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 text-[9px] font-black uppercase rounded-lg">New Item</span>
+                          ) : (
+                            <span className="px-3 py-1 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-[9px] font-black uppercase rounded-lg">Update</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          <input type="text" value={item.name} onChange={e => {
+                            const newer = [...pendingInvoiceItems];
+                            newer[idx].name = e.target.value;
+                            setPendingInvoiceItems(newer);
+                          }} className="w-full bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-white/10 p-3 rounded-xl font-bold text-sm outline-none focus:border-primary-500" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <input type="text" value={item.category} onChange={e => {
+                            const newer = [...pendingInvoiceItems];
+                            newer[idx].category = e.target.value;
+                            setPendingInvoiceItems(newer);
+                          }} className="w-full bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-white/10 p-3 rounded-xl font-bold text-sm outline-none focus:border-primary-500" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <input type="number" value={item.quantity} onChange={e => {
+                            const newer = [...pendingInvoiceItems];
+                            newer[idx].quantity = Number(e.target.value);
+                            setPendingInvoiceItems(newer);
+                          }} className="w-full bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-white/10 p-3 rounded-xl font-bold text-sm text-center outline-none focus:border-primary-500" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <input type="number" step="0.01" value={item.rate} onChange={e => {
+                            const newer = [...pendingInvoiceItems];
+                            newer[idx].rate = Number(e.target.value);
+                            setPendingInvoiceItems(newer);
+                          }} className="w-full bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-white/10 p-3 rounded-xl font-bold text-sm text-center outline-none focus:border-primary-500" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <input type="text" value={item.unit} onChange={e => {
+                            const newer = [...pendingInvoiceItems];
+                            newer[idx].unit = e.target.value;
+                            setPendingInvoiceItems(newer);
+                          }} className="w-full bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-white/10 p-3 rounded-xl font-bold text-sm outline-none focus:border-primary-500" />
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <button onClick={() => {
+                            setPendingInvoiceItems(pendingInvoiceItems.filter((_, i) => i !== idx));
+                          }} className="text-rose-500 hover:text-white hover:bg-rose-500 p-3 rounded-xl transition-all">✕</button>
+                        </td>
+                      </tr>
+                    ))}
+                    {pendingInvoiceItems.length === 0 && (
+                      <tr><td colSpan={7} className="text-center py-12 text-slate-400 font-bold uppercase">No items extracted.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="p-8 bg-surface-base border-t border-slate-100 flex justify-end gap-4 shrink-0 shadow-inner">
+              <button 
+                onClick={() => setPendingInvoiceItems(null)} 
+                className="px-8 py-4 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-neutral-600 dark:text-neutral-400 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all"
+              >
+                Discard
+              </button>
+              <button 
+                onClick={handleConfirmInvoiceItems}
+                disabled={isSaving || pendingInvoiceItems.length === 0}
+                className="px-12 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest cursor-pointer shadow-xl transition-all disabled:opacity-50"
+              >
+                 {isSaving ? "Saving..." : "Confirm & Save"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <ShopMateIntegration
         isOpen={showShopMateModal}

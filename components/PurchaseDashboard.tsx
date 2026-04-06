@@ -68,10 +68,10 @@ const PurchaseDashboard: React.FC<PurchaseDashboardProps> = ({ purchases, suppli
             {/* 1. HERO STATS (Data Heavy) */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                    { label: 'Total Procurement', value: `£${stats.totalSpend.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, color: 'text-primary-600', bg: 'bg-primary-50 border-primary-100' },
-                    { label: 'Outstanding Balance', value: `£${stats.outstandingTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, color: 'text-rose-600', bg: 'bg-rose-50 border-rose-100' },
+                    { label: 'Total Procurement', value: `₹${stats.totalSpend.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, color: 'text-primary-600', bg: 'bg-primary-50 border-primary-100' },
+                    { label: 'Outstanding Balance', value: `₹${stats.outstandingTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, color: 'text-rose-600', bg: 'bg-rose-50 border-rose-100' },
                     { label: 'Total Invoices', value: stats.totalOrders, color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-100' },
-                    { label: 'Avg Invoice Value', value: `£${stats.avgOrderValue.toFixed(2)}`, color: 'text-amber-600', bg: 'bg-amber-50 border-amber-100' },
+                    { label: 'Avg Invoice Value', value: `₹${stats.avgOrderValue.toFixed(2)}`, color: 'text-amber-600', bg: 'bg-amber-50 border-amber-100' },
                 ].map((stat, idx) => (
                     <div key={idx} className={`${stat.bg} p-6 rounded-[2rem] border shadow-sm flex flex-col items-center justify-center text-center gap-2 transition-all hover:scale-105`}>
                         <span className={`text-2xl md:text-3xl font-black font-mono tracking-tight ${stat.color}`}>{stat.value}</span>
@@ -94,7 +94,7 @@ const PurchaseDashboard: React.FC<PurchaseDashboardProps> = ({ purchases, suppli
                                 <div key={s.id} className="w-full">
                                     <div className="flex justify-between text-[10px] uppercase font-bold text-slate-500 mb-1">
                                         <span>{s.name}</span>
-                                        <span>£{s.amount.toLocaleString()}</span>
+                                        <span>₹{s.amount.toLocaleString()}</span>
                                     </div>
                                     <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
                                         <div
@@ -124,7 +124,7 @@ const PurchaseDashboard: React.FC<PurchaseDashboardProps> = ({ purchases, suppli
                                     <p className="text-[10px] text-white/50 truncate opacity-70">{renderItems(p.items)}</p>
                                 </div>
                                 <div className="text-right shrink-0">
-                                    <span className="block font-mono font-bold text-emerald-400">£{(p.amount || 0).toFixed(2)}</span>
+                                    <span className="block font-mono font-bold text-emerald-400">₹{(p.amount || 0).toFixed(2)}</span>
                                     <span className="text-[9px] text-white/30">{p.date}</span>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@ const PurchaseDashboard: React.FC<PurchaseDashboardProps> = ({ purchases, suppli
                                 </div>
                                 <div className="text-right">
                                     <p className="text-[8px] font-bold text-primary-200 uppercase tracking-widest mb-0.5">Est. Investment</p>
-                                    <p className="text-sm font-black text-emerald-400">£{item.estimatedCost.toFixed(2)}</p>
+                                    <p className="text-sm font-black text-emerald-400">₹{item.estimatedCost.toFixed(2)}</p>
                                 </div>
                             </div>
                         </div>
@@ -232,7 +232,7 @@ const PurchaseDashboard: React.FC<PurchaseDashboardProps> = ({ purchases, suppli
                                 <h5 className="font-black text-lg leading-tight mb-1 truncate">{suppliers.find(s => s.id === p.supplierId)?.name || 'Unknown'}</h5>
                                 <p className="text-xs text-white/70 line-clamp-1 mb-2 opacity-80">{renderItems(p.items)}</p>
                                 <div className="flex items-center justify-between border-t border-white/20 pt-2 mt-2">
-                                    <span className="font-mono text-xl font-bold text-emerald-400">£{(p.amount || 0).toFixed(2)}</span>
+                                    <span className="font-mono text-xl font-bold text-emerald-400">₹{(p.amount || 0).toFixed(2)}</span>
                                     {p.receiptData ? (
                                         <span className="text-[10px] bg-white/20 px-2 py-1 rounded hover:bg-white/30 transition-colors">View</span>
                                     ) : (
@@ -274,7 +274,7 @@ const PurchaseDashboard: React.FC<PurchaseDashboardProps> = ({ purchases, suppli
                                 <div>
                                     <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-2">Amount</label>
                                     <div className="text-3xl font-mono font-black text-primary-600">
-                                        £{selectedPurchase.amount?.toFixed(2)}
+                                        ₹{selectedPurchase.amount?.toFixed(2)}
                                     </div>
                                 </div>
 

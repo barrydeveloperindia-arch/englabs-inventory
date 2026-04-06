@@ -86,13 +86,17 @@ export const AccessTerminal: React.FC<AccessTerminalProps> = ({ isOpen, onClose,
                 if (hardwareStatus !== 'NO_CAMERA') {
                     setHardwareStatus('NO_CAMERA');
                     setStatus('ERROR'); // Or Warning? ERROR draws attention.
-                    setStatusMsg('Camera Offline - Use PIN');
+                    setStatusMsg('Camera Offline - Self-Healing to PIN mode');
+                    setMode('PIN'); // ANTIGRAVITY SELF-HEALING
+                    speak("Visual Cortex Offline. Falling back to secure pin mode.");
                 }
             }
         } catch (e) {
             console.warn("Hardware Check Failed", e);
             if (hardwareStatus !== 'NO_CAMERA') {
                 setHardwareStatus('NO_CAMERA');
+                setMode('PIN'); // ANTIGRAVITY SELF-HEALING
+                setStatusMsg('Camera Error - Self-Healing to PIN mode');
             }
         }
     };

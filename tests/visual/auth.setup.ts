@@ -3,11 +3,13 @@ import { test as setup, expect } from '@playwright/test';
 setup('authenticate', async ({ page }) => {
     await page.goto('/?test=true');
 
-    // Fill in login credentials
-    await page.locator('[data-testid="email-input"]').waitFor({ state: 'visible', timeout: 30000 });
-    await page.fill('[data-testid="email-input"]', 'gaurav@englabs.com');
-    await page.fill('[data-testid="password-input"]', 'ShopManager1!');
-    await page.click('[data-testid="login-btn"]');
+    // Enter PIN '1111' using the on-screen terminal keypad
+    const btn1 = page.getByRole('button', { name: '1', exact: true });
+    await btn1.waitFor({ state: 'visible', timeout: 30000 });
+    await btn1.click();
+    await btn1.click();
+    await btn1.click();
+    await btn1.click();
 
     // Wait for the app to load the dashboard (which confirms login success)
     await page.waitForSelector('[data-testid="dashboard-heading"]', { state: 'visible', timeout: 45000 });

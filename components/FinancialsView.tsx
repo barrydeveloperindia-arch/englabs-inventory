@@ -19,7 +19,7 @@ import React, { useState, useMemo } from 'react';
 import { LedgerEntry, Transaction, InventoryItem, Supplier, Bill, Expense, SalaryRecord, LedgerAccount, ViewType, VatBandSummary, UserRole, StaffMember } from '../types';
 import { RegistersView } from './RegistersView';
 import { SHOP_INFO } from '../constants';
-import { scanInvoiceMedia, ExtractedInvoiceData } from '../lib/ai_pdf_scanner';
+import { scanInvoiceMedia, AIIntakeResult } from '../lib/ai_pdf_scanner';
 import { generateRTIData } from '../lib/payroll_logic';
 
 interface FinancialsViewProps {
@@ -356,7 +356,7 @@ const VatAnalysis: React.FC<{
               <tr key={rate} className="hover:bg-surface-elevated/50 transition-all group font-bold">
                 <td className="px-10 py-7">
                   <span className="text-xs font-black uppercase text-ink-base">
-                    {rate === 0 ? 'Zero-Rated' : rate === 5 ? 'Reduced Rate' : 'Standard Rate'} ({rate}%)
+                    {rate === 0 ? 'Exempt' : rate === 18 ? 'Standard GST' : rate === 28 ? 'Luxury' : 'GST'} ({rate}%)
                   </span>
                 </td>
                 <td className="px-10 py-7 text-right font-mono text-sm">
@@ -379,7 +379,7 @@ const VatAnalysis: React.FC<{
             <div key={rate} className="bg-surface-elevated p-5 rounded-2xl border border-surface-highlight shadow-sm flex flex-col gap-4">
               <div>
                 <span className="text-xs font-black uppercase text-ink-base block">
-                  {rate === 0 ? 'Zero-Rated' : rate === 5 ? 'Reduced Rate' : 'Standard Rate'} ({rate}%)
+                  {rate === 0 ? 'Exempt' : rate === 18 ? 'Standard GST' : rate === 28 ? 'Luxury' : 'GST'} ({rate}%)
                 </span>
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Classification</p>
               </div>
@@ -498,7 +498,7 @@ const SalesLedger: React.FC<{ userId: string }> = ({ userId }) => {
                 if (ix === -1) return 0;
                 const val = row[ix];
                 if (typeof val === 'number') return val;
-                return parseFloat(String(val).replace(/[£,]/g, '')) || 0;
+                return parseFloat(String(val).replace(/[₹,]/g, '')) || 0;
               };
 
               records.push({
@@ -571,7 +571,7 @@ const SalesLedger: React.FC<{ userId: string }> = ({ userId }) => {
         timestamp: new Date().toISOString()
       };
 
-      data.items.forEach((item: ExtractedInvoiceData['items'][0]) => {
+      data.items?.forEach((item: any) => {
         const cat = (item.category || '').toLowerCase();
         const desc = item.description.toLowerCase();
         const val = item.amount;
@@ -734,7 +734,7 @@ const ExpenseManager: React.FC<{
         }
       ]);
 
-      logAction('Expense Recorded', 'expenses', `Added expense: ${formData.description} - £${formData.amount}`, 'Info');
+      logAction('Expense Recorded', 'expenses', `Added expense: ${formData.description} - ₹${formData.amount}`, 'Info');
       setFormData({
         date: new Date().toISOString().split('T')[0],
         description: '',

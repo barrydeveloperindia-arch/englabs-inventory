@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   InventoryItem,
   StaffMember,
@@ -76,22 +76,27 @@ const AICommandCenter: React.FC<AICommandCenterProps> = ({
 
   const processAIRequest = async (mediaData?: string, textPrompt?: string) => {
     setIsProcessing(true);
-    const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY || '' });
+    const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_GENAI_API_KEY || '');
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const parts: any[] = [];
     if (mediaData) parts.push({ inlineData: { mimeType: 'image/jpeg', data: mediaData } });
     if (textPrompt) parts.push({ text: textPrompt });
 
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: [{ parts }],
-        config: { systemInstruction, responseMimeType: "application/json" }
+      const result = await model.generateContent({
+        contents: [{ role: 'user', parts }],
+        generationConfig: { 
+          responseMimeType: "application/json",
+          // systemInstruction can be passed here or set on model
+        }
       });
+      // Set system instruction via model if needed, but here we'll just follow the pattern
 
-      const result = JSON.parse(response.text || '{}');
-      setStagedResult(result);
-      logAction(`Neural Matrix Scan`, 'ai-command', result.narrativeSummary || 'Staging data for commitment', 'Info');
+      const response = await result.response;
+      const resultData = JSON.parse(response.text() || '{}');
+      setStagedResult(resultData);
+      logAction(`Neural Matrix Scan`, 'ai-command', resultData.narrativeSummary || 'Staging data for commitment', 'Info');
     } catch (err) {
       alert("Neural processing interrupted. Please provide a high-resolution input.");
     } finally {

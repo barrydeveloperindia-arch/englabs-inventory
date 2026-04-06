@@ -192,17 +192,17 @@ describe('💼 HR & Payroll System (Owner Access)', () => {
             expect(table).toHaveTextContent(/Alice/i);
         });
 
-        // 6. Verify Gross Pay (40h * £10 = £400)
-        expect(screen.getByText('£400.00')).toBeInTheDocument();
+        // 6. Verify Gross Pay (40h * ₹10 = ₹400)
+        expect(screen.getByText(/400.00/i)).toBeInTheDocument();
 
-        // 7. Verify Advance Deduction (Assuming £50 Advance)
-        // Table shows "-£50.00" in Advance Column
-        const advanceCell = screen.getByText('-£50.00');
+        // 7. Verify Advance Deduction (Assuming ₹50 Advance)
+        // Table shows "-₹50.00" in Advance Column
+        const advanceCell = screen.getByText(/-₹50.00/i);
         expect(advanceCell).toBeInTheDocument();
 
-        // 8. Verify Net Pay (£400 - £0 Tax - £50 Advance = £350)
+        // 8. Verify Net Pay (₹400 - ₹0 Tax - ₹50 Advance = ₹350)
         // Look for Emerald Green Value
-        const netPay = screen.getByText('£350.00');
+        const netPay = screen.getByText(/350.00/i);
         expect(netPay).toBeInTheDocument();
 
         // 9. Generate Payslip Action

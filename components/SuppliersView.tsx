@@ -18,14 +18,19 @@ const SuppliersView: React.FC<SuppliersViewProps> = ({ userId, suppliers, setSup
   const [showAdd, setShowAdd] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [formData, setFormData] = useState<Partial<Supplier>>({
+    id: undefined,
     name: '',
     contactName: '',
     phone: '',
     email: '',
-    category: 'General Wholesale'
+    category: 'General Wholesale',
+    address: '',
+    gstin: ''
   });
 
   const supplierCategories = [
+    'General Wholesale',
+    'Approved Supplier',
     'Raw Materials',
     'Component Spares',
     'Industrial Tooling',
@@ -46,6 +51,11 @@ const SuppliersView: React.FC<SuppliersViewProps> = ({ userId, suppliers, setSup
     if (!formData.contactName?.trim()) return "Contact Person name is mandatory.";
     if (!formData.phone?.trim() || formData.phone.length < 10) return "Please enter a valid Phone Number.";
     if (!formData.email?.trim() || !emailRegex.test(formData.email)) return "A valid Email Address is required.";
+    
+    // Duplicate detection
+    const isDuplicate = suppliers.some(s => s.name.toLowerCase() === formData.name?.trim().toLowerCase() && s.id !== formData.id);
+    if (isDuplicate) return "A vendor with this company name already exists (Duplicate Detection).";
+    
     return null;
   };
 
@@ -56,24 +66,41 @@ const SuppliersView: React.FC<SuppliersViewProps> = ({ userId, suppliers, setSup
       return;
     }
 
-    const newSup: Supplier = {
-      id: crypto.randomUUID(),
-      name: formData.name || '',
-      contactName: formData.contactName || '',
-      phone: formData.phone || '',
-      email: formData.email || '',
-      category: formData.category || 'General Wholesale',
-      totalSpend: 0,
-      outstandingBalance: 0,
-      orderCount: 0
-    };
+    if (formData.id) {
+       updateSupplier(userId, formData.id, {
+          name: formData.name,
+          contactName: formData.contactName,
+          phone: formData.phone,
+          email: formData.email,
+          category: formData.category,
+          address: formData.address,
+          gstin: formData.gstin
+       });
+       setSuppliers(prev => prev.map(s => s.id === formData.id ? { ...s, name: formData.name!, contactName: formData.contactName!, phone: formData.phone!, email: formData.email!, category: formData.category!, address: formData.address, gstin: formData.gstin } : s));
+       logAction('Vendor Updated', 'vendors', `Vendor profile ${formData.name} updated.`, 'Info');
+    } else {
+       const newSup: Supplier = {
+         id: crypto.randomUUID(),
+         name: formData.name || '',
+         contactName: formData.contactName || '',
+         phone: formData.phone || '',
+         email: formData.email || '',
+         category: formData.category || 'General Wholesale',
+         address: formData.address || '',
+         gstin: formData.gstin || '',
+         totalSpend: 0,
+         outstandingBalance: 0,
+         orderCount: 0
+       };
 
-    addSupplier(userId, newSup); // Persist to Firestore
-    setSuppliers(prev => [...prev, newSup]);
-    logAction('Vendor Enrolled', 'suppliers', `New partner ${newSup.name} added to the registry.`, 'Info');
+       addSupplier(userId, newSup); // Persist to Firestore
+       setSuppliers(prev => [...prev, newSup]);
+       logAction('Vendor Enrolled', 'vendors', `New partner ${newSup.name} added to the registry.`, 'Info');
+    }
     setShowAdd(false);
-    setFormData({ name: '', contactName: '', phone: '', email: '', category: 'General Wholesale' });
+    setFormData({ id: undefined, name: '', contactName: '', phone: '', email: '', category: 'General Wholesale', address: '', gstin: '' });
   };
+
 
   const settleBill = (bill: Bill) => {
     if (!confirm(`Settle Bill #${bill.id.slice(0, 8)} of ₹${(bill.amount || 0).toLocaleString('en-IN')}/-?`)) return;
@@ -90,7 +117,7 @@ const SuppliersView: React.FC<SuppliersViewProps> = ({ userId, suppliers, setSup
       }
       return s;
     }));
-    logAction('Bill Settled', 'suppliers', `Remittance of ₹${(bill.amount || 0).toLocaleString('en-IN')} paid to ${suppliers.find(s => s.id === bill.supplierId)?.name}.`, 'Warning');
+    logAction('Bill Settled', 'vendors', `Remittance of ₹${(bill.amount || 0).toLocaleString('en-IN')} paid to ${suppliers.find(s => s.id === bill.supplierId)?.name}.`, 'Warning');
   };
 
   return (
@@ -122,16 +149,19 @@ const SuppliersView: React.FC<SuppliersViewProps> = ({ userId, suppliers, setSup
                 </select>
               </div>
               <button
-                onClick={() => setShowAdd(!showAdd)}
+                onClick={() => {
+                  if (showAdd) setFormData({ id: undefined, name: '', contactName: '', phone: '', email: '', category: 'General Wholesale', address: '', gstin: '' });
+                  setShowAdd(!showAdd);
+                }}
                 className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${showAdd ? 'bg-slate-900 text-white' : 'bg-primary-600 text-white shadow-lg shadow-primary-100'}`}
               >
-                {showAdd ? 'Close Form' : 'Enroll Partner'}
+                {showAdd ? 'Cancel' : 'Enroll Partner'}
               </button>
             </div>
           </div>
 
           {showAdd && (
-            <div className="p-10 bg-surface-elevated/50 border-b space-y-8 animate-in slide-in-from-top-4 duration-300">
+            <div id="vendor-form" className="p-10 bg-surface-elevated/50 border-b space-y-8 animate-in slide-in-from-top-4 duration-300">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Company Name *</label>
@@ -172,7 +202,7 @@ const SuppliersView: React.FC<SuppliersViewProps> = ({ userId, suppliers, setSup
                     onChange={e => setFormData({ ...formData, phone: e.target.value })}
                   />
                 </div>
-                <div className="space-y-1.5 md:col-span-2">
+                <div className="space-y-1.5 md:col-span-1">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Official Email Address *</label>
                   <input
                     type="email"
@@ -182,13 +212,31 @@ const SuppliersView: React.FC<SuppliersViewProps> = ({ userId, suppliers, setSup
                     onChange={e => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
+                <div className="space-y-1.5 md:col-span-1">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">GSTIN Number</label>
+                  <input
+                    placeholder="e.g. 03AFWPA5127P1Z4"
+                    className="w-full bg-surface-elevated border border-surface-highlight rounded-xl p-4 text-xs font-black uppercase outline-none focus:border-primary-600 transition-all"
+                    value={formData.gstin}
+                    onChange={e => setFormData({ ...formData, gstin: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-1.5 md:col-span-3">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Registered Address</label>
+                  <input
+                    placeholder="e.g. Plot No. 309, Industrial Area..."
+                    className="w-full bg-surface-elevated border border-surface-highlight rounded-xl p-4 text-xs font-black outline-none focus:border-primary-600 transition-all"
+                    value={formData.address}
+                    onChange={e => setFormData({ ...formData, address: e.target.value })}
+                  />
+                </div>
               </div>
               <div className="flex justify-end pt-4">
                 <button
                   onClick={handleAdd}
                   className="bg-emerald-600 text-white px-12 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-emerald-100 hover:scale-105 active:scale-95 transition-all"
                 >
-                  Confirm & Enroll Partner
+                  {formData.id ? 'Save Profile Updates' : 'Confirm & Enroll Partner'}
                 </button>
               </div>
             </div>
@@ -227,13 +275,36 @@ const SuppliersView: React.FC<SuppliersViewProps> = ({ userId, suppliers, setSup
                     </div>
                     <p className="text-[9px] font-bold text-slate-300 uppercase mt-2">Lifetime Spend: ₹{(sup.totalSpend || 0).toLocaleString('en-IN')}</p>
                   </td>
-                  <td className="px-8 py-7 text-right">
+                  <td className="px-8 py-7 text-right flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => {
+                        setFormData({
+                           id: sup.id, name: sup.name, contactName: sup.contactName,
+                           phone: sup.phone, email: sup.email, category: sup.category,
+                           address: sup.address || '', gstin: sup.gstin || ''
+                        });
+                        setShowAdd(true);
+                        setTimeout(() => {
+                          const formNode = document.getElementById('vendor-form');
+                          if (formNode) {
+                            formNode.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                          } else {
+                            // Fallback if form not rendered yet in next tick
+                            requestAnimationFrame(() => document.getElementById('vendor-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+                          }
+                        }, 50);
+                      }}
+                      className="p-3 text-slate-400 hover:text-primary-600 transition-colors"
+                      title="Edit Vendor Details"
+                    >
+                      ✎
+                    </button>
                     <button
                       onClick={() => {
                         if (confirm(`Permanently remove ${sup.name} from the registry?`)) {
                           deleteSupplier(userId, sup.id);
                           setSuppliers(prev => prev.filter(s => s.id !== sup.id));
-                          logAction('Vendor Deletion', 'suppliers', `Removed ${sup.name} from registry.`, 'Warning');
+                          logAction('Vendor Deletion', 'vendors', `Removed ${sup.name} from registry.`, 'Warning');
                         }
                       }}
                       className="p-3 text-slate-200 hover:text-red-500 transition-colors"
@@ -286,7 +357,7 @@ const SuppliersView: React.FC<SuppliersViewProps> = ({ userId, suppliers, setSup
                     onClick={() => {
                       if (confirm(`Permanently remove ${sup.name} from the registry?`)) {
                         setSuppliers(prev => prev.filter(s => s.id !== sup.id));
-                        logAction('Vendor Deletion', 'suppliers', `Removed ${sup.name} from registry.`, 'Warning');
+                        logAction('Vendor Deletion', 'vendors', `Removed ${sup.name} from registry.`, 'Warning');
                       }
                     }}
                     className="self-end text-[10px] text-slate-400 font-black uppercase hover:text-red-600"

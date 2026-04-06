@@ -444,7 +444,7 @@ export const INITIAL_INVENTORY: InventoryItem[] = [
 ];
 
 export const NAV_ITEMS = [
-  { id: 'dashboard', label: 'Master Monitor', icon: '📊' },
+  { id: 'dashboard', label: 'Operational Intelligence', icon: '📊' },
   { id: 'sales', label: 'Point of Sale', icon: '🛒' },
   { id: 'inventory', label: 'Stock Console', icon: '📦' },
   { id: 'ai-command', label: 'Center', icon: '🧠' },

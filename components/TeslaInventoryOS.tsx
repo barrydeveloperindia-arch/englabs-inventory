@@ -418,7 +418,7 @@ export const TeslaInventoryOS: React.FC<TeslaInventoryOSProps> = ({
         {[
             { label: 'Neural Throughput', val: '430 Assets/H', icon: Cpu, color: 'emerald' },
             { label: 'Audit Integrity', val: '99.99%', icon: ShieldCheck, color: 'emerald' },
-            { label: 'Intelligent Savings', val: '£1,240', icon: Coins, color: 'emerald' },
+            { label: 'Intelligent Savings', val: '₹1,240', icon: Coins, color: 'emerald' },
             { label: 'Anomaly Detected', val: 'None', icon: AlertTriangle, color: 'neutral' },
         ].map((stat, i) => (
             <div key={i} className="bg-white/5 border border-white/5 p-6 rounded-3xl flex items-center justify-between group hover:bg-white/10 transition-all">

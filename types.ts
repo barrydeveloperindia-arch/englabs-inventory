@@ -142,6 +142,7 @@ export interface Purchase {
   deliveryMethod?: 'Delivered' | 'Collected';
   status: 'Received' | 'Pending' | 'Cancelled';
   receiptData?: string;
+  invoiceUrl?: string;
 }
 
 export interface AuditEntry {
@@ -339,29 +340,13 @@ export interface RotaPreference {
 
 export type ViewType =
   | 'dashboard'
-  | 'sales'
-  | 'inventory'
-  | 'project'
-  | 'skills'
-  | 'test-center'
-  | 'ai-command'
-  | 'purchases'
-  | 'financials'
-  | 'staff'
-  | 'help-support'
-  | 'about-us'
-  | 'smart-intake'
-  | 'expenses'
-  | 'suppliers'
-  | 'salary'
-  | 'sales-ledger'
-  | 'support'
-  | 'registers'
-  | 'command-center'
-  | 'system-health'
-  | 'materials-master'
-  | 'projects-office'
-  | 'tesla-mode';
+  | 'inventory' // Inventory Master
+  | 'vendors'   // Vendors
+  | 'purchases' // Purchases
+  | 'stock'     // Stock Operations
+  | 'reports'   // Reports
+  | 'documents' // Documents
+  | 'support';  // Support
 
 
 export interface Skill {

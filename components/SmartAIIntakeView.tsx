@@ -1,8 +1,8 @@
 
 import React, { useState, useRef } from 'react';
-import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { InventoryItem, SmartIntakeItem, ViewType, LedgerEntry } from '../types';
 import { db, auth } from '../lib/firebase';
+import { scanDocument } from '../lib/ai_pdf_scanner';
 import { doc, writeBatch, increment, getDocs, collection } from 'firebase/firestore';
 
 interface SmartAIIntakeViewProps {
@@ -53,88 +53,12 @@ const SmartAIIntakeView: React.FC<SmartAIIntakeViewProps> = ({ userId, inventory
     setSummary(null);
     setCurrentImage(null);
 
-    // Initialize the standard Google Generative AI SDK
-    const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_GENAI_API_KEY);
-
-    // Use gemini-1.5-flash which is the current stable flash model
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      systemInstruction: {
-        role: "system",
-        parts: [{
-          text: `You are a smart inventory management AI for "ENGLABS INVENTORY". 
-      Analyze the input (Image or Text).
-      1. IDENTIFY items visible.
-      2. COUNT the quantity of each item. 
-      3. EXTRACT details: Brand, Name, Pack Size (if visible), Price (if visible).
-      4. If Selling Price is missing, suggest a UK market price.
-      5. Return a valid JSON array. Each object must have: name, brand, qty (number), costPrice (number), price (number), category, shelfLocation, barcode, sku.
-      6. CRITICAL: For each item, provide "box_2d": [ymin, xmin, ymax, xmax] coordinates (0-1 scale) for cropping. 
-      7. Keep descriptions concise to ensure valid JSON output.` }]
-      }
-    });
-
-    let parts: any[] = [];
-    let base64Image: string | null = null;
-
-    if (typeof input !== 'string') {
-      const base64 = await fileToBase64(input);
-      base64Image = base64;
-      setCurrentImage(base64);
-
-      // Remove data prefix for the SDK: "data:image/png;base64,..." -> "..."
-      const base64Data = base64.split(',')[1];
-      parts.push({
-        inlineData: {
-          mimeType: input.type,
-          data: base64Data
-        }
-      });
-    } else {
-      parts.push({ text: input });
-    }
-
-    // Add prompt
-    parts.push({ text: "Analyze this image/text. Count the items. Output JSON array." });
+    const base64Image = (typeof input !== 'string') ? await fileToBase64(input) : null;
+    if (base64Image) setCurrentImage(base64Image);
 
     try {
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Request timed out (30s). Try a smaller image.")), 30000)
-      );
-
-      const result = await Promise.race([
-        model.generateContent({
-          contents: [{ role: "user", parts: parts }],
-          generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: SchemaType.ARRAY,
-              items: {
-                type: SchemaType.OBJECT,
-                properties: {
-                  name: { type: SchemaType.STRING },
-                  brand: { type: SchemaType.STRING },
-                  qty: { type: SchemaType.NUMBER },
-                  costPrice: { type: SchemaType.NUMBER },
-                  price: { type: SchemaType.NUMBER },
-                  category: { type: SchemaType.STRING },
-                  shelfLocation: { type: SchemaType.STRING },
-                  barcode: { type: SchemaType.STRING },
-                  sku: { type: SchemaType.STRING },
-                  box_2d: {
-                    type: SchemaType.ARRAY,
-                    items: { type: SchemaType.NUMBER }
-                  }
-                },
-                required: ['name', 'qty', 'costPrice', 'price']
-              }
-            }
-          }
-        }), timeoutPromise]) as any;
-
-      const response = await result.response;
-      const text = response.text();
-      const rawItems: SmartIntakeItem[] = JSON.parse(text || '[]');
+      const result = await scanDocument(input, 'INVENTORY_DETAILED');
+      const rawItems = result.items || [];
 
       const items = await Promise.all(rawItems.map(async (item) => {
         let finalImage = base64Image || undefined;
@@ -163,17 +87,7 @@ const SmartAIIntakeView: React.FC<SmartAIIntakeViewProps> = ({ userId, inventory
       logAction('AI Intake Analysis', 'smart-intake', `Detected ${items.length} items from input.`, 'Info');
     } catch (err: any) {
       console.error("AI Analysis Error:", err);
-
-      let msg = "Unknown AI Error";
-      if (err.message) msg = err.message;
-
-      if (msg.includes("403")) {
-        alert("⛔ ACCESS DENIED (403)\n\nPlease enable the 'Generative Language API' in your Google Cloud Console for this API Key.");
-      } else if (msg.includes("404")) {
-        alert("⛔ MODEL NOT FOUND (404)\n\nThe model 'gemini-1.5-flash' is not available for your API Key/Region. Check your Google Cloud settings.");
-      } else {
-        alert(`❌ AI Error: ${msg}`);
-      }
+      alert(`❌ AI Error: ${err.message || "Unknown error"}`);
     } finally {
       setIsProcessing(false);
     }
@@ -319,7 +233,7 @@ const SmartAIIntakeView: React.FC<SmartAIIntakeViewProps> = ({ userId, inventory
         }
       ]);
 
-      logAction('Inventory Commitment', 'smart-intake', `Committed ${stagedItems.length} items to database. Valuation: £${totalInventoryValuation.toFixed(2)}`, 'Info');
+      logAction('Inventory Commitment', 'smart-intake', `Committed ${stagedItems.length} items to database. Valuation: ₹${totalInventoryValuation.toFixed(2)}`, 'Info');
       setStagedItems([]);
       setSummary(null);
       setCurrentImage(null);

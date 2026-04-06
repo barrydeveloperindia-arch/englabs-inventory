@@ -1,7 +1,6 @@
-
 import React, { useState, useMemo, useRef } from 'react';
 import { Purchase, Supplier, ViewType, AuditEntry, InventoryItem, AdjustmentLog, Bill, LedgerEntry, Transaction } from '../types';
-import { GoogleGenAI } from "@google/genai";
+import { scanDocument } from '../lib/ai_pdf_scanner';
 import { SHOP_INFO } from '../constants';
 
 interface PurchasesViewProps {
@@ -96,89 +95,50 @@ const PurchasesView: React.FC<PurchasesViewProps> = ({
     }).sort((a, b) => b.month.localeCompare(a.month));
   }, [purchases, suppliers]);
 
-  const processReceiptWithAI = async (base64Data: string) => {
+  const processReceiptWithAI = async (file: File | string) => {
     setIsScanning(true);
     try {
-      const apiKey = import.meta.env.VITE_GOOGLE_AI_KEY || import.meta.env.VITE_GOOGLE_GENAI_API_KEY || '';
-      if (!apiKey) throw new Error("Missing Google AI Key (VITE_GOOGLE_GENAI_API_KEY)");
+      const result = await scanDocument(file, 'INVOICE_SUMMARY');
+      const summary = result.summary;
 
-      const ai = new GoogleGenAI({ apiKey });
-      const prompt = `Analyze this receipt image for a UK Grocery Shop.
-      Extract these details in strict JSON format:
-      - total_amount (number)
-      - date (YYYY-MM-DD string)
-      - supplier_name (string, inferred from logo/header)
-      - invoice_number (string)
-      - items_summary (string, brief list)
-      
-      Output ONLY raw JSON. No markdown blocks.`;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: [{ parts: [{ text: prompt }, { inlineData: { mimeType: 'image/jpeg', data: base64Data.split(',')[1] } }] }],
-        config: { responseMimeType: "application/json" }
-      });
-
-      const textData = response.text;
-      const cleanText = (typeof textData === 'string' ? textData : JSON.stringify(textData) || '{}').replace(/```json/g, '').replace(/```/g, '').trim();
-      const result = JSON.parse(cleanText);
-
-      setFormData(prev => ({
-        ...prev,
-        amount: result.total_amount || prev.amount,
-        date: result.date || prev.date,
-        items: result.items_summary || prev.items,
-        invoiceNumber: result.invoice_number || prev.invoiceNumber,
-        receiptData: base64Data
-      }));
-
-      logAction('AI Receipt Scan', 'purchases', `Extracted ${SHOP_INFO.currency}${result.total_amount} from receipt.`, 'Info');
+      if (summary) {
+        setFormData(prev => ({
+          ...prev,
+          amount: summary.total_amount || prev.amount,
+          date: summary.date || prev.date,
+          items: summary.items_summary || prev.items,
+          invoiceNumber: summary.invoice_number || prev.invoiceNumber,
+        }));
+        
+        logAction('AI Document Scan', 'purchases', `Extracted ${SHOP_INFO.currency}${summary.total_amount}.`, 'Info');
+      }
     } catch (error) {
       console.error("AI Scan Error:", error);
-      alert("AI Vision failed to process the receipt. Please enter data manually.");
+      alert("AI failed to parse document. Please check input.");
     } finally {
       setIsScanning(false);
     }
   };
 
-  // Import at top (I will add this via separate edit or rely on smart insertion if I could, but I'll do standard replace)
-  // Since I typically can't add imports easily with replace_file_content in the middle of a file without context, 
-  // I will check if I need to add the import first. 
-  // Wait, I can't add imports with this specific tool easily if I target the middle. 
-  // I will assume I need to handle the import separately or rewrite the file header.
-  // Actually, I'll rewrite the helper function entirely here.
-
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, isEdit: boolean = false) => {
     const file = e.target.files?.[0];
-    if (file) {
-      try {
-        console.log("Compressing receipt image...");
-        // Dynamic import to avoid needing top-level change if possible, or just assume it is available globally? 
-        // No, I need to import it. 
-        // I will use a dirty trick or just do it properly in two steps. 
-        // Step 1: Add import. Step 2: Use it. 
-        // Check if I can do both. 
-        // I will just use the logic here.
+    if (!file) return;
 
-        const { compressImage } = await import('../lib/storage_utils');
-        const compressedFile = await compressImage(file);
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64 = reader.result as string;
-          if (isEdit) {
-            setEditingPurchaseForm(prev => ({ ...prev, receiptData: base64 }));
-          } else {
-            // FIX: Attach image immediately so it persists even if AI fails
-            setFormData(prev => ({ ...prev, receiptData: base64 }));
-            processReceiptWithAI(base64);
-          }
-        };
-        reader.readAsDataURL(compressedFile);
-      } catch (err) {
-        console.error("Compression failed", err);
-        alert("Failed to process image.");
-      }
+    try {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        if (isEdit) {
+          setEditingPurchaseForm(prev => ({ ...prev, receiptData: base64 }));
+        } else {
+          setFormData(prev => ({ ...prev, receiptData: base64 }));
+          processReceiptWithAI(file);
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error("File processing failed", err);
+      alert("Failed to process document.");
     }
   };
 
@@ -222,21 +182,25 @@ const PurchasesView: React.FC<PurchasesViewProps> = ({
 
     try {
       if (formData.receiptData && formData.receiptData.startsWith('data:')) {
-        console.log("Uploading receipt to Firebase Storage...");
-        // Convert base64 to Blob
+        console.log("Uploading attachment to Firebase Storage...");
+        
+        // Dynamic mime parsing from data URI
+        const mimeType = formData.receiptData.split(';')[0].split(':')[1] || 'image/jpeg';
+        const extension = mimeType.split('/')[1] === 'pdf' ? 'pdf' : 
+                          mimeType.includes('sheet') || mimeType.includes('excel') ? 'xlsx' : 'jpg';
+
         const fetchRes = await fetch(formData.receiptData);
         const blob = await fetchRes.blob();
-        const file = new File([blob], `receipt_${Date.now()}.jpg`, { type: 'image/jpeg' });
+        const fileToUpload = new File([blob], `receipt_${Date.now()}.${extension}`, { type: mimeType });
 
-        // Dynamic import to use storage util
         const { uploadFile } = await import('../lib/storage_utils');
-        const storagePath = `receipts/${userId}/${Date.now()}_receipt.jpg`;
-        finalReceiptUrl = await uploadFile(file, storagePath);
-        console.log("Receipt uploaded:", finalReceiptUrl);
+        const storagePath = `receipts/${userId}/${Date.now()}_attachment.${extension}`;
+        finalReceiptUrl = await uploadFile(fileToUpload, storagePath);
+        console.log("File uploaded:", finalReceiptUrl);
       }
     } catch (uploadErr) {
-      console.error("Receipt Upload Failed:", uploadErr);
-      if (!confirm("Receipt upload failed. Continue without receipt?")) return;
+      console.error("File Upload Failed:", uploadErr);
+      if (!confirm("Document upload failed. Continue without attachment?")) return;
       finalReceiptUrl = '';
     }
 
@@ -399,6 +363,29 @@ const PurchasesView: React.FC<PurchasesViewProps> = ({
             <p className="font-black uppercase text-[10px] tracking-widest text-ink-base">AI Vision Analyzing Receipt...</p>
           </div>
         )}
+        {/* Global Hidden Inputs for File Uploads (Always Mounted) */}
+        <input 
+          ref={addReceiptRef} 
+          type="file" 
+          accept="image/*,.pdf,.xlsx,.xls,.csv" 
+          className="hidden" 
+          onChange={e => {
+            handleFileUpload(e);
+            // Reset value so same file can be uploaded again
+            if (e.target) e.target.value = '';
+          }} 
+        />
+        <input 
+          ref={editReceiptRef} 
+          type="file" 
+          accept="image/*,.pdf,.xlsx,.xls,.csv" 
+          className="hidden" 
+          onChange={e => {
+            handleFileUpload(e, true);
+            if (e.target) e.target.value = '';
+          }} 
+        />
+
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
           <div>
             <h4 className="text-sm font-black text-ink-base uppercase tracking-widest leading-none">Stock Acquisition Interface</h4>
@@ -522,10 +509,23 @@ const PurchasesView: React.FC<PurchasesViewProps> = ({
 
             <div className="space-y-1">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">10. Evidence</label>
-              <button onClick={() => addReceiptRef.current?.click()} className={`w-full py-3 rounded-xl border-2 border-dashed text-[10px] font-black uppercase ${formData.receiptData ? 'border-emerald-500 text-emerald-600 bg-emerald-50' : 'border-slate-300 text-slate-400 hover:border-primary-400'}`}>
-                {formData.receiptData ? '✓ Attached' : '+ Attach Bill'}
-              </button>
-              <input ref={addReceiptRef} type="file" accept="image/*" className="hidden" onChange={e => handleFileUpload(e)} />
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => addReceiptRef.current?.click()} 
+                  className={`flex-1 py-3 rounded-xl border-2 border-dashed text-[10px] font-black uppercase transition-all ${formData.receiptData ? 'border-emerald-500 text-emerald-600 bg-emerald-50' : 'border-slate-300 text-slate-400 hover:border-primary-400'}`}
+                >
+                  {formData.receiptData ? '✓ Attached' : '+ Attach Bill'}
+                </button>
+                {formData.receiptData && (
+                  <button 
+                    onClick={() => setFormData(prev => ({ ...prev, receiptData: undefined }))}
+                    className="px-3 bg-rose-50 text-rose-500 rounded-xl border border-rose-100 font-bold hover:bg-rose-100 transition-colors"
+                    title="Clear Attachment"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="col-span-full mt-4">
@@ -582,10 +582,10 @@ const PurchasesView: React.FC<PurchasesViewProps> = ({
                   <td className="px-4 py-4 text-[10px] font-bold text-slate-500">{p.purchasedBy || 'Shop Owner'}</td>
                   <td className="px-4 py-4 text-[10px] italic text-slate-500 max-w-[150px] truncate" title={p.remarks}>{p.remarks || '-'}</td>
                   <td className="px-4 py-4 text-center">
-                    {p.receiptData ? (
-                      <button onClick={() => handleDownloadReceipt(p)} className="p-1.5 bg-emerald-50 text-emerald-600 rounded hover:bg-emerald-100 transition-colors" title="Download Proof">
+                    {(p.receiptData || p.invoiceUrl) ? (
+                      <a href={p.invoiceUrl || '#'} onClick={(e) => { if(!p.invoiceUrl) { e.preventDefault(); handleDownloadReceipt(p); } }} target="_blank" className="p-1.5 bg-emerald-50 text-emerald-600 rounded hover:bg-emerald-100 transition-colors inline-block" title="Download Proof">
                         📄
-                      </button>
+                      </a>
                     ) : <span className="text-slate-200 font-bold">-</span>}
                   </td>
                   <td className="px-4 py-4 text-right">
@@ -766,7 +766,6 @@ const PurchasesView: React.FC<PurchasesViewProps> = ({
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Click to upload payment proof</p>
                     </>
                   )}
-                  <input ref={editReceiptRef} type="file" accept="image/*" className="hidden" onChange={e => handleFileUpload(e, true)} />
                 </div>
               </div>
               <button onClick={savePurchaseEdit} className="w-full bg-primary-600 text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] shadow-xl hover:scale-105 transition-all mt-4">Apply Document Refinement</button>

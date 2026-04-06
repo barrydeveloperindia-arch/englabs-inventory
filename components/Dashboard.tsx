@@ -12,6 +12,7 @@ import {
   ArrowDownRight,
   RefreshCw,
   Search,
+  Package,
   Filter,
   Shield
 } from 'lucide-react';
@@ -75,7 +76,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, transactions, inventory, 
   if (isLoading) return <DashboardSkeleton />;
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 pb-20">
+    <div className="space-y-8 animate-in fade-in duration-500 pb-20 pt-10 px-2 lg:px-0">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -100,9 +101,11 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, transactions, inventory, 
       </div>
 
       {/* Primary Metrics Feed */}
+      {/* Primary Metrics Feed */}
       <OperationalIntelligence
         transactions={transactions}
         attendance={attendance}
+        inventory={inventory}
         staffCount={staff.length}
       />
 
@@ -133,8 +136,8 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, transactions, inventory, 
         <div className="lg:col-span-2 bg-white dark:bg-neutral-900 p-8 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-sm flex flex-col">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
             <div>
-              <h4 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-widest">Revenue Analytics</h4>
-              <p className="text-xs text-neutral-400 font-medium">Weekly sales distribution and performance</p>
+              <h4 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-widest">Procurement Analytics</h4>
+              <p className="text-xs text-neutral-400 font-medium">Weekly asset influx and outflow performance</p>
             </div>
             <div className="flex items-center gap-2 p-1 bg-neutral-100 dark:bg-white/5 rounded-lg border border-neutral-200 dark:border-white/10">
               <button className="px-3 py-1 text-[10px] font-bold text-primary-600 bg-white dark:bg-neutral-800 rounded-md shadow-sm">Daily</button>
@@ -199,18 +202,18 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, transactions, inventory, 
           <div className="flex-1 overflow-y-auto space-y-5 pr-2 custom-scrollbar">
             {recentOrders.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center opacity-40">
-                <ShoppingBag size={32} className="mb-2 text-neutral-400" />
+                <Package size={32} className="mb-2 text-neutral-400" />
                 <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Idle Terminal</p>
               </div>
             ) : (
               recentOrders.map((order) => (
                 <div key={order.id} className="group flex gap-4 p-3 rounded-xl hover:bg-neutral-50 dark:hover:bg-white/5 transition-all cursor-pointer">
                   <div className="w-10 h-10 bg-neutral-100 dark:bg-white/5 rounded-full flex items-center justify-center shrink-0 border border-neutral-200/50 dark:border-white/5">
-                    <ShoppingBag className="w-5 h-5 text-neutral-500" />
+                    <Package className="w-5 h-5 text-neutral-500" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex justify-between items-start mb-0.5">
-                      <h5 className="text-xs font-bold text-neutral-900 dark:text-white truncate pr-2">Terminal Sale #{order.id.slice(0, 6)}</h5>
+                      <h5 className="text-xs font-bold text-neutral-900 dark:text-white truncate pr-2">Dispatch Order #{order.id.slice(0, 6)}</h5>
                       <span className="text-[10px] font-black text-neutral-900 dark:text-white shrink-0">
                         {SHOP_INFO.currency}{order.total.toFixed(2)}
                       </span>
@@ -236,8 +239,8 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, transactions, inventory, 
       <div className="bg-white dark:bg-neutral-900 p-8 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-sm relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h4 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-widest">Global Order Ledger</h4>
-            <p className="text-xs text-neutral-400 font-medium">Comprehensive audit trail of recent transactions</p>
+            <h4 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-widest">Global Dispatch Ledger</h4>
+            <p className="text-xs text-neutral-400 font-medium">Comprehensive audit trail of recent asset movements</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="relative">

@@ -17,32 +17,20 @@ import { auth } from './lib/firebase';
 import { subscribeToInventory, subscribeToTransactions, subscribeToStaff, subscribeToAttendance, subscribeToLedger, subscribeToSuppliers, subscribeToBills, subscribeToExpenses, subscribeToPurchases, subscribeToSalaries, markNotificationRead, subscribeToNotifications, addLedgerEntry, addAttendanceRecord, updateAttendanceRecord } from './lib/firestore';
 import { ViewType, Bill, Expense, Purchase, SalaryRecord, InventoryItem, StaffMember, AttendanceRecord, Supplier, UserRole, AuditEntry, Transaction, LedgerEntry, SystemSnapshot, Notification, ShopTask } from './types';
 import { INITIAL_STAFF, INITIAL_SUPPLIERS, INITIAL_CATEGORIES } from './constants';
-import Dashboard from './components/Dashboard';
-import SalesView from './components/SalesView';
-import InventoryView from './components/InventoryView';
-import StaffView from './components/StaffView';
-import FinancialsView from './components/FinancialsView';
-import PurchasesView from './components/PurchasesView';
-import HelpSupportView from './components/HelpSupportView';
-import AboutUsView from './components/AboutUsView';
-import SplashScreen from './components/SplashScreen';
-import AICommandCenter from './components/AICommandCenter';
-import { SkillSystem } from './components/SkillSystem';
-import { TestCenter } from './components/TestCenter';
-import { RegistersView } from './components/RegistersView';
-import { ProjectView } from './components/ProjectView';
-import { MaterialsMaster } from './components/MaterialsMaster';
-import { ProjectsOffice } from './components/ProjectsOffice';
-import SalesLedgerDashboard from './components/SalesLedgerDashboard';
+const Dashboard = React.lazy(() => import('./components/Dashboard'));
+const InventoryView = React.lazy(() => import('./components/InventoryView'));
+const HelpSupportView = React.lazy(() => import('./components/HelpSupportView'));
+const SuppliersView = React.lazy(() => import('./components/SuppliersView'));
+const PurchasesView = React.lazy(() => import('./components/PurchasesView'));
+const ReportsView = React.lazy(() => import('./components/ReportsView'));
+import SplashScreen from './components/SplashScreen'; // Keep direct for initial load
 import { subscribeToTasks } from './lib/firestore';
 
-import AuthView from './components/AuthView';
+const AuthView = React.lazy(() => import('./components/AuthView'));
 import { NavigationSidebar } from './components/NavigationSidebar';
 import { Menu, Bell, LogOut, Search, ShoppingCart, Package } from 'lucide-react';
 import { cn } from './lib/utils';
-import SuppliersView from './components/SuppliersView';
-import SmartAIIntakeView from './components/SmartAIIntakeView';
-import { AccessTerminal } from './components/AccessTerminal';
+import { AccessTerminal } from './components/AccessTerminal'; // Keep AccessTerminal synchronous for security lock
 import { UserProfileMenu } from './components/UserProfileMenu';
 
 const TERMINAL_ID = "ENGLABS-IND-01";
@@ -196,7 +184,7 @@ const App: React.FC<AppProps> = ({ initialShowSplash = true, initialLocked }) =>
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
-      const validViews: ViewType[] = ['dashboard', 'sales', 'inventory', 'staff', 'financials', 'purchases', 'sales-ledger', 'suppliers', 'smart-intake', 'support', 'about-us', 'command-center', 'system-health'];
+      const validViews: ViewType[] = ['dashboard', 'inventory', 'vendors', 'purchases', 'reports', 'stock', 'documents', 'support'];
 
       if (validViews.includes(hash as any)) {
         setActiveView(hash as any);
@@ -281,9 +269,9 @@ const App: React.FC<AppProps> = ({ initialShowSplash = true, initialLocked }) =>
 
     // Navigation Logic based on notification type/link
     if (n.link) {
-      if (n.link.startsWith('/staff')) setActiveView('staff');
+      if (n.link.startsWith('/staff')) setActiveView('dashboard');
       else if (n.link.startsWith('/inventory')) setActiveView('inventory');
-      else if (n.link.startsWith('/sales')) setActiveView('sales');
+      else if (n.link.startsWith('/sales')) setActiveView('dashboard');
       else if (n.link.startsWith('/dashboard')) setActiveView('dashboard');
     }
   };
@@ -332,50 +320,31 @@ const App: React.FC<AppProps> = ({ initialShowSplash = true, initialLocked }) =>
   }, [user]);
 
   if (!authChecked) return null; // Wait for Firebase to check session
-  if (!user) return <AuthView />;
+  if (!user) return <React.Suspense fallback={<div className="h-screen w-full bg-neutral-900" />}><AuthView /></React.Suspense>;
 
   if (showSplash && !isTest) {
     return <SplashScreen />;
   }
 
   const renderContent = () => {
-    switch (activeView) {
-      case 'dashboard': return <Dashboard userId={shopId} transactions={transactions} inventory={inventory} role={currentUserRole} staff={staff} attendance={attendance} bills={bills} />;
-      case 'sales': return <SalesView userId={shopId} transactions={transactions} setTransactions={setTransactions} refunds={[]} setRefunds={() => { }} inventory={inventory} setInventory={setInventory} userRole={currentUserRole} staff={staff} activeStaffId={currentStaffId} logAction={logAction} postToLedger={postToLedger} />;
-      case 'inventory': return <InventoryView userId={shopId} inventory={inventory} setInventory={setInventory} categories={INITIAL_CATEGORIES} setCategories={() => { }} suppliers={suppliers} userRole={currentUserRole} logAction={logAction} postToLedger={postToLedger} />;
-      case 'project': return <ProjectView userId={shopId} staff={staff} inventory={inventory} logAction={logAction} userRole={currentUserRole} currentStaffId={currentStaffId} activeStaffName={activeStaffName} tasks={tasks} />;
-      case 'skills': return <SkillSystem />;
-      case 'test-center': return <TestCenter />;
-      case 'staff':
-        return <StaffView
-          userId={shopId}
-          staff={staff}
-          setStaff={setStaff}
-          attendance={attendance}
-          setAttendance={setAttendance}
-          logAction={logAction}
-          userRole={currentUserRole}
-          currentStaffId={currentStaffId}
-          inventory={inventory}
-          activeStaffName={activeStaffName}
-          navigateToProcurement={() => setActiveView('purchases')}
-          forceEditStaffId={forceEditStaffId}
-          onClearForceEdit={() => setForceEditStaffId(null)}
-        />;
-      case 'financials': return <FinancialsView userId={shopId} ledger={ledgerEntries} setLedger={setLedgerEntries} transactions={transactions} inventory={inventory} suppliers={suppliers} bills={bills} expenses={expenses} setExpenses={setExpenses} salaries={salaries} staff={staff} postToLedger={postToLedger} setBills={setBills} setSuppliers={setSuppliers} logAction={logAction} userRole={currentUserRole} currentStaffId={currentStaffId} activeStaffName={activeStaffName} navigateToProcurement={() => setActiveView('purchases')} />;
-      case 'purchases': return <PurchasesView userId={shopId} purchases={purchases} setPurchases={setPurchases} suppliers={suppliers} setSuppliers={setSuppliers} logAction={logAction} inventory={inventory} setInventory={setInventory} bills={bills} setBills={setBills} activeStaffName={activeStaffName} postToLedger={postToLedger} transactions={transactions} />;
-      case 'smart-intake': return <SmartAIIntakeView userId={shopId} inventory={inventory} setInventory={setInventory} logAction={logAction} postToLedger={postToLedger} />;
-      case 'system-health': return <SystemHealthView />;
-      case 'suppliers': return <SuppliersView userId={shopId} suppliers={suppliers} setSuppliers={setSuppliers} bills={bills} setBills={setBills} logAction={logAction} />;
-      case 'sales-ledger': return <SalesLedgerDashboard transactions={transactions} inventory={inventory} />;
-      case 'support': return <HelpSupportView />;
-      case 'about-us': return <AboutUsView />;
-      case 'command-center': return <AICommandCenter inventory={inventory} setInventory={setInventory} staff={staff} attendance={attendance} setAttendance={setAttendance} logAction={logAction} history={history} createSnapshot={(desc) => console.log('Snapshot:', desc)} rollbackToSnapshot={() => false} />;
-      case 'materials-master': return <MaterialsMaster inventory={inventory} />;
-      case 'projects-office': return <ProjectsOffice tasks={tasks} />;
-      case 'tesla-mode': return <TeslaInventoryOS userId={shopId} inventory={inventory} setInventory={setInventory} logAction={logAction} />;
-      default: return <div className="text-white p-10">Module Under Construction</div>;
-    }
+    return (
+        <React.Suspense fallback={<div className="flex h-[60vh] items-center justify-center"><div className="animate-spin w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full shadow-lg" /></div>}>
+          {(() => {
+            switch (activeView) {
+              case 'dashboard': return <Dashboard userId={shopId} transactions={transactions} inventory={inventory} role={currentUserRole} staff={staff} attendance={attendance} bills={bills} />;
+              case 'inventory': return <InventoryView userId={shopId} inventory={inventory} setInventory={setInventory} categories={INITIAL_CATEGORIES} setCategories={() => { }} suppliers={suppliers} userRole={currentUserRole} logAction={logAction} postToLedger={postToLedger} />;
+              case 'vendors': return <SuppliersView userId={shopId} suppliers={suppliers} setSuppliers={setSuppliers} bills={bills} setBills={setBills} logAction={logAction} />;
+              case 'purchases': return <PurchasesView userId={shopId} purchases={purchases} setPurchases={setPurchases} suppliers={suppliers} setSuppliers={setSuppliers} logAction={logAction} inventory={inventory} setInventory={setInventory} bills={bills} setBills={setBills} activeStaffName={activeStaffName} postToLedger={postToLedger} transactions={transactions} />;
+              case 'reports': return <ReportsView transactions={transactions} refunds={[]} inventory={inventory} purchases={purchases} expenses={expenses} salaries={salaries} bills={bills} />;
+              case 'support': return <HelpSupportView />;
+              case 'stock':
+              case 'documents':
+                return <div className="text-neutral-500 font-bold p-10 mx-auto text-center mt-20">Coming Soon: {activeView.toUpperCase()}</div>;
+              default: return <div className="text-neutral-500 font-bold p-10 mx-auto text-center mt-20">Under maintenance. Core functionality only is active.</div>;
+            }
+          })()}
+        </React.Suspense>
+    );
   };
 
   const handleAuthenticate = async (staffId: string, method: string, proof?: string, intent?: 'UNLOCK' | 'CLOCK_OUT') => {
@@ -405,7 +374,7 @@ const App: React.FC<AppProps> = ({ initialShowSplash = true, initialLocked }) =>
     // Shift management continues through specific CLOCK_OUT intent or intra-app staff controls.
 
     setIsLocked(false);
-    if (matched.role === 'Cashier') setActiveView('sales');
+    if (matched.role === 'Cashier') setActiveView('inventory');
     logAction('Authentication', 'dashboard', `${matched.name} Verified via ${method}`, 'Info');
   };
 
@@ -535,12 +504,12 @@ const App: React.FC<AppProps> = ({ initialShowSplash = true, initialLocked }) =>
                  </div>
                  <UserProfileMenu
                    currentStaffId={currentStaffId}
-                   onViewProfile={() => setActiveView('staff')}
+                   onViewProfile={() => setActiveView('dashboard')}
                    onSettings={() => setActiveView('support')}
                    onChangePassword={() => alert('Secure terminal change initiated.')}
                    onProfileChange={() => {
                      setForceEditStaffId(currentStaffId);
-                     setActiveView('staff');
+                     setActiveView('dashboard');
                    }}
                  />
                </div>

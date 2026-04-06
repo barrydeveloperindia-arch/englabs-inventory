@@ -25,6 +25,9 @@ vi.mock('lucide-react', () => ({
     Activity: () => <div data-testid="icon-activity" />,
     Lightbulb: () => <div data-testid="icon-lightbulb" />,
     FlaskConical: () => <div data-testid="icon-test" />,
+    Camera: () => <div data-testid="icon-camera" />,
+    Zap: () => <div data-testid="icon-zap" />,
+    Info: () => <div data-testid="icon-info" />,
 }));
 
 describe('🎨 Branding & Logo Integrity Suite', () => {
