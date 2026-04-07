@@ -1,7 +1,0 @@
-{
-  "name": "ENGLABS Inventory",
-  "description": "Professional industrial inventory & project management system with multi-site tracking and professional analytics.",
-  "requestFramePermissions": [
-    "camera"
-  ]
-}
