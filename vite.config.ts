@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
       testTimeout: 30000,
       retry: 2,
       environment: 'jsdom',
-      setupFiles: './setupTests.ts',
+      setupFiles: './src/setupTests.ts',
       css: true,
       exclude: [
         '**/node_modules/**',
@@ -94,6 +94,7 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
+        '@': path.resolve(__dirname, './src'),
         'react-native': 'react-native-web',
         'react': path.resolve(__dirname, 'node_modules/react'),
         'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),

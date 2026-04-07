@@ -16,6 +16,9 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { Trash2, Plus, Calendar, Settings, Clock, UserCheck, Shield, ShieldOff, Lock, ChevronLeft, ChevronRight, Download, Upload, Filter, Search, Award, Briefcase, FileText, CheckCircle2, XCircle, AlertCircle, RefreshCw, DollarSign, PieChart, BarChart3, TrendingUp, Users, Edit2, MoreVertical, Mail, Phone, Pencil, IdCard as IdCardIcon, ZoomIn, ZoomOut, RotateCcw, Maximize, Move, ArrowDown, ArrowLeftRight, ClipboardList, X, Camera } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { AttendanceSystem } from '../features/staff/components/AttendanceSystem';
+import { AttendanceAnalytics } from '../features/staff/components/AttendanceAnalytics';
+import { StaffAttendanceTable } from '../features/staff/components/StaffAttendanceTable';
 import { addAttendanceRecord, updateAttendanceRecord, deleteAttendanceRecord, updateStaffMember, deleteStaffMember, subscribeToLeaves, addLeaveRequest, updateLeaveRequest, publishRota, saveRotaPreference, subscribeToRota, subscribeToRotaPreferences, subscribeToTasks, addTask, addBatchTasks, updateTask, addNotification, processPayrollBatch, subscribeToShopSettings, getStaffDocRef } from '../lib/firestore';
 import { hasPermission } from '../lib/rbac'; // Import RBAC
 import { calculatePayroll, calculateTaxAndNI } from '../lib/payroll_logic';
@@ -1871,7 +1874,7 @@ function StaffView({
 
     const lateArrivals = myRecords.filter(r => {
       if (!r.clockIn || !r.date) return false;
-      const dayName = new Date(r.date).toLocaleDateString('en-US', { weekday: 'long' });
+      const dayName = new Date(r.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
       const startTime = shopHours[dayName]?.start || '08:00';
       const [targetH, targetM] = startTime.split(':').map(Number);
       const targetMins = targetH * 60 + targetM + 5;
@@ -1892,432 +1895,35 @@ function StaffView({
       }
     });
 
-    const formatDuration = (mins: number) => {
-      const h = Math.floor(mins / 60);
-      const m = Math.round(mins % 60);
-      return `${h}:${m.toString().padStart(2, '0')}`;
-    };
-
     return (
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 data-testid="dashboard-heading" className="text-2xl font-black text-neutral-900 dark:text-white tracking-tight">
-              {isAdmin ? 'Operational Intelligence' : 'Personal Terminal'}
-            </h1>
-            <p className="text-sm text-neutral-500 font-medium">Monitoring attendance and workforce metrics</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleSyncHours}
-              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/10 rounded-xl text-xs font-bold text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-500/10 transition-all shadow-sm"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              Sync Rotations
-            </button>
-            <button
-              onClick={generateDailyTasks}
-              data-testid="intelligence-setup-btn"
-              className="px-4 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-xs font-black transition-all shadow-lg active:scale-95"
-            >
-              Intelligence Setup
-            </button>
-          </div>
-        </div>
+      <div className="space-y-12 pb-20 font-sans" data-testid="attendance-dashboard">
+        <AttendanceSystem 
+          userId={userId}
+          staff={staff}
+          attendance={attendance}
+          selectedStaffId={selectedStaffId}
+          logAction={logAction}
+          delayRate={delayRate}
+          attendanceRate={attendanceRate}
+          overtimeMins={overtimeMins}
+          leaves={leaves}
+        />
 
-        {/* Staff Pulse (Who is here) */}
-        {renderStaffPulse()}
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Main Controls & Visualization */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Precision Clock Widget */}
-            <div className="bg-white dark:bg-neutral-900 p-8 rounded-3xl shadow-sm border border-neutral-200 dark:border-white/10 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-primary-500/5 blur-3xl rounded-full -mr-24 -mt-24 pointer-events-none group-hover:bg-primary-500/10 transition-all duration-700"></div>
-
-              <div className="flex justify-between items-start mb-12 relative">
-                <div>
-                  <h3 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-widest mb-1">Terminal Session</h3>
-                  <div className="flex items-center gap-2 text-neutral-400 text-[10px] font-bold uppercase tracking-wider">
-                    <Clock className="w-3 h-3 text-primary-500" />
-                    <span>{new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  {[...Array(2)].map((_, i) => {
-                    const todayStr = new Date().toISOString().split('T')[0];
-                    const todaysShifts = attendance
-                      .filter(a => a.staffId === selectedStaffId && a.date === todayStr)
-                      .sort((a, b) => (a.clockIn || '').localeCompare(b.clockIn || ''));
-                    const shift = todaysShifts[i];
-                    const isActive = shift && !shift.clockOut;
-
-                    return (
-                      <div key={i} className={cn(
-                        "px-3 py-2 rounded-xl border flex flex-col justify-center min-w-[110px] transition-all",
-                        isActive ? "bg-success-500/10 border-success-500/30" : shift ? "bg-neutral-50 dark:bg-white/5 border-neutral-200 dark:border-white/10" : "bg-neutral-50/50 dark:bg-white/5 border-transparent opacity-40"
-                      )}>
-                        <p className={cn("text-[8px] font-black uppercase tracking-widest mb-0.5", isActive ? "text-success-600" : "text-neutral-400")}>
-                          Shift {i + 1} {isActive && <span className="animate-pulse ml-1">●</span>}
-                        </p>
-                        <p className={cn("text-[11px] font-black font-mono", isActive ? "text-neutral-900 dark:text-white" : shift ? "text-neutral-600 dark:text-neutral-400" : "text-neutral-300 dark:text-neutral-700")}>
-                          {shift ? `${shift.clockIn} ➔ ${shift.clockOut || '...'}` : '--:--'}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex flex-col items-center justify-center mb-12 py-4 relative">
-                <span className="absolute inset-0 flex items-center justify-center text-[120px] font-black text-neutral-500/5 select-none pointer-events-none tabular-nums">
-                  {new Date().getHours().toString().padStart(2, '0')}
-                </span>
-                <p className="text-6xl font-black text-neutral-900 dark:text-white tabular-nums tracking-tighter relative">
-                  {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
-                </p>
-                <div className="flex items-center gap-2 mt-4 px-3 py-1 bg-neutral-100 dark:bg-white/5 rounded-full border border-neutral-200 dark:border-white/10 shadow-inner">
-                  <div className="w-1.5 h-1.5 rounded-full bg-success-500"></div>
-                  <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">Network Active</span>
-                </div>
-              </div>
-
-              <div className="flex gap-4 relative">
-                <button
-                  onClick={() => handleAttendanceAction(isCheckedIn ? 'OUT' : 'IN')}
-                  data-testid="clock-in-btn"
-                  className={cn(
-                    "flex-1 py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-white shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2",
-                    isCheckedIn ? "bg-neutral-900 dark:bg-white dark:text-neutral-900 shadow-neutral-950/20" : "bg-primary-600 hover:bg-primary-700 shadow-primary-600/20"
-                  )}
-                >
-                  {isCheckedIn ? 'End Session' : 'Clock In'}
-                  {isCheckedIn ? <ArrowDown className="w-4 h-4" /> : <TrendingUp className="w-4 h-4" />}
-                </button>
-                <button
-                  onClick={handleBreakAction}
-                  className={cn(
-                    "flex-1 py-4 rounded-2xl text-xs font-black uppercase tracking-widest border transition-all active:scale-95 flex items-center justify-center gap-2",
-                    todayRecord?.breakStart ? "bg-amber-50 dark:bg-amber-500/10 text-amber-600 border-amber-200 dark:border-amber-500/30" : "bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white border-neutral-200 dark:border-white/10 hover:border-primary-500"
-                  )}
-                >
-                  {todayRecord?.breakStart ? 'Finish Break' : 'Tea Break'}
-                  <span className="text-base">☕</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Attendance Analytics Module */}
-            <div className="bg-white dark:bg-neutral-900 p-8 rounded-3xl shadow-sm border border-neutral-200 dark:border-white/10 h-[380px] flex flex-col">
-              <div className="flex justify-between items-center mb-8">
-                <div>
-                  <h3 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-widest">Attendance Performance</h3>
-                  <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider mt-0.5">Rolling 7-day synchronization</p>
-                </div>
-                <div className="flex items-center gap-2 p-1 bg-neutral-100 dark:bg-white/5 rounded-lg border border-neutral-200/50">
-                  <button className="px-2 py-1 text-[9px] font-bold text-primary-600 bg-white dark:bg-neutral-800 rounded-md shadow-xs">Punctuality</button>
-                  <button className="px-2 py-1 text-[9px] font-bold text-neutral-500">Volume</button>
-                </div>
-              </div>
-
-              <div className="flex-1 w-full min-h-0">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={(() => {
-                    return Array.from({ length: 7 }, (_, i) => {
-                      const d = new Date();
-                      d.setDate(d.getDate() - (6 - i));
-                      const dateStr = d.toISOString().split('T')[0];
-                      const rec = attendance.find(a => a.staffId === selectedStaffId && a.date === dateStr);
-                      let timeVal = null;
-                      if (rec && rec.clockIn) {
-                        const [h, m] = rec.clockIn.split(':').map(Number);
-                        timeVal = h * 60 + m;
-                      }
-                      return {
-                        day: d.toLocaleString('default', { weekday: 'short' }).slice(0, 3).toUpperCase(),
-                        time: timeVal,
-                        isLate: timeVal ? timeVal > 540 : false
-                      };
-                    });
-                  })()} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="colorPerf" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.15} />
-                        <stop offset="95%" stopColor="#4F46E5" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e5e5" className="dark:opacity-5" />
-                    <XAxis
-                      dataKey="day"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: '#888', fontSize: 9, fontWeight: 900 }}
-                      dy={10}
-                    />
-                    <YAxis
-                      domain={[420, 720]}
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: '#888', fontSize: 9, fontWeight: 700 }}
-                      tickFormatter={(val) => `${Math.floor(val / 60)}:${(val % 60).toString().padStart(2, '0')}`}
-                    />
-                    <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', padding: '10px', fontSize: '10px', fontWeight: 800 }} />
-                    <ReferenceLine y={540} stroke="#F59E0B" strokeDasharray="4 4" strokeWidth={1} label={{ value: 'HQ TARGET', fill: '#F59E0B', fontSize: 8, fontWeight: 900, position: 'insideTopRight' }} />
-                    <Area type="monotone" dataKey="time" stroke="#4F46E5" strokeWidth={3} fill="url(#colorPerf)" connectNulls />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
-
-          {/* Secondary Intelligence Wing */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Calendar Segment */}
-              <div className="bg-white dark:bg-neutral-900 p-8 rounded-3xl shadow-sm border border-neutral-200 dark:border-white/10 flex flex-col items-center">
-                <div className="w-full flex justify-between items-center mb-8 pb-4 border-b border-neutral-100 dark:border-white/5">
-                  <span className="text-xs font-black text-neutral-900 dark:text-white uppercase tracking-widest">{dashboardMonth.toLocaleString('default', { month: 'short', year: 'numeric' })}</span>
-                  <div className="flex gap-2">
-                    <button onClick={() => setDashboardMonth(d => { const n = new Date(d); n.setMonth(n.getMonth() - 1); return n; })} className="p-1 hover:bg-neutral-100 dark:hover:bg-white/5 rounded-md transition-colors"><ChevronLeft className="w-4 h-4 text-neutral-400" /></button>
-                    <button onClick={() => setDashboardMonth(d => { const n = new Date(d); n.setMonth(n.getMonth() + 1); return n; })} className="p-1 hover:bg-neutral-100 dark:hover:bg-white/5 rounded-md transition-colors"><ChevronRight className="w-4 h-4 text-neutral-400" /></button>
-                  </div>
-                </div>
-                <div className="grid grid-cols-7 w-full text-center gap-y-3">
-                  {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => <span key={i} className="text-[10px] font-black text-neutral-300 uppercase">{d}</span>)}
-                  {(() => {
-                    const year = dashboardMonth.getFullYear();
-                    const month = dashboardMonth.getMonth();
-                    const firstDay = new Date(year, month, 1).getDay();
-                    const daysInMonth = new Date(year, month + 1, 0).getDate();
-                    const blanks = Array.from({ length: firstDay });
-                    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-                    return (
-                      <>
-                        {blanks.map((_, i) => <div key={`b-${i}`} />)}
-                        {days.map(d => {
-                          const dateObj = new Date(year, month, d);
-                          const isSelected = dateObj.toDateString() === dashboardDate.toDateString();
-                          const isToday = dateObj.toDateString() === new Date().toDateString();
-                          const dateStr = dateObj.toISOString().split('T')[0];
-                          const hasActivity = tasks.some(t => t.date === dateStr && (t.assignedTo === selectedStaffId || t.assignedTo === '')) || shifts.some(s => s.date === dateStr && s.staff_id === selectedStaffId);
-
-                          return (
-                            <div
-                              key={d}
-                              onClick={() => setDashboardDate(dateObj)}
-                              className={cn(
-                                "w-7 h-7 mx-auto flex items-center justify-center text-[11px] font-black rounded-full cursor-pointer transition-all relative",
-                                isSelected ? "bg-primary-600 text-white shadow-lg shadow-primary-600/30 scale-110" : isToday ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900" : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5"
-                              )}
-                            >
-                              {d}
-                              {hasActivity && !isSelected && <div className="absolute -bottom-0.5 w-1 h-1 rounded-full bg-primary-500"></div>}
-                            </div>
-                          );
-                        })}
-                      </>
-                    );
-                  })()}
-                </div>
-              </div>
-
-              {/* Task Intelligence Module */}
-              <div className="bg-white dark:bg-neutral-900 p-8 rounded-3xl shadow-sm border border-neutral-200 dark:border-white/10 flex flex-col">
-                <div className="flex items-center justify-between mb-8 pb-4 border-b border-neutral-100 dark:border-white/5">
-                  <h3 className="text-xs font-black text-neutral-900 dark:text-white uppercase tracking-widest">Active Orders</h3>
-                  {isAdmin && (
-                    <button onClick={generateDailyTasks} className="p-1 hover:bg-neutral-100 dark:hover:bg-white/5 rounded-md transition-colors"><Plus className="w-4 h-4 text-primary-500" /></button>
-                  )}
-                </div>
-                <div className="flex-1 overflow-y-auto space-y-4 max-h-[180px] custom-scrollbar">
-                  {(() => {
-                    const targetDate = dashboardDate.toISOString().split('T')[0];
-                    const myTasks = tasks.filter(t => (t.assignedTo === selectedStaffId || t.assignedTo === '') && t.date === targetDate);
-                    if (myTasks.length === 0) return <div className="h-full flex flex-col items-center justify-center opacity-30 py-4"><FileText className="w-6 h-6 mb-2" /><p className="text-[9px] font-bold uppercase tracking-widest text-center">Desk Clear</p></div>;
-                    return myTasks.map(task => (
-                      <div
-                        key={task.id}
-                        onClick={() => { setSelectedTask(task); setTaskModalOpen(true); }}
-                        className={cn(
-                          "group p-3 rounded-xl border border-transparent hover:border-neutral-200 dark:hover:border-white/10 transition-all cursor-pointer relative",
-                          task.status === 'Completed' ? "bg-success-500/5" : "bg-neutral-50 dark:bg-white/5"
-                        )}
-                      >
-                        <div className="flex items-start gap-2.5">
-                          <div className={cn(
-                            "mt-0.5 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors",
-                            task.status === 'Completed' ? "border-success-500 bg-success-500" : "border-neutral-300 dark:border-neutral-600"
-                          )}>
-                            {task.status === 'Completed' && <CheckCircle2 className="w-2 h-2 text-white" />}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className={cn("text-[11px] font-bold truncate transition-all", task.status === 'Completed' ? "text-neutral-400 line-through" : "text-neutral-900 dark:text-white")}>{task.title}</p>
-                            <div className="flex justify-between items-center mt-1">
-                              <span className="text-[8px] font-black uppercase text-neutral-400 tracking-tighter">{task.status}</span>
-                              {(task.proofPhotos?.length || 0) > 0 && <span className="text-[8px] font-black text-success-600 uppercase">Proof Attached</span>}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ));
-                  })()}
-                </div>
-                <button className="w-full mt-6 py-2 bg-neutral-100 dark:bg-white/5 text-[9px] font-black text-neutral-500 uppercase tracking-widest rounded-xl hover:text-primary-600 transition-colors">
-                  Global Task Stream
-                </button>
-              </div>
-            </div>
-
-            {/* Performance Indicators Hub */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="bg-white dark:bg-neutral-900 p-5 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-sm relative overflow-hidden group">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-1.5 bg-error-50 dark:bg-error-500/10 rounded-lg text-error-500"><AlertCircle className="w-3.5 h-3.5" /></div>
-                  <span className="text-[8px] font-black text-neutral-400 uppercase tracking-widest">Delay Variance</span>
-                </div>
-                <p className="text-2xl font-black text-neutral-900 dark:text-white tabular-nums mb-2">{delayRate}%</p>
-                <div className="w-full h-1 bg-neutral-100 dark:bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-error-500 transition-all duration-1000" style={{ width: `${delayRate}%` }}></div>
-                </div>
-              </div>
-
-              <div className="bg-white dark:bg-neutral-900 p-5 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-sm relative overflow-hidden group">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-1.5 bg-success-50 dark:bg-success-500/10 rounded-lg text-success-500"><UserCheck className="w-3.5 h-3.5" /></div>
-                  <span className="text-[8px] font-black text-neutral-400 uppercase tracking-widest">Attendance</span>
-                </div>
-                <p className="text-2xl font-black text-neutral-900 dark:text-white tabular-nums mb-2">{attendanceRate}%</p>
-                <div className="w-full h-1 bg-neutral-100 dark:bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-success-500 transition-all duration-1000" style={{ width: `${attendanceRate}%` }}></div>
-                </div>
-              </div>
-
-              <div className="bg-white dark:bg-neutral-900 p-5 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-sm relative overflow-hidden group">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-1.5 bg-primary-50 dark:bg-primary-500/10 rounded-lg text-primary-500"><TrendingUp className="w-3.5 h-3.5" /></div>
-                  <span className="text-[8px] font-black text-neutral-400 uppercase tracking-widest">Overtime</span>
-                </div>
-                <p className="text-2xl font-black text-neutral-900 dark:text-white tabular-nums mb-2">{formatDuration(overtimeMins)}</p>
-                <span className="text-[8px] font-black text-success-500 flex items-center gap-1">Pushed +1.2h</span>
-              </div>
-
-              <div className="bg-white dark:bg-neutral-900 p-5 rounded-2xl border border-neutral-200 dark:border-white/10 shadow-sm relative overflow-hidden group">
-                <div className="flex items-center gap-2 mb-4 text-primary-600">
-                  <span className="text-base leading-none">🏖️</span>
-                  <span className="text-[8px] font-black text-neutral-400 uppercase tracking-widest">Leave Pool</span>
-                </div>
-                {(() => {
-                  const s = getTargetStaff();
-                  const entitlement = s?.holidayEntitlement || 28;
-                  const used = leaves.filter(l => l.staffId === selectedStaffId && l.status === 'Approved' && l.type === 'Annual').reduce((acc, curr) => acc + curr.totalDays, 0);
-                  const remaining = entitlement - used;
-                  const perc = Math.max(0, (remaining / entitlement) * 100);
-                  return (
-                    <>
-                      <div className="flex items-baseline gap-1 mb-2">
-                        <p className="text-2xl font-black text-neutral-900 dark:text-white tabular-nums">{remaining}</p>
-                        <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-tighter">/ {entitlement}</span>
-                      </div>
-                      <div className="w-full h-1 bg-neutral-100 dark:bg-white/5 rounded-full overflow-hidden">
-                        <div className="h-full bg-primary-500 transition-all duration-1000" style={{ width: `${perc}%` }}></div>
-                      </div>
-                    </>
-                  );
-                })()}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Audit Journal: Monthly Persistence */}
-        <div className="bg-white dark:bg-neutral-900 p-8 rounded-3xl shadow-sm border border-neutral-200 dark:border-white/10 animate-in fade-in slide-in-from-bottom-8 duration-700">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-            <div>
-              <h3 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-widest">Workforce Ledger</h3>
-              <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider mt-0.5">Historical verification of sessions</p>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-neutral-50 dark:bg-white/5 rounded-xl border border-neutral-200 dark:border-white/10">
-              <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">Filtered Stream:</span>
-              <span className="text-[11px] font-black text-primary-600 dark:text-primary-400">
-                {myRecords.filter((r: AttendanceRecord) => {
-                  if (!r.date) return false;
-                  const d = new Date(r.date);
-                  const today = new Date();
-                  return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
-                }).length} ENTRIES
-              </span>
-            </div>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-neutral-100 dark:border-white/5">
-                  <th className="py-4 pl-4 text-[9px] font-black text-neutral-400 uppercase tracking-widest">Entry Ref</th>
-                  <th className="py-4 text-[9px] font-black text-neutral-400 uppercase tracking-widest text-center">Protocol Status</th>
-                  <th className="py-4 text-[9px] font-black text-neutral-400 uppercase tracking-widest">Operational Window</th>
-                  <th className="py-4 text-[9px] font-black text-neutral-400 uppercase tracking-widest text-right">Net Units</th>
-                  <th className="py-4 text-[9px] font-black text-neutral-400 uppercase tracking-widest text-right pr-4 text-error-500">Overrun</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-100 dark:divide-white/5">
-                {myRecords
-                  .filter(a => {
-                    if (!a.date) return false;
-                    const d = new Date(a.date);
-                    const today = new Date();
-                    return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
-                  })
-                  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                  .map(record => {
-                    const isLate = (() => {
-                      if (!record.clockIn) return false;
-                      const dayName = new Date(record.date).toLocaleDateString('en-US', { weekday: 'long' });
-                      const startTime = shopHours[dayName]?.start || '08:00';
-                      const [targetH, targetM] = startTime.split(':').map(Number);
-                      const targetMins = targetH * 60 + targetM + 5;
-                      const [h, m] = record.clockIn.split(':').map(Number);
-                      return (h * 60 + m) > targetMins;
-                    })();
-                    const ot = record.hoursWorked && record.hoursWorked > 8 ? record.hoursWorked - 8 : 0;
-
-                    return (
-                      <tr key={record.id} className="hover:bg-neutral-50 dark:hover:bg-white/5 transition-all group cursor-pointer" onClick={() => { setEditingRecord(record); setIsAddMode(false); }}>
-                        <td className="py-4 pl-4">
-                          <div className="flex flex-col">
-                            <span className="text-[11px] font-black text-neutral-900 dark:text-white uppercase">{new Date(record.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', weekday: 'short' })}</span>
-                            <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">Terminal ID: {record.id.slice(0, 6)}</span>
-                          </div>
-                        </td>
-                        <td className="py-4 text-center">
-                          <span className={cn(
-                            "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider",
-                            isLate ? "bg-error-500/10 text-error-500" : "bg-success-500/10 text-success-500"
-                          )}>
-                            {isLate ? <AlertCircle className="w-3 h-3" /> : <CheckCircle2 className="w-3 h-3" />}
-                            {isLate ? "Deviation Logged" : "Protocol Match"}
-                          </span>
-                        </td>
-                        <td className="py-4">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[11px] font-mono font-bold text-neutral-600 dark:text-neutral-400">{record.clockIn || '--:--'}</span>
-                            <ChevronRight className="w-3 h-3 text-neutral-300" />
-                            <span className="text-[11px] font-mono font-bold text-neutral-600 dark:text-neutral-400">{record.clockOut || 'IN PROGRESS'}</span>
-                          </div>
-                        </td>
-                        <td className="py-4 text-right">
-                          <span className="text-xs font-black text-neutral-900 dark:text-white tabular-nums">{record.hoursWorked?.toFixed(2) || '0.00'}h</span>
-                        </td>
-                        <td className="py-4 text-right pr-4">
-                          <span className={cn("text-xs font-black tabular-nums", ot > 0 ? "text-error-500" : "text-neutral-300 dark:text-neutral-800")}>{ot > 0 ? `+${ot.toFixed(2)}h` : '0.00h'}</span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <AttendanceAnalytics 
+              attendance={attendance}
+              selectedStaffId={selectedStaffId}
+            />
+            <StaffAttendanceTable 
+              records={myRecords.filter((r: AttendanceRecord) => {
+                if (!r.date) return false;
+                const d = new Date(r.date);
+                const today = new Date();
+                return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+              })}
+              shopHours={shopHours}
+              onEdit={(record) => { setEditingRecord(record); setIsAddMode(false); }}
+            />
         </div>
       </div>
     );
