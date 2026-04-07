@@ -46,6 +46,11 @@ For every task below, the following gates must be passed:
 | **5.3** | `Inventory` | Refactor `InventoryView.tsx` into Atomic Domain | [ ] | [ ] | [ ] | [ ] | 🔘 ACTIVE |
 | **5.4** | `Logic` | Extract Business Logic to Custom Hooks (`hooks/`) | [ ] | [ ] | [ ] | [ ] | ⚪ PENDING |
 
+## 📦 PILLAR 6: PROCUREMENT AUTOMATION & SYNC
+| Task ID | Component | Task Description | B | T | G | A | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **6.1** | `Vendors` | Automated Invoice Ingestion & Vendor Ledger Sync | [ ] | [ ] | [ ] | [ ] | ⚪ PENDING |
+
 ---
 
 ## 📈 SPRINT LOG
