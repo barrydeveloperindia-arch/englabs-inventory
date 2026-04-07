@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { AttendanceRecord, StaffMember } from '../../../types';
-import { addAttendanceRecord, updateAttendanceRecord } from '../../../lib/firestore';
+import { AttendanceRecord, StaffMember } from '@/types';
+import { addAttendanceRecord, updateAttendanceRecord } from '@/lib/firestore';
 
 export function useAttendance(userId: string, staff: StaffMember[], attendance: AttendanceRecord[], logAction: any) {
     const [isProcessing, setIsProcessing] = useState(false);

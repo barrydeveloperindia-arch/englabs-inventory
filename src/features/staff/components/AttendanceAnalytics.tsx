@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from 'recharts';
-import { AttendanceRecord } from '../types';
+import { AttendanceRecord } from '@/types';
 
 interface AttendanceAnalyticsProps {
   attendance: AttendanceRecord[];

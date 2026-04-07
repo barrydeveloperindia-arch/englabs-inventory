@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserCheck, AlertCircle, TrendingUp, Clock, ChevronRight } from 'lucide-react';
-import { AttendanceRecord, StaffMember } from '../types';
+import { AttendanceRecord, StaffMember } from '@/types';
 import { cn } from '../../../lib/utils';
 import { useAttendance } from '../hooks/useAttendance';
 

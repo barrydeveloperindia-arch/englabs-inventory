@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertCircle, CheckCircle2, ChevronRight } from 'lucide-react';
-import { AttendanceRecord, StaffMember } from '../../../types';
-import { cn } from '../../../lib/utils';
+import { AttendanceRecord, StaffMember } from '@/types';
+import { cn } from '@/lib/utils';
 
 interface StaffAttendanceTableProps {
   records: AttendanceRecord[];

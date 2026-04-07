@@ -43,7 +43,7 @@ For every task below, the following gates must be passed:
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **5.1** | `Global` | **Blueprint: Feature-Based Modular Architecture** | [✅] | [✅] | [✅] | [✅] | 🟢 STABLE |
 | **5.2** | `Staff` | Refactor `StaffView.tsx` into Atomic Domain | [✅] | [✅] | [✅] | [✅] | 🟢 STABLE |
-| **5.3** | `Inventory` | Refactor `InventoryView.tsx` into Atomic Domain | [ ] | [ ] | [ ] | [ ] | ⚪ PENDING |
+| **5.3** | `Inventory` | Refactor `InventoryView.tsx` into Atomic Domain | [ ] | [ ] | [ ] | [ ] | 🔘 ACTIVE |
 | **5.4** | `Logic` | Extract Business Logic to Custom Hooks (`hooks/`) | [ ] | [ ] | [ ] | [ ] | ⚪ PENDING |
 
 ---
