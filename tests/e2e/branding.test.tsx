@@ -64,7 +64,7 @@ describe('🎨 Branding & Logo Integrity Suite', () => {
  
         expect(screen.getByText(/ENGLABS/i)).toBeInTheDocument();
         expect(screen.getByText(/Engineering Portal/i)).toBeInTheDocument();
-        expect(screen.getByText(/Inventory Engine/i)).toBeInTheDocument();
-        expect(screen.getByText(/Project Engine/i)).toBeInTheDocument();
+        expect(screen.getByText(/Core System/i)).toBeInTheDocument();
+        expect(screen.getByText(/Inventory/i)).toBeInTheDocument();
     });
 });

@@ -152,7 +152,7 @@ export interface AuditEntry {
   userRole: UserRole;
   staffName: string;
   terminalId: string;
-  module: ViewType;
+  module: string;
   details: string;
   severity: 'Info' | 'Warning' | 'Critical';
 }
@@ -346,7 +346,8 @@ export type ViewType =
   | 'stock'     // Stock Operations
   | 'reports'   // Reports
   | 'documents' // Documents
-  | 'support';  // Support
+  | 'support'
+  | string;  // Support older module strings like 'staff', 'sales', 'pos'
 
 
 export interface Skill {

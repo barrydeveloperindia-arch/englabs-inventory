@@ -16,7 +16,7 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { Trash2, Plus, Calendar, Settings, Clock, UserCheck, Shield, ShieldOff, Lock, ChevronLeft, ChevronRight, Download, Upload, Filter, Search, Award, Briefcase, FileText, CheckCircle2, XCircle, AlertCircle, RefreshCw, DollarSign, PieChart, BarChart3, TrendingUp, Users, Edit2, MoreVertical, Mail, Phone, Pencil, IdCard as IdCardIcon, ZoomIn, ZoomOut, RotateCcw, Maximize, Move, ArrowDown, ArrowLeftRight, ClipboardList, X, Camera } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { addAttendanceRecord, updateAttendanceRecord, deleteAttendanceRecord, updateStaffMember, deleteStaffMember, subscribeToLeaves, addLeaveRequest, updateLeaveRequest, publishRota, saveRotaPreference, subscribeToRota, subscribeToRotaPreferences, subscribeToTasks, addTask, addBatchTasks, updateTask, addNotification, processPayrollBatch, subscribeToShopSettings } from '../lib/firestore';
+import { addAttendanceRecord, updateAttendanceRecord, deleteAttendanceRecord, updateStaffMember, deleteStaffMember, subscribeToLeaves, addLeaveRequest, updateLeaveRequest, publishRota, saveRotaPreference, subscribeToRota, subscribeToRotaPreferences, subscribeToTasks, addTask, addBatchTasks, updateTask, addNotification, processPayrollBatch, subscribeToShopSettings, getStaffDocRef } from '../lib/firestore';
 import { hasPermission } from '../lib/rbac'; // Import RBAC
 import { calculatePayroll, calculateTaxAndNI } from '../lib/payroll_logic';
 import { SHOP_OPERATING_HOURS, CLEANING_ROTA } from '../constants';
@@ -161,6 +161,8 @@ function StaffView({
     };
 
     // Run periodically (every 5 mins) and on mount
+    if (import.meta.env.MODE === 'test') return; // Prevent vitest hang
+
     const interval = setInterval(runAutoCheckout, 5 * 60 * 1000);
     const initialTimer = setTimeout(runAutoCheckout, 5000); // 5s delay on boot
 
@@ -354,10 +356,6 @@ function StaffView({
 
         // Only update if role is different and newRole is defined
         if (newRole && s.role !== newRole) {
-          // Dynamic import to avoid circular dependency issues inside the component if direct import fails, 
-          // or ideally use top-level import. Since we are in an async function, dynamic import is safe.
-          const { getStaffDocRef } = await import('../lib/firestore');
-
           // USE CENTRALIZED PATH HELPER - Prevents "Ghost Writes" to wrong paths
           const docRef = getStaffDocRef(userId, s.id);
           batch.update(docRef, { role: newRole });

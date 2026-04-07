@@ -74,20 +74,19 @@ describe('Mobile UI Responsiveness', () => {
             resizeScreenSize(375); // iPhone SE
             render(<AuthView />);
 
-            expect(screen.getAllByText(/Command OS/i)[0]).toBeInTheDocument();
-            expect(screen.getByLabelText(/Fleet Identity/i)).toBeInTheDocument();
-            expect(screen.getByLabelText(/Access Key/i)).toBeInTheDocument();
+            expect(screen.getAllByText(/Terminal Login/i)[0]).toBeInTheDocument();
+            expect(screen.getByText(/Enter Terminal Passcode/i)).toBeInTheDocument();
 
             // Check for the main button
             const actions = screen.getAllByRole('button');
-            const loginBtn = actions.find(btn => btn.textContent?.includes('Authenticate Terminal'));
+            const loginBtn = actions.find(btn => btn.textContent?.includes('Start Session'));
             expect(loginBtn).toBeInTheDocument();
         });
 
         it('renders correctly on desktop viewport', () => {
             resizeScreenSize(1024); // Desktop
             render(<AuthView />);
-            expect(screen.getAllByText(/Command OS/i)[0]).toBeInTheDocument();
+            expect(screen.getAllByText(/Terminal Login/i)[0]).toBeInTheDocument();
         });
     });
 

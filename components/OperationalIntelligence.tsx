@@ -14,10 +14,10 @@ interface OperationalIntelligenceProps {
 }
 
 export const OperationalIntelligence: React.FC<OperationalIntelligenceProps> = ({
-    transactions,
-    attendance,
-    inventory,
-    staffCount,
+    transactions = [],
+    attendance = [],
+    inventory = [],
+    staffCount = 0,
     efficiency = 98.4
 }) => {
     const todayStr = new Date().toISOString().split('T')[0];
