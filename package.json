@@ -1,0 +1,14 @@
+{
+  "name": "englabs-accounts-erp",
+  "version": "2.1.0",
+  "description": "Professional Master Accounts & Inventory System for Civil Engineering",
+  "main": "index.html",
+  "scripts": {
+    "dev": "http-server ./ -p 3000",
+    "backup": "echo 'Running ERP Backup Protocol...' && cp -r ./* ./08_Backup/Emergency_Backup/",
+    "audit": "echo 'Executing Forensic System Audit...' && node scripts/audit.js"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}

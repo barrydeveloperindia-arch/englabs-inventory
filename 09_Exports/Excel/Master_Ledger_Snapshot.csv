@@ -1,0 +1,5 @@
+Date,Voucher ID,Description,Debit Account,Credit Account,Amount,Reference
+2026-04-19,JE-4309,Initial Capital Inflow,CASH,EQUITY,500000.00,OPENING
+2026-04-19,JE-4310,Fixed Deposit Reserve,BANK,EQUITY,2500000.00,OPENING
+2026-04-19,JE-4311,TMT Steel Purchase,PURCHASE,CASH,32500.00,PO-9921
+2026-04-19,JE-4312,Site Advance - Bridge Site,CASH,PROJECT_INCOME,10000.00,ADV-01

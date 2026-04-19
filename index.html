@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngLabs Master ERP | Industrial Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #002244;
+            --secondary: #0a4d92;
+            --accent: #3b82f6;
+            --bg-dark: #001529;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --sidebar-width: 280px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-light); color: var(--text-dark); overflow: hidden; height: 100vh; display: flex; }
+
+        /* 🛡️ ERP SIDEBAR */
+        #sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 1.5rem 0;
+            list-style: none;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        .nav-label {
+            padding: 1.5rem 1.5rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* 🏢 MAIN CONTENT */
+        #main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header.top-header {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .view-title h1 { font-size: 1.25rem; font-weight: 800; color: var(--primary); }
+
+        .main-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .view-container { display: none; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 📊 STAT CARDS */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+        .stat-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+        /* 🧾 DATA TABLES */
+        .card { background: white; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem; overflow: hidden; }
+        .card-header { padding: 1.25rem 1.5rem; background: #f8fafc; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .card-title { font-size: 0.9rem; font-weight: 700; color: var(--primary); }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+        th { padding: 1rem 1.5rem; background: #f8fafc; font-weight: 700; color: var(--text-muted); border-bottom: 2px solid var(--border); }
+        td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); color: var(--text-dark); }
+        tr:hover { background: #f1f5f9; }
+
+        /* 🔘 COMPONENTS */
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dark); }
+
+        .badge { padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+
+        /* 🎭 MODALS */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+            z-index: 1000; display: none;
+        }
+        .modal-content {
+            background: white; padding: 2.5rem; border-radius: 16px; width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-muted); }
+        .form-input { 
+            width: 100%; padding: 0.75rem; border-radius: 8px; border: 1.5px solid var(--border); 
+            font-family: inherit; font-size: 0.9rem; outline: none; transition: border-color 0.2s;
+        }
+        .form-input:focus { border-color: var(--accent); }
+
+        /* 🔐 LOGIN OVERLAY */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary); z-index: 2000; display: flex;
+            align-items: center; justify-content: center;
+        }
+        .login-card { background: white; padding: 3rem; border-radius: 24px; width: 400px; text-align: center; }
+        .pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; }
+        .pin-btn { 
+            width: 60px; height: 60px; border-radius: 50%; border: 1px solid var(--border); 
+            font-size: 1.25rem; font-weight: 600; cursor: pointer; background: white;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pin-btn:hover { background: #f1f5f9; }
+        .pin-display { font-size: 2rem; letter-spacing: 0.5rem; margin-bottom: 2rem; color: var(--primary); min-height: 48px; }
+
+    </style>
+</head>
+<body>
+    <!-- 🔐 ERP SECURE ENTRY -->
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2 style="color: var(--primary); margin-bottom: 0.5rem;">EngLabs ERP</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Secure Forensic Entry Required</p>
+            <div id="token-display" class="pin-display"></div>
+            <div class="pin-pad">
+                <button class="pin-btn" onclick="addPin('1')">1</button>
+                <button class="pin-btn" onclick="addPin('2')">2</button>
+                <button class="pin-btn" onclick="addPin('3')">3</button>
+                <button class="pin-btn" onclick="addPin('4')">4</button>
+                <button class="pin-btn" onclick="addPin('5')">5</button>
+                <button class="pin-btn" onclick="addPin('6')">6</button>
+                <button class="pin-btn" onclick="addPin('7')">7</button>
+                <button class="pin-btn" onclick="addPin('8')">8</button>
+                <button class="pin-btn" onclick="addPin('9')">9</button>
+                <button class="pin-btn" style="color: var(--danger)" onclick="clearPin()">C</button>
+                <button class="pin-btn" onclick="addPin('0')">0</button>
+                <button class="pin-btn" style="color: var(--success)" onclick="submitLogin()">↲</button>
+            </div>
+            <p style="font-size: 0.65rem; color: var(--text-muted);">Adm: 1234 | Man: 5678 | Store: 0000</p>
+        </div>
+    </div>
+
+    <!-- 🛡️ NAVIGATION SIDEBAR -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <div style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px;">ENGLABS</div>
+            <div style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6;">Master Accounts v2.1</div>
+        </div>
+        <nav class="nav-menu">
+            <li class="nav-item active" onclick="switchView('dashboard')">
+                <i data-lucide="layout-dashboard"></i> Central Gateway
+            </li>
+            
+            <div class="nav-label">Core Operations</div>
+            <li class="nav-item" onclick="switchView('projects')">
+                <i data-lucide="building-2"></i> Project Master
+            </li>
+            <li class="nav-item" onclick="switchView('inventory')">
+                <i data-lucide="package"></i> Master Inventory
+            </li>
+            <li class="nav-item" onclick="switchView('purchase')">
+                <i data-lucide="shopping-cart"></i> Purchase System
+            </li>
+            <li class="nav-item" onclick="switchView('sales')">
+                <i data-lucide="banknote"></i> Sales & Billing
+            </li>
+
+            <div class="nav-label">Accounts & Finance</div>
+            <li class="nav-item" onclick="switchView('ledger')">
+                <i data-lucide="landmark"></i> Financial Ledger
+            </li>
+            <li class="nav-item" onclick="switchView('reports')">
+                <i data-lucide="file-bar-chart"></i> MIS Reports
+            </li>
+
+            <div class="nav-label">Forensic Controls</div>
+            <li class="nav-item" onclick="switchView('audit')">
+                <i data-lucide="shield-check"></i> System Audit
+            </li>
+            <li class="nav-item" onclick="switchView('admin')">
+                <i data-lucide="settings"></i> ERP Configuration
+            </li>
+        </nav>
+    </aside>
+
+    <div id="main-wrapper">
+        <header class="top-header">
+            <div class="view-title">
+                <h1 id="active-title">Central Gateway</h1>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div id="user-display" class="badge badge-success" style="padding: 0.5rem 1rem;">
+                    MANAGER: SAM
+                </div>
+                <button class="btn btn-outline" style="padding: 0.5rem;" onclick="logout()">
+                    <i data-lucide="log-out" style="width: 18px;"></i>
+                </button>
+            </div>
+        </header>
+
+        <section class="main-scroll-area">
+            
+            <!-- 🏢 DASHBOARD VIEW -->
+            <div id="view-dashboard" class="view-container" style="display: block;">
+                <div class="stats-grid">
+                    <div class="stat-card" style="border-top: 4px solid var(--accent);">
+                        <span class="stat-label">Total Cash Balance</span>
+                        <span class="stat-value" id="cash-bal">₹0.00</span>
+                    </div>
+                    <div class="stat-card" style="border-top: 4px solid var(--success);">
+                        <span class="stat-label">Total Inventory Value</span>
+                        <span class="stat-value" id="stock-val">₹0.00</span>
+                    </div>
+                    <div class="stat-card" style="border-top: 4px solid var(--warning);">
+                        <span class="stat-label">Pending Payables</span>
+                        <span class="stat-value" id="payable-val">₹0.00</span>
+                    </div>
+                    <div class="stat-card" style="border-top: 4px solid var(--primary);">
+                        <span class="stat-label">Active Projects</span>
+                        <span class="stat-value" id="active-proj">0</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Real-Time Flow Monitor</span>
+                        <div class="badge badge-success">LIVE</div>
+                    </div>
+                    <div style="padding: 2rem; height: 300px;">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🏗️ PROJECTS VIEW -->
+            <div id="view-projects" class="view-container">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Active Projects Directory</span>
+                        <button class="btn btn-primary" onclick="showModal('project-modal')">
+                            <i data-lucide="plus"></i> New Project
+                        </button>
+                    </div>
+                    <table id="projects-table">
+                        <thead>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>Name</th>
+                                <th>Budget</th>
+                                <th>Expenses</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projects-body">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 📦 INVENTORY VIEW -->
+            <div id="view-inventory" class="view-container">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Master Item Registry</span>
+                        <button class="btn btn-primary" onclick="showModal('item-modal')">
+                            <i data-lucide="package-plus"></i> Add Item
+                        </button>
+                    </div>
+                    <table id="items-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Category</th>
+                                <th>Item Name</th>
+                                <th>Stock Qty</th>
+                                <th>Unit</th>
+                                <th>Avg Rate</th>
+                                <th>Value</th>
+                                <th>Alert</th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 🛒 PURCHASE VIEW -->
+            <div id="view-purchase" class="view-container">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Purchase Order Command</span>
+                        <button class="btn btn-primary" onclick="showModal('po-modal')">
+                            <i data-lucide="shopping-bag"></i> Create PO
+                        </button>
+                    </div>
+                    <table id="po-table">
+                        <thead>
+                            <tr>
+                                <th>PO Date</th>
+                                <th>PO ID</th>
+                                <th>Vendor</th>
+                                <th>Items</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="po-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 💰 LEDGER VIEW -->
+            <div id="view-ledger" class="view-container">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">General Ledger (Double Entry)</span>
+                        <button class="btn btn-primary" onclick="showModal('voucher-modal')">
+                            <i data-lucide="plus-circle"></i> New Voucher
+                        </button>
+                    </div>
+                    <table id="ledger-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Voucher ID</th>
+                                <th>Particulars</th>
+                                <th>Debit (₹)</th>
+                                <th>Credit (₹)</th>
+                                <th>Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledger-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 📊 REPORTS VIEW -->
+            <div id="view-reports" class="view-container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Project Yield</span>
+                        <span class="stat-value">84%</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Stock Turnover</span>
+                        <span class="stat-value">12.5x</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Profitability Index</span>
+                        <span class="stat-value">1.12</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Monthly P&L Trend</span></div>
+                    <div style="padding:1.5rem; height:250px;"><canvas id="reportsChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- 🛡️ AUDIT VIEW -->
+            <div id="view-audit" class="view-container">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Forensic Activity Watchdog</span>
+                        <button class="btn btn-outline" onclick="exportAuditLog()">Export Logs</button>
+                    </div>
+                    <table id="audit-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audit-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ⚙️ ADMIN VIEW -->
+            <div id="view-admin" class="view-container">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">ERP Configuration</span></div>
+                    <div style="padding: 2rem;">
+                        <div class="form-group">
+                            <label>SYSTEM LOCK STATUS</label>
+                            <div style="display:flex; gap:1rem; align-items:center;">
+                                <span class="badge badge-success">UNLOCKED</span>
+                                <button class="btn btn-outline">LOCK SYSTEM</button>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top:2rem;">
+                            <label>DATABASE MAINTENANCE</label>
+                            <div style="display:flex; gap:1rem;">
+                                <button class="btn btn-outline" onclick="InventoryEngine.reset(); location.reload();">Hard Reset System</button>
+                                <button class="btn btn-primary">Download Backup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+        <!-- Item Modal -->
+        <div id="item-modal" class="modal-overlay">
+            <div class="modal-content">
+                <h3 style="margin-bottom: 2rem;">Register Inventory Item</h3>
+                <form onsubmit="handleItemSubmit(event)">
+                    <div class="form-group">
+                        <label>ITEM NAME</label>
+                        <input type="text" id="i_name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CATEGORY</label>
+                        <select id="i_category" class="form-input" required>
+                            <option value="">Select Category</option>
+                            <option>Construction Materials</option>
+                            <option>Electrical & Lighting</option>
+                            <option>Plumbing & Sanitization</option>
+                            <option>Tools & Equipment</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>MIN STOCK ALERT LEVEL</label>
+                        <input type="number" id="i_min" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>UNIT</label>
+                        <select id="i_unit" class="form-input" required>
+                            <option>Nos</option><option>Kg</option><option>Mtr</option><option>Bag</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">Save Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Voucher Modal -->
+        <div id="voucher-modal" class="modal-overlay">
+            <div class="modal-content">
+                <h3 style="margin-bottom: 2rem;">Double-Entry Voucher</h3>
+                <form onsubmit="handleVoucherSubmit(event)">
+                    <div class="form-group">
+                        <label>DEBIT ACCOUNT</label>
+                        <select id="v_dr" class="form-input" required>
+                            <option value="CASH">Cash</option>
+                            <option value="BANK">Bank</option>
+                            <option value="PURCHASE">Purchase Account</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>CREDIT ACCOUNT</label>
+                        <select id="v_cr" class="form-input" required>
+                            <option value="CASH">Cash</option>
+                            <option value="BANK">Bank</option>
+                            <option value="INCOME">Project Income</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>AMOUNT (₹)</label>
+                        <input type="number" id="v_amount" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>DESCRIPTION</label>
+                        <input type="text" id="v_desc" class="form-input" required>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">Post Voucher</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Project Modal -->
+        <div id="project-modal" class="modal-overlay">
+            <div class="modal-content">
+                <h3 style="margin-bottom: 2rem;">Register New Project</h3>
+                <form onsubmit="handleProjectSubmit(event)">
+                    <div class="form-group">
+                        <label>PROJECT NAME</label>
+                        <input type="text" id="p_name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>TOTAL BUDGET (₹)</label>
+                        <input type="number" id="p_budget" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>START DATE</label>
+                        <input type="date" id="p_date" class="form-input" required>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">Create Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script type="module" src="js/data.js"></script>
+    <script type="module" src="js/engine.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
