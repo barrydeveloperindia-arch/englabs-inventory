@@ -1,5 +1,5 @@
 /**
- * 🛰️ EngLabs Master ERP: Application Controller
+ * 🛰️ Englabs_Accounts_Team: Application Controller
  */
 
 let currentPin = '';
@@ -57,10 +57,11 @@ function switchView(viewId) {
     document.querySelectorAll('.nav-item').forEach(v => v.classList.remove('active'));
 
     // Show target
-    document.getElementById('view-' + viewId).style.display = 'block';
+    const target = document.getElementById('view-' + viewId);
+    if (target) target.style.display = 'block';
     
     // Update active nav
-    const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.getAttribute('onclick').includes(viewId));
+    const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.getAttribute('onclick')?.includes(viewId));
     if (activeNav) activeNav.classList.add('active');
 
     // Update Header
@@ -71,14 +72,17 @@ function switchView(viewId) {
         'purchase': 'Purchase System',
         'sales': 'Sales & Billing',
         'ledger': 'Financial Ledger',
+        'site-cash': 'Site Cash Details',
         'reports': 'MIS Reports',
         'audit': 'System Audit',
-        'admin': 'ERP Configuration'
+        'admin': 'Admin Panel',
+        'folders': 'Local Directory'
     };
-    document.getElementById('active-title').textContent = titles[viewId] || 'EngLabs ERP';
+    document.getElementById('active-title').textContent = titles[viewId] || 'Englabs_Accounts_Team';
     
     currentView = viewId;
     updateUI();
+    lucide.createIcons();
 }
 
 // 🔄 UI UPDATE ENGINE
@@ -86,9 +90,210 @@ function updateUI() {
     if (currentView === 'dashboard') renderDashboard();
     if (currentView === 'projects') renderProjects();
     if (currentView === 'inventory') renderInventory();
+    if (currentView === 'purchase') renderPurchase();
+    if (currentView === 'sales') renderSales();
     if (currentView === 'ledger') renderLedger();
+    if (currentView === 'site-cash') renderSiteCash();
     if (currentView === 'audit') renderAudit();
     if (currentView === 'reports') renderReports();
+    if (currentView === 'folders') renderFolders();
+}
+
+function renderSiteCash() {
+    const body = document.getElementById('site-cash-body');
+    const balanceEl = document.getElementById('site-cash-bal');
+    if (!body || !balanceEl) return;
+
+    const tx = InventoryEngine.getCache().ledger.filter(l => l.debit === 'SITE_CASH' || l.credit === 'SITE_CASH');
+    const total = InventoryEngine.finance.getBalance('SITE_CASH');
+    
+    balanceEl.textContent = `₹${total.toLocaleString()}`;
+    
+    if (tx.length === 0) {
+        body.innerHTML = '<tr><td colspan="6" class="empty-state">No Site Cash transactions recorded yet.</td></tr>';
+        return;
+    }
+
+    body.innerHTML = tx.map(t => `
+        <tr>
+            <td>${new Date(t.date).toLocaleDateString()}</td>
+            <td><span class="badge badge-outline">${t.reference.split('|')[0] || 'N/A'}</span></td>
+            <td>${t.description}</td>
+            <td style="color: var(--success)">${t.debit === 'SITE_CASH' ? '₹' + t.amount.toLocaleString() : '-'}</td>
+            <td style="color: var(--danger)">${t.credit === 'SITE_CASH' ? '₹' + t.amount.toLocaleString() : '-'}</td>
+            <td><small>${t.reference.split('|')[1] || 'SYSTEM'}</small></td>
+        </tr>
+    `).join('');
+}
+
+window.handleSiteCashSubmit = function(e) {
+    e.preventDefault();
+    const proj = document.getElementById('sc_project').value;
+    const type = document.getElementById('sc_type').value.toUpperCase();
+    const amount = document.getElementById('sc_amount').value;
+    const desc = document.getElementById('sc_desc').value;
+
+    let entry;
+    if (type === 'IN') {
+        entry = InventoryEngine.finance.recordEntry('SITE_CASH', 'BANK', amount, `${proj}|LOGGED`, desc);
+    } else {
+        entry = InventoryEngine.finance.recordEntry('EXPENSE', 'SITE_CASH', amount, `${proj}|LOGGED`, desc);
+    }
+
+    // 🛡️ Forensic Log Injection
+    if (typeof InventoryEngine.logActivity === 'function') {
+        InventoryEngine.logActivity('SITE_CASH_LOG', `${type}: ₹${amount} for ${proj} - ${desc}`);
+    }
+
+    hideModals();
+    updateUI();
+    showToast('Site Cash transaction logged successfully');
+}
+
+window.showModal = function(id) {
+    // Hide all first to prevent overlap
+    document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+
+    if (id === 'site-cash-modal' || id === 'issue-modal' || id === 'invoice-modal') {
+        const selectId = id === 'site-cash-modal' ? 'sc_project' : (id === 'issue-modal' ? 'iss_project' : 'inv_project');
+        const select = document.getElementById(selectId);
+        const projs = InventoryEngine.projects.getAll();
+        if (select && projs) {
+            select.innerHTML = projs.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+        }
+    }
+
+    if (id === 'po-modal') {
+        const select = document.getElementById('po_vendor');
+        // Simulate vendors from state
+        const vendors = ['Tata Steel Ltd', 'UltraTech Cement', 'Asian Paints', 'HDFC Bank'];
+        select.innerHTML = vendors.map(v => `<option value="${v}">${v}</option>`).join('');
+    }
+    
+    const modal = document.getElementById(id);
+    if (modal) modal.style.display = 'flex';
+}
+
+window.handlePOSubmit = function(e) {
+    e.preventDefault();
+    const vendor = document.getElementById('po_vendor').value;
+    const amount = document.getElementById('po_amount').value;
+    const remarks = document.getElementById('po_remarks').value;
+
+    InventoryEngine.finance.recordEntry('INVENTORY_VAL', 'ACCOUNTS_PAYABLE', amount, `PO-${Date.now()}`, `Purchase from ${vendor}: ${remarks}`);
+    InventoryEngine.logActivity('PO_CREATED', `Created PO for ${vendor} amount: ₹${amount}`);
+
+    hideModals();
+    updateUI();
+}
+
+window.handleInvoiceSubmit = function(e) {
+    e.preventDefault();
+    const project = document.getElementById('inv_project').value;
+    const client = document.getElementById('inv_client').value;
+    const amount = document.getElementById('inv_amount').value;
+
+    InventoryEngine.finance.recordEntry('ACCOUNTS_RECEIVABLE', 'SALES_REVENUE', amount, `INV-${Date.now()}`, `Invoice to ${client} for Project ID: ${project}`);
+    InventoryEngine.logActivity('INVOICE_GENERATED', `Generated invoice for ${client} amount: ₹${amount}`);
+
+    hideModals();
+    updateUI();
+}
+
+window.openIssueModal = function(itemId) {
+    const item = InventoryEngine.inventory.getAll().find(i => i.id === itemId);
+    if (!item) return;
+    document.getElementById('iss_item_id').value = item.id;
+    document.getElementById('iss_item_name').value = item.name;
+    showModal('issue-modal');
+}
+
+window.handleIssueSubmit = function(e) {
+    e.preventDefault();
+    const itemId = document.getElementById('iss_item_id').value;
+    const projectId = document.getElementById('iss_project').value;
+    const qty = parseFloat(document.getElementById('iss_qty').value);
+
+    const res = InventoryEngine.inventory.updateStock(itemId, qty, 0, 'OUT', { projectId });
+    if (res.success) {
+        showToast('Material issued to project successfully');
+        hideModals();
+        updateUI();
+    } else {
+        alert(res.msg);
+    }
+}
+
+function renderFolders() {
+    const list = document.getElementById('folder-health-list');
+    if (!list) return;
+    
+    // Simulate folder metadata
+    const folders = [
+        { path: '📄 /01_Projects', status: 'ACTIVE', size: '2.4 GB' },
+        { path: '📦 /03_Inventory', status: 'STABLE', size: '1.1 GB' },
+        { path: '📊 /09_Exports', status: 'SCANNING', size: '450 MB' }
+    ];
+
+    list.innerHTML = folders.map(f => `
+        <div class="stat-card" style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div class="stat-label">${f.path}</div>
+                <div class="stat-value" style="font-size: 0.9rem; color: var(--text-muted)">Size: ${f.size}</div>
+            </div>
+            <span class="badge ${f.status === 'ACTIVE' ? 'badge-success' : f.status === 'STABLE' ? 'badge-primary' : 'badge-outline'}">${f.status}</span>
+        </div>
+    `).join('');
+}
+
+function renderPurchase() {
+    const entries = InventoryEngine.getCache().ledger.filter(e => e.credit === 'ACCOUNTS_PAYABLE');
+    const body = document.getElementById('po-body');
+    if (!body) return;
+    
+    if (entries.length === 0) {
+        body.innerHTML = '<tr><td colspan="7" class="empty-state"><i data-lucide="shopping-cart"></i><h3>No Purchase Orders Found</h3></td></tr>';
+        lucide.createIcons();
+        return;
+    }
+
+    body.innerHTML = entries.map(e => `
+        <tr>
+            <td>${new Date(e.date).toLocaleDateString()}</td>
+            <td><strong>${e.reference}</strong></td>
+            <td>${e.description.split('from ')[1]?.split(':')[0] || 'N/A'}</td>
+            <td>General Procurement</td>
+            <td style="font-weight: 700">₹${e.amount.toLocaleString()}</td>
+            <td><span class="badge badge-primary">ACTIVE</span></td>
+            <td><button class="btn btn-outline" style="padding:4px;"><i data-lucide="printer" style="width:14px;"></i></button></td>
+        </tr>
+    `).join('');
+    lucide.createIcons();
+}
+
+function renderSales() {
+    const entries = InventoryEngine.getCache().ledger.filter(e => e.credit === 'SALES_REVENUE');
+    const body = document.getElementById('sales-body');
+    if (!body) return;
+
+    if (entries.length === 0) {
+        body.innerHTML = '<tr><td colspan="7" class="empty-state"><i data-lucide="banknote"></i><h3>No Sales records Found</h3></td></tr>';
+        lucide.createIcons();
+        return;
+    }
+
+    body.innerHTML = entries.map(e => `
+        <tr>
+            <td>${new Date(e.date).toLocaleDateString()}</td>
+            <td><strong>${e.reference}</strong></td>
+            <td>${e.description.split('to ')[1]?.split(' for')[0] || 'N/A'}</td>
+            <td>${e.description.split('ID: ')[1] || 'N/A'}</td>
+            <td style="font-weight: 700">₹${e.amount.toLocaleString()}</td>
+            <td><span class="badge badge-success">PAID</span></td>
+            <td><button class="btn btn-outline" style="padding:4px;"><i data-lucide="download" style="width:14px;"></i></button></td>
+        </tr>
+    `).join('');
+    lucide.createIcons();
 }
 
 function renderAudit() {
@@ -113,15 +318,19 @@ function renderReports() {
         data: {
             labels: ['Jan', 'Feb', 'Mar', 'Apr'],
             datasets: [{
-                label: 'Project Revenue',
-                data: [450, 520, 610, 840],
-                backgroundColor: '#3b82f6'
+                label: 'Project Revenue (₹ Lakhs)',
+                data: [45, 52, 61, 84],
+                backgroundColor: '#3b82f6',
+                borderRadius: 8
             }]
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
     });
 }
-
 function renderDashboard() {
     const stats = InventoryEngine.reports.getDashboardStats();
     document.getElementById('cash-bal').textContent = `₹${stats.totalCash.toLocaleString()}`;
@@ -137,8 +346,10 @@ function renderDashboard() {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             datasets: [{
                 label: 'Operational Liquidity',
-                data: [12000, 19000, 3000, 5000, 2000, 3000],
+                data: [1200000, 1900000, 300000, 500000, 200000, 300000],
                 borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                fill: true,
                 tension: 0.4
             }]
         },
@@ -188,8 +399,25 @@ function renderInventory() {
             <td>
                 ${i.qty <= i.minStock ? `<span class="badge badge-danger">LOW STOCK</span>` : `<span class="badge badge-success">OK</span>`}
             </td>
+            <td>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-outline" style="padding: 4px 8px;" onclick="openIssueModal('${i.id}')" title="Quick Issue">
+                        <i data-lucide="package-minus"></i>
+                    </button>
+                    <button class="btn btn-outline" style="padding: 4px 8px;" onclick="viewItemHistory('${i.id}')" title="View Audit Trail">
+                        <i data-lucide="history"></i>
+                    </button>
+                </div>
+            </td>
         </tr>
     `).join('');
+    lucide.createIcons();
+}
+
+window.viewItemHistory = function(itemId) {
+    switchView('audit');
+    // We could filter the audit body here, but for now just showing the logic
+    showToast(`Filtering Audit for ${itemId}...`);
 }
 
 function renderLedger() {

@@ -2,6 +2,7 @@
  * 🌀 EngLabs Master ERP: Forensic Core Engine
  * Manages Projects, Inventory, Accounts, and Procurement.
  */
+import { EXCEL_SEED } from './seed_data.js';
 
 const InventoryEngine = (() => {
     // 🛡️ HEADLESS SAFETY: Handle Node/Testing environments
@@ -176,28 +177,49 @@ const InventoryEngine = (() => {
     const seedData = () => {
         if (_cache.projects.length > 0) return;
         
-        projects.add('Bridge Construction Site A', 1500000, '2026-01-01');
-        projects.add('Residential Tower B', 800000, '2026-03-15');
-        
+        console.log("🏭 Seeding Engine with Professional and Excel Ingested Data...");
+
+        // 🏗️ Projects from Excel / Default
+        const defaultProjects = [
+            { id: 'C4925', name: 'Marelli Project (Ph-1)', budget: 1500000 },
+            { id: 'C5131', name: 'Delhi Expo Site', budget: 800000 }
+        ];
+
+        defaultProjects.forEach(p => projects.add(p.name, p.budget, '2026-04-01'));
+
+        // 📦 Inventory Seed
         inventory.addItem('TMT Steel 12mm', 'Construction Materials', 100, 'Kg');
         inventory.addItem('OPC Cement 43 Grade', 'Construction Materials', 50, 'Bag');
-        inventory.addItem('Internal Primer 20L', 'Paints & Coatings', 10, 'Nos');
 
-        finance.recordEntry('CASH', 'EQUITY', 500000, 'OPENING', 'Initial Capital Inflow');
-        finance.recordEntry('BANK', 'EQUITY', 2500000, 'OPENING', 'Fixed Deposit Reserve');
+        // ➕ Inject Discovered Items from Site Cash
+        if (EXCEL_SEED.discoveredItems) {
+            EXCEL_SEED.discoveredItems.forEach(name => {
+                inventory.addItem(name, 'Discovered - Site Cash', 5, 'Nos');
+            });
+        }
+
+        // 🏛️ Financial Ledger Injection (EXCEL)
+        if (EXCEL_SEED.ledger) {
+            EXCEL_SEED.ledger.forEach(l => {
+                const dr = l.type === 'IN' ? 'SITE_CASH' : 'EXPENSE';
+                const cr = l.type === 'IN' ? 'BANK' : 'SITE_CASH';
+                finance.recordEntry(dr, cr, l.amount, l.project, l.description);
+            });
+        } else {
+            finance.recordEntry('CASH', 'EQUITY', 500000, 'OPENING', 'Initial Capital Inflow');
+            finance.recordEntry('BANK', 'EQUITY', 2500000, 'OPENING', 'Fixed Deposit Reserve');
+        }
         
-        inventory.updateStock('ITM-' + _cache.items.find(i => i.name === 'TMT Steel 12mm').id.slice(-4), 500, 65, 'IN', { remarks: 'Opening Stock' });
+        logActivity('SYSTEM_SEED', 'Engine initialized with Excel metadata and forensic audit trails.');
     };
 
     const reset = () => {
-        _cache.projects = [];
-        _cache.items = [];
-        _cache.transactions = [];
-        _cache.vendors = [];
-        _cache.pos = [];
-        _cache.ledger = [];
-        _cache.currentUser = null;
-        logActivity('SYSTEM_RESET', 'Forensic state cleared.');
+        if (typeof localStorage !== 'undefined') {
+            Object.keys(localStorage).forEach(k => {
+                if (k.startsWith('englabs_')) localStorage.removeItem(k);
+            });
+        }
+        location.reload();
     };
 
     return {
@@ -208,6 +230,7 @@ const InventoryEngine = (() => {
         reports,
         seedData,
         reset,
+        logActivity,
         getCache: () => _cache
     };
 })();

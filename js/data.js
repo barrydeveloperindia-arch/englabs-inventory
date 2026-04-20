@@ -1,5 +1,5 @@
 /**
- * 📊 EngLabs ERP: Static Master Data
+ * 📊 Englabs_Accounts_Team: Static Master Data
  */
 
 const MASTER_DATA = {
