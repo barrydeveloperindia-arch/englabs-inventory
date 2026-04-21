@@ -12,6 +12,7 @@ const localStorageMock = (() => {
     };
 })();
 global.localStorage = localStorageMock;
+global.location = { reload: vi.fn() };
 
 describe('EngLabs ERP: Forensic Intelligence Audit', () => {
 
@@ -89,4 +90,21 @@ describe('EngLabs ERP: Forensic Intelligence Audit', () => {
         expect(logs[logs.length - 1].user).toBe('ADMIN');
     });
 
+    it('should preserve forensic metadata (From, Mode, Category) in Site Cash entries', () => {
+        InventoryEngine.finance.recordEntry('SITE_CASH', 'BANK', 5000, 'C-GENERAL', 'Test Inflow', {
+            from: 'Englabs IDFC',
+            mode: 'NEFT',
+            category: 'MAINTENANCE'
+        });
+
+        const ledger = InventoryEngine.getCache().ledger;
+        const entry = ledger.find(e => e.description === 'Test Inflow');
+
+        expect(entry.from).toBe('Englabs IDFC');
+        expect(entry.mode).toBe('NEFT');
+        expect(entry.category).toBe('MAINTENANCE');
+        expect(entry.type).toBe('IN');
+    });
+
 });
+

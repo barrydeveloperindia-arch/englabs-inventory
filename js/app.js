@@ -9,9 +9,33 @@ let currentView = 'dashboard';
 document.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
     InventoryEngine.seedData();
-    checkAuth();
+    
+    // 🔓 Bypassing Authentication for Direct Access
+    const res = InventoryEngine.auth.login('1234'); // Auto-login as ADMIN
+    if (res.success) {
+        document.getElementById('user-display').textContent = `ADMIN: SAM`;
+    }
+    
     updateUI();
 });
+
+
+function showToast(msg) {
+    const toast = document.createElement('div');
+    toast.className = 'badge badge-success';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '2rem';
+    toast.style.right = '2rem';
+    toast.style.padding = '1rem 2rem';
+    toast.style.boxShadow = 'var(--shadow-lg)';
+    toast.style.zIndex = '9999';
+    toast.style.animation = 'slideUp 0.3s ease';
+    toast.innerHTML = `<i data-lucide="bell" style="width:16px; margin-right:8px;"></i> ${msg}`;
+    document.body.appendChild(toast);
+    lucide.createIcons();
+    setTimeout(() => toast.remove(), 3000);
+}
+
 
 function addPin(num) {
     if (currentPin.length < 4) {
@@ -38,12 +62,9 @@ function submitLogin() {
 }
 
 function checkAuth() {
-    const user = InventoryEngine.getCache().currentUser;
-    if (user) {
-        document.getElementById('login-overlay').style.display = 'none';
-        document.getElementById('user-display').textContent = `${user.role}: SAM`;
-    }
+    // Authentication Bypass: Direct Access Enabled
 }
+
 
 function logout() {
     InventoryEngine.auth.logout();
@@ -114,16 +135,28 @@ function renderSiteCash() {
         return;
     }
 
-    body.innerHTML = tx.map(t => `
+    body.innerHTML = tx.map(t => {
+        const isIn = t.type === 'IN';
+        const plValue = t.balance > 0 ? 'Surplus' : 'Deficit';
+        return `
         <tr>
             <td>${new Date(t.date).toLocaleDateString()}</td>
-            <td><span class="badge badge-outline">${t.reference.split('|')[0] || 'N/A'}</span></td>
+            <td><span style="font-weight: 700; color: var(--primary)">${t.from || '-'}</span></td>
+            <td><span class="badge badge-outline" style="font-size: 0.6rem">${t.mode || 'CASH'}</span></td>
             <td>${t.description}</td>
-            <td style="color: var(--success)">${t.debit === 'SITE_CASH' ? '₹' + t.amount.toLocaleString() : '-'}</td>
-            <td style="color: var(--danger)">${t.credit === 'SITE_CASH' ? '₹' + t.amount.toLocaleString() : '-'}</td>
-            <td><small>${t.reference.split('|')[1] || 'SYSTEM'}</small></td>
+            <td><span class="badge ${t.category === 'MAINTENANCE' ? 'badge-primary' : (t.category === 'EMERGENCY' ? 'badge-danger' : (t.category === 'LOGISTICS' ? 'badge-outline' : 'badge-success'))}" style="font-size: 0.6rem">${t.category || 'GENERAL'}</span></td>
+            <td style="color: var(--success); font-weight: 600">${isIn ? '₹' + t.amount.toLocaleString() : '-'}</td>
+
+            <td style="color: var(--danger); font-weight: 600">${!isIn ? '₹' + t.amount.toLocaleString() : '-'}</td>
+            <td style="font-weight: 700; color: var(--primary)">₹${t.balance?.toLocaleString() || '0'}</td>
+            <td><span class="badge badge-primary" style="font-size: 0.65rem">${t.project || 'N/A'}</span></td>
+            <td><span class="badge ${t.balance > 0 ? 'badge-success' : 'badge-danger'}">${plValue}</span></td>
         </tr>
-    `).join('');
+    `;
+    }).join('');
+
+
+
 }
 
 window.handleSiteCashSubmit = function(e) {
@@ -227,24 +260,46 @@ window.handleIssueSubmit = function(e) {
 function renderFolders() {
     const list = document.getElementById('folder-health-list');
     if (!list) return;
-    
-    // Simulate folder metadata
+
     const folders = [
-        { path: '📄 /01_Projects', status: 'ACTIVE', size: '2.4 GB' },
-        { path: '📦 /03_Inventory', status: 'STABLE', size: '1.1 GB' },
-        { path: '📊 /09_Exports', status: 'SCANNING', size: '450 MB' }
+        { name: 'Master Registers', description: 'Core ERP Ledger & Inventories', status: 'ACTIVE', size: '2.4 MB', icon: 'book-open' },
+        { name: '01_Projects', description: 'Project Documents & Site Blueprints', status: 'STABLE', size: '1.8 GB', icon: 'folder' },
+        { name: 'Site Cash Details', description: 'Raw Forensic Excel Ledgers', status: 'ACTIVE', size: '50 KB', icon: 'file-spreadsheet' },
+        { name: '03_Inventory', description: 'Procurement & Warehouse Logs', status: 'ACTIVE', size: '450 KB', icon: 'package' },
+        { name: '09_Exports', description: 'Monthly Financial Audit Reports', status: 'LOCKED', size: '12 MB', icon: 'file-archive' }
     ];
 
+
+    list.parentElement.style.display = 'grid';
+    list.parentElement.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
+    list.parentElement.style.gap = '1.5rem';
+
     list.innerHTML = folders.map(f => `
-        <div class="stat-card" style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <div class="stat-label">${f.path}</div>
-                <div class="stat-value" style="font-size: 0.9rem; color: var(--text-muted)">Size: ${f.size}</div>
+        <div class="stat-card" style="cursor: pointer; display: flex; flex-direction: column; gap: 0.5rem; padding: 2rem;" onclick="handleFolderClick('${f.name}')">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <i data-lucide="${f.icon}" style="width: 32px; height: 32px; color: var(--accent); opacity: 1;"></i>
+                <span class="badge ${f.status === 'ACTIVE' ? 'badge-success' : 'badge-outline'}">${f.status}</span>
             </div>
-            <span class="badge ${f.status === 'ACTIVE' ? 'badge-success' : f.status === 'STABLE' ? 'badge-primary' : 'badge-outline'}">${f.status}</span>
+            <div class="stat-label" style="font-size: 1.1rem; margin-top: 1rem;">${f.name}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin: 0.5rem 0;">${f.description}</div>
+            <small style="margin-top: auto; color: var(--text-dark); font-weight: 700;">${f.size}</small>
         </div>
     `).join('');
+    lucide.createIcons();
 }
+
+window.handleFolderClick = function(name) {
+    if (name === 'Master Registers' || name === '03_Inventory') {
+        switchView('inventory');
+        showToast(`Opening ${name}...`);
+    } else if (name === 'Site Cash Details') {
+        switchView('site-cash');
+        showToast('Scanning Forensic Site Cash Ledger...');
+    } else {
+        showToast(`Folder ${name} is protected by forensic policy.`);
+    }
+}
+
 
 function renderPurchase() {
     const entries = InventoryEngine.getCache().ledger.filter(e => e.credit === 'ACCOUNTS_PAYABLE');
@@ -331,6 +386,7 @@ function renderReports() {
         }
     });
 }
+
 function renderDashboard() {
     const stats = InventoryEngine.reports.getDashboardStats();
     document.getElementById('cash-bal').textContent = `₹${stats.totalCash.toLocaleString()}`;
@@ -404,14 +460,45 @@ function renderInventory() {
                     <button class="btn btn-outline" style="padding: 4px 8px;" onclick="openIssueModal('${i.id}')" title="Quick Issue">
                         <i data-lucide="package-minus"></i>
                     </button>
+                    <button class="btn btn-outline" style="padding: 4px 8px;" onclick="showToast('Edit feature coming soon...')" title="Edit Item">
+                        <i data-lucide="edit-3"></i>
+                    </button>
+                    <button class="btn btn-outline" style="padding: 4px 8px;" onclick="viewItemPhoto('${i.id}')" title="View Site Photo">
+                        <i data-lucide="camera"></i>
+                    </button>
                     <button class="btn btn-outline" style="padding: 4px 8px;" onclick="viewItemHistory('${i.id}')" title="View Audit Trail">
                         <i data-lucide="history"></i>
                     </button>
                 </div>
             </td>
+
         </tr>
     `).join('');
     lucide.createIcons();
+}
+
+window.viewItemPhoto = function(itemId) {
+    const item = InventoryEngine.inventory.getAll().find(i => i.id === itemId);
+    if (!item) return;
+
+    const img = document.getElementById('forensic-img');
+    const details = document.getElementById('forensic-details');
+    const idEl = document.getElementById('forensic-id');
+
+    // Mapping professional forensic images
+    const itemPhotos = {
+        'ITM-6361': 'https://images.unsplash.com/photo-1586769845811-e40854d9091b?q=80&w=1000', // A4 Paper
+        'ITM-6362': 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?q=80&w=1000', // Toner
+        'ITM-6363': 'https://images.unsplash.com/photo-1599708139598-a28a3138b555?q=80&w=1000', // PPE Kit
+        'ITM-6364': 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=1000', // Logitech Combo
+        'DEFAULT': 'https://images.unsplash.com/photo-1586769845811-e40854d9091b?q=80&w=1000'
+    };
+
+    img.src = itemPhotos[itemId] || itemPhotos['DEFAULT'];
+    details.textContent = `${item.name} (${item.category})`;
+    idEl.textContent = item.id;
+
+    showModal('photo-modal');
 }
 
 window.viewItemHistory = function(itemId) {
@@ -474,16 +561,11 @@ function handleVoucherSubmit(e) {
     if (currentView === 'dashboard') renderDashboard();
 }
 
-// 🖼️ MODAL UTILS
-function showModal(id) {
-    document.getElementById(id).style.display = 'flex';
-}
-
 function hideModals() {
     document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
 }
 
-// GLOBAL EXPORTS
+// 🌐 GLOBAL EXPORTS
 window.addPin = addPin;
 window.clearPin = clearPin;
 window.submitLogin = submitLogin;
@@ -492,5 +574,7 @@ window.switchView = switchView;
 window.handleProjectSubmit = handleProjectSubmit;
 window.handleItemSubmit = handleItemSubmit;
 window.handleVoucherSubmit = handleVoucherSubmit;
-window.showModal = showModal;
+window.showModal = window.showModal; // Already assigned on line 153
 window.hideModals = hideModals;
+
+

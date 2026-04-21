@@ -10,8 +10,10 @@ const MASTER_DATA = {
         'Paints & Coatings',
         'Tools & Equipment',
         'Safety & PPE',
-        'Housekeeping',
-        'Office Supplies'
+        'Office Supplies',
+        'Stationery',
+        'Electronics & IT',
+        'Housekeeping'
     ],
     units: [
         'Nos',

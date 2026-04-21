@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <!-- 🔐 ERP SECURE ENTRY -->
-    <div id="login-overlay">
+    <!-- 🔐 ERP SECURE ENTRY (Bypassed) -->
+    <div id="login-overlay" style="display: none;">
+
         <div class="login-card">
             <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Englabs_Accounts_Team</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Secure Forensic Entry Required</p>
@@ -174,6 +175,15 @@
 
             <!-- 📦 INVENTORY VIEW -->
             <div id="view-inventory" class="view-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <div>
+                        <h1 style="margin: 0;">Master Register</h1>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Stationery & Office Supplies Ledger</p>
+                    </div>
+                    <button class="btn btn-outline" onclick="switchView('folders')">
+                        <i data-lucide="arrow-left"></i> BACK TO FOLDERS
+                    </button>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title">Master Item Registry</span>
@@ -296,13 +306,20 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Project</th>
-                                <th>Description</th>
-                                <th>In (₹)</th>
-                                <th>Out (₹)</th>
-                                <th>User</th>
+                                <th>From / Payer</th>
+                                <th>Payment Mode</th>
+                                <th>Particulars</th>
+                                <th>Category</th>
+                                <th>Cr. (In)</th>
+
+                                <th>Dr. (Out)</th>
+                                <th>Balance (₹)</th>
+                                <th>Project ID</th>
+                                <th>P/L Analytics</th>
                             </tr>
                         </thead>
+
+
                         <tbody id="site-cash-body"></tbody>
                     </table>
                 </div>
@@ -490,11 +507,27 @@
         </div>
     </div>
 
+    <!-- Forensic Photo Modal -->
+    <div id="photo-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px; text-align: center;">
+            <h3 style="margin-bottom: 2rem; color: var(--primary);">Forensic Item Verification</h3>
+            <div id="photo-content">
+                <img id="forensic-img" src="https://images.unsplash.com/photo-1586769852044-692d6e692453?q=80&w=1000" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-lg); margin-bottom: 1.5rem;">
+                <p id="forensic-details" style="font-weight: 600; color: var(--text-dark);"></p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Forensic Identity: <span id="forensic-id"></span></p>
+            </div>
+            <button class="btn btn-primary" style="margin-top: 2rem; width: 100%;" onclick="hideModals()">Close Verification</button>
+        </div>
+    </div>
+
     <!-- SCRIPTS -->
-    <script type="module" src="js/data.js"></script>
-    <script type="module" src="js/engine.js"></script>
-    <script type="module" src="js/app.js"></script>
+
+    <script type="module" src="js/data.js?v=forensic_2.1"></script>
+    <script type="module" src="js/seed_data.js?v=forensic_2.1"></script>
+    <script type="module" src="js/engine.js?v=forensic_2.1"></script>
+    <script type="module" src="js/app.js?v=forensic_2.1"></script>
+
+
     <script> lucide.createIcons(); </script>
 </body>
 </html>
-

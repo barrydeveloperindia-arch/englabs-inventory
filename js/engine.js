@@ -66,7 +66,7 @@ const InventoryEngine = (() => {
     const inventory = {
         addItem: (name, category, minStock, unit) => {
             const item = {
-                id: 'ITM-' + Date.now().toString().slice(-4),
+                id: 'ITM-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0'),
                 name,
                 category,
                 qty: 0,
@@ -113,14 +113,22 @@ const InventoryEngine = (() => {
             };
             _cache.transactions.push(tx);
             _save('tx', _cache.transactions);
+
+            // 🛡️ Forensic Audit Injection
+            if (type === 'OUT') {
+                logActivity('STOCK_REMOVED', `Issued ${qtyChange} units of ${item.name} to ${metadata?.projectId || 'GENERAL'}`);
+            } else {
+                logActivity('STOCK_ADDED', `Restocked ${qtyChange} units of ${item.name}`);
+            }
             
-            return { success: true };
+            return { success: true, tx };
+
         }
     };
 
     // 💰 FINANCE MODULE (Triple-Entry)
     const finance = {
-        recordEntry: (dr, cr, amount, ref, desc) => {
+        recordEntry: (dr, cr, amount, ref, desc, metadata = {}) => {
             const entry = {
                 id: 'FIN-' + Date.now().toString().slice(-6),
                 date: new Date().toISOString(),
@@ -128,7 +136,9 @@ const InventoryEngine = (() => {
                 credit: cr,
                 amount: parseFloat(amount),
                 reference: ref,
-                description: desc
+                description: desc,
+                type: dr === 'SITE_CASH' ? 'IN' : 'OUT',
+                ...metadata
             };
             _cache.ledger.push(entry);
             _save('ledger', _cache.ledger);
@@ -187,23 +197,47 @@ const InventoryEngine = (() => {
 
         defaultProjects.forEach(p => projects.add(p.name, p.budget, '2026-04-01'));
 
-        // 📦 Inventory Seed
-        inventory.addItem('TMT Steel 12mm', 'Construction Materials', 100, 'Kg');
-        inventory.addItem('OPC Cement 43 Grade', 'Construction Materials', 50, 'Bag');
+        // 📦 Inventory Seed (Stationery & Office Focus)
+        const i1 = inventory.addItem('A4 Paper Rim (75GSM)', 'Stationery', 200, 'Nos');
+        inventory.updateStock(i1.id, 500, 280, 'IN', { projectId: 'OPENING' });
+        
+        const i2 = inventory.addItem('HP Laserjet Toner 12A', 'Office Supplies', 10, 'Nos');
+        inventory.updateStock(i2.id, 25, 3200, 'IN', { projectId: 'OPENING' });
+        
+        const i3 = inventory.addItem('Safety PPE Kit (L1)', 'Safety & PPE', 50, 'Set');
+        inventory.updateStock(i3.id, 100, 1500, 'IN', { projectId: 'OPENING' });
+        
+        const i4 = inventory.addItem('Logitech Wireless Combo', 'Electronics & IT', 15, 'Nos');
+        inventory.updateStock(i4.id, 30, 1850, 'IN', { projectId: 'OPENING' });
+
 
         // ➕ Inject Discovered Items from Site Cash
         if (EXCEL_SEED.discoveredItems) {
-            EXCEL_SEED.discoveredItems.forEach(name => {
-                inventory.addItem(name, 'Discovered - Site Cash', 5, 'Nos');
+            EXCEL_SEED.discoveredItems.forEach(itemInfo => {
+                const item = inventory.addItem(itemInfo.name, 'Discovered - Site Cash', 5, 'Nos');
+                // Auto-fill actual forensic stock and rate from Excel
+                inventory.updateStock(item.id, itemInfo.qty, itemInfo.rate, 'IN', { projectId: 'EXCEL_SYNC' });
             });
         }
 
+
+
         // 🏛️ Financial Ledger Injection (EXCEL)
-        if (EXCEL_SEED.ledger) {
+        // Only seed if ledger is empty to prevent duplication on reload
+        if (EXCEL_SEED.ledger && _cache.ledger.length === 0) {
+
             EXCEL_SEED.ledger.forEach(l => {
                 const dr = l.type === 'IN' ? 'SITE_CASH' : 'EXPENSE';
                 const cr = l.type === 'IN' ? 'BANK' : 'SITE_CASH';
-                finance.recordEntry(dr, cr, l.amount, l.project, l.description);
+                finance.recordEntry(dr, cr, l.amount, l.project, l.description, {
+                    from: l.from,
+                    mode: l.mode,
+                    recBy: l.recBy,
+                    balance: l.balance,
+                    category: l.category, // Forensic Category Persistence
+                    project: l.project // Explicitly set for easy access
+                });
+
             });
         } else {
             finance.recordEntry('CASH', 'EQUITY', 500000, 'OPENING', 'Initial Capital Inflow');
@@ -219,7 +253,17 @@ const InventoryEngine = (() => {
                 if (k.startsWith('englabs_')) localStorage.removeItem(k);
             });
         }
-        location.reload();
+        // 🧼 CLEAR MEMORY CACHE for testing parity
+        _cache.projects = [];
+        _cache.items = [];
+        _cache.transactions = [];
+        _cache.vendors = [];
+        _cache.pos = [];
+        _cache.ledger = [];
+        _cache.currentUser = null;
+        _cache.isLocked = false;
+        
+        if (typeof location !== 'undefined' && location.reload) location.reload();
     };
 
     return {
