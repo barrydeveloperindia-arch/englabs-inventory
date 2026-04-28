@@ -22,6 +22,7 @@ async function ingest() {
     const raw = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
     const ledgerEntries = [];
+    const siteCashRows = [];
     const discoveredItems = [];
     const discoveredProjects = new Set();
 
@@ -55,35 +56,68 @@ async function ingest() {
         
         const maintenance = parseFloat(row[9] || 0);
         const emergency = parseFloat(row[10] || 0);
-        const logi = parseFloat(row[11] || 0);
-        const projectId = row[13] || 'C-GENERAL';
+        const logi = parseFloat(row[11] || 0); // Zepto / Blinkit mapped to Logistics
+        const projDr = parseFloat(row[12] || 0);
+        const projectId = row[13] || '';
+        const budget = parseFloat(row[14] || 0);
+        const profit = parseFloat(row[15] || 0);
+        const remarks = row[16] || '';
         const date = new Date((dateRaw - 25569) * 86400 * 1000).toISOString();
+        
+        // Exact Excel Row Mapping for UI
+        siteCashRows.push({
+            date,
+            from,
+            mode,
+            recBy,
+            desc,
+            cr,
+            dr,
+            balance,
+            maintenance,
+            emergency,
+            logi,
+            projDr,
+            projectId,
+            budget,
+            profit,
+            remarks
+        });
         
         let category = 'GENERAL';
         if (maintenance > 0) category = 'MAINTENANCE';
         else if (emergency > 0) category = 'EMERGENCY';
         else if (logi > 0) category = 'LOGISTICS';
 
-        const addEntry = (type, amount) => {
+        if (cr !== 0) {
             ledgerEntries.push({
-                type,
-                amount,
+                type: cr > 0 ? 'IN' : 'OUT',
+                amount: Math.abs(cr),
+                date,
+                description: dr > 0 ? `Receipt from ${from || 'Bank/Source'}` : desc,
+                project: dr > 0 ? 'C-GENERAL' : projectId,
+                category: 'GENERAL',
+                from: from,
+                mode: mode,
+                recBy: recBy,
+                balance: balance + dr, // approximate balance before expense
+                ref: `EX-ROW-${i}-CR`
+            });
+        }
+        if (dr !== 0) {
+            ledgerEntries.push({
+                type: 'OUT',
+                amount: dr,
                 date,
                 description: desc,
                 project: projectId,
-                category,
-                from,
-                mode,
-                recBy,
-                balance,
-                ref: `EX-ROW-${i}`
+                category: category,
+                from: cr > 0 ? '-' : from,
+                mode: mode,
+                recBy: recBy,
+                balance: balance,
+                ref: `EX-ROW-${i}-DR`
             });
-        };
-
-        if (cr !== 0) addEntry(cr > 0 ? 'IN' : 'OUT', Math.abs(cr));
-        if (dr !== 0) addEntry('OUT', dr);
-        if (cr === 0 && dr === 0 && balance !== 0) {
-             // Handle balance-only rows? No, usually skipping.
         }
 
 
@@ -154,6 +188,7 @@ async function ingest() {
 
 export const EXCEL_SEED = {
     ledger: ${JSON.stringify(ledgerEntries, null, 4)},
+    siteCashRows: ${JSON.stringify(siteCashRows, null, 4)},
     discoveredItems: ${JSON.stringify(discoveredItems, null, 4)},
     discoveredProjects: ${JSON.stringify(Array.from(discoveredProjects), null, 4)}
 };

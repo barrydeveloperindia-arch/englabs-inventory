@@ -58,6 +58,17 @@ const InventoryEngine = (() => {
             logActivity('PROJECT_ADDED', `Created project: ${name}`);
             return p;
         },
+        update: (id, name, budget, date) => {
+            const p = _cache.projects.find(x => x.id === id);
+            if (p) {
+                p.name = name;
+                p.budget = parseFloat(budget);
+                p.date = date;
+                _save('projects', _cache.projects);
+                logActivity('PROJECT_UPDATED', `Updated project: ${name}`);
+            }
+            return p;
+        },
         getAll: () => _cache.projects,
         get: (id) => _cache.projects.find(p => p.id === id)
     };
@@ -131,7 +142,7 @@ const InventoryEngine = (() => {
         recordEntry: (dr, cr, amount, ref, desc, metadata = {}) => {
             const entry = {
                 id: 'FIN-' + Date.now().toString().slice(-6),
-                date: new Date().toISOString(),
+                date: metadata.date || new Date().toISOString(),
                 debit: dr,
                 credit: cr,
                 amount: parseFloat(amount),
@@ -230,6 +241,7 @@ const InventoryEngine = (() => {
                 const dr = l.type === 'IN' ? 'SITE_CASH' : 'EXPENSE';
                 const cr = l.type === 'IN' ? 'BANK' : 'SITE_CASH';
                 finance.recordEntry(dr, cr, l.amount, l.project, l.description, {
+                    date: l.date,
                     from: l.from,
                     mode: l.mode,
                     recBy: l.recBy,
@@ -275,7 +287,8 @@ const InventoryEngine = (() => {
         seedData,
         reset,
         logActivity,
-        getCache: () => _cache
+        getCache: () => _cache,
+        EXCEL_SEED: EXCEL_SEED
     };
 })();
 

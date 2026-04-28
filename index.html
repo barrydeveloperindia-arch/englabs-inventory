@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <!-- 🔐 ERP SECURE ENTRY (Bypassed) -->
+    <!-- 🔐 ERP SECURE ENTRY (Active) -->
     <div id="login-overlay" style="display: none;">
 
         <div class="login-card">
@@ -50,46 +50,8 @@
             </div>
         </div>
         <nav class="nav-menu">
-            <li class="nav-item active" onclick="switchView('dashboard')">
-                <i data-lucide="layout-dashboard"></i> Central Gateway
-            </li>
-            
-            <div class="nav-label">Core Operations</div>
-            <li class="nav-item" onclick="switchView('projects')">
-                <i data-lucide="building-2"></i> Project Master
-            </li>
-            <li class="nav-item" onclick="switchView('inventory')">
-                <i data-lucide="package"></i> Master Inventory
-            </li>
-            <li class="nav-item" onclick="switchView('purchase')">
-                <i data-lucide="shopping-cart"></i> Purchase System
-            </li>
-            <li class="nav-item" onclick="switchView('sales')">
-                <i data-lucide="banknote"></i> Sales & Billing
-            </li>
-
-            <div class="nav-label">Accounts & Finance</div>
-            <li class="nav-item" onclick="switchView('ledger')">
-                <i data-lucide="landmark"></i> Financial Ledger
-            </li>
-            <li class="nav-item" onclick="switchView('site-cash')">
+            <li class="nav-item active" onclick="switchView('site-cash')">
                 <i data-lucide="coins"></i> Site Cash Details
-            </li>
-            <li class="nav-item" onclick="switchView('reports')">
-                <i data-lucide="file-bar-chart"></i> MIS Reports
-            </li>
-
-            <div class="nav-label">Forensic Controls</div>
-            <li class="nav-item" onclick="switchView('audit')">
-                <i data-lucide="history"></i> System Audit
-            </li>
-            <li class="nav-item" onclick="switchView('admin')">
-                <i data-lucide="shield"></i> Admin Panel
-            </li>
-            
-            <div class="nav-label">Data Folders</div>
-            <li class="nav-item" onclick="switchView('folders')">
-                <i data-lucide="folder-tree"></i> Local Directory
             </li>
         </nav>
     </aside>
@@ -111,181 +73,7 @@
 
         <section class="main-scroll-area">
             
-            <!-- 🏢 DASHBOARD VIEW -->
-            <div id="view-dashboard" class="view-container" style="display: block;">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <i data-lucide="wallet"></i>
-                        <span class="stat-label">Total Cash Balance</span>
-                        <span class="stat-value" id="cash-bal">₹0.00</span>
-                    </div>
-                    <div class="stat-card">
-                        <i data-lucide="box"></i>
-                        <span class="stat-label">Total Inventory Value</span>
-                        <span class="stat-value" id="stock-val">₹0.00</span>
-                    </div>
-                    <div class="stat-card">
-                        <i data-lucide="clock"></i>
-                        <span class="stat-label">Pending Payables</span>
-                        <span class="stat-value" id="payable-val">₹0.00</span>
-                    </div>
-                    <div class="stat-card">
-                        <i data-lucide="activity"></i>
-                        <span class="stat-label">Active Projects</span>
-                        <span class="stat-value" id="active-proj">0</span>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Real-Time Flow Monitor</span>
-                        <div class="badge badge-success">LIVE DATA FEED</div>
-                    </div>
-                    <div style="padding: 2.5rem; height: 350px;">
-                        <canvas id="mainChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 🏗️ PROJECTS VIEW -->
-            <div id="view-projects" class="view-container">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Active Projects Directory</span>
-                        <button class="btn btn-primary" onclick="showModal('project-modal')">
-                            <i data-lucide="plus"></i> New Project
-                        </button>
-                    </div>
-                    <table id="projects-table">
-                        <thead>
-                            <tr>
-                                <th>Project ID</th>
-                                <th>Name</th>
-                                <th>Budget</th>
-                                <th>Expenses</th>
-                                <th>Balance</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="projects-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 📦 INVENTORY VIEW -->
-            <div id="view-inventory" class="view-container">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <div>
-                        <h1 style="margin: 0;">Master Register</h1>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Stationery & Office Supplies Ledger</p>
-                    </div>
-                    <button class="btn btn-outline" onclick="switchView('folders')">
-                        <i data-lucide="arrow-left"></i> BACK TO FOLDERS
-                    </button>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Master Item Registry</span>
-                        <button class="btn btn-primary" onclick="showModal('item-modal')">
-                            <i data-lucide="package-plus"></i> Add Item
-                        </button>
-                    </div>
-                    <table id="items-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category</th>
-                                <th>Item Name</th>
-                                <th>Stock Qty</th>
-                                <th>Unit</th>
-                                <th>Avg Rate</th>
-                                <th>Value</th>
-                                <th>Alert</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="items-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 🛒 PURCHASE VIEW -->
-            <div id="view-purchase" class="view-container">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Purchase Order Command</span>
-                        <button class="btn btn-primary" onclick="showModal('po-modal')">
-                            <i data-lucide="shopping-bag"></i> Create PO
-                        </button>
-                    </div>
-                    <table id="po-table">
-                        <thead>
-                            <tr>
-                                <th>PO Date</th>
-                                <th>PO ID</th>
-                                <th>Vendor</th>
-                                <th>Items</th>
-                                <th>Total Amount</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="po-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 💰 SALES VIEW -->
-            <div id="view-sales" class="view-container">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Sales & Billing Ledger</span>
-                        <button class="btn btn-primary" onclick="showModal('invoice-modal')">
-                            <i data-lucide="plus-circle"></i> Generate Invoice
-                        </button>
-                    </div>
-                    <table id="sales-table">
-                        <thead>
-                            <tr>
-                                <th>Inv Date</th>
-                                <th>Invoice #</th>
-                                <th>Client Name</th>
-                                <th>Project</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="sales-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 💰 LEDGER VIEW -->
-            <div id="view-ledger" class="view-container">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">General Ledger (Double Entry)</span>
-                        <button class="btn btn-primary" onclick="showModal('voucher-modal')">
-                            <i data-lucide="plus-circle"></i> New Voucher
-                        </button>
-                    </div>
-                    <table id="ledger-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Voucher ID</th>
-                                <th>Particulars</th>
-                                <th>Debit (₹)</th>
-                                <th>Credit (₹)</th>
-                                <th>Reference</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ledger-body"></tbody>
-                    </table>
-                </div>
-            </div>
 
             <!-- 🪙 SITE CASH VIEW -->
             <div id="view-site-cash" class="view-container">
@@ -298,157 +86,56 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title">Site Cash Ledger</span>
-                        <button class="btn btn-primary" onclick="showModal('site-cash-modal')">
-                            <i data-lucide="plus"></i> Log Daily Cash
-                        </button>
+                        <div style="display: flex; gap: 0.75rem;">
+                            <button class="btn btn-outline" onclick="showModal('import-modal')">
+                                <i data-lucide="upload-cloud"></i> Import Statement
+                            </button>
+                            <button class="btn btn-primary" onclick="showModal('site-cash-modal')">
+                                <i data-lucide="plus"></i> Log Daily Cash
+                            </button>
+                        </div>
                     </div>
-                    <table id="site-cash-table">
+                    <div style="overflow-x: auto; padding-bottom: 1rem;">
+                    <table id="site-cash-table" style="min-width: 1400px; font-size: 0.85rem;">
                         <thead>
                             <tr>
                                 <th>Date</th>
                                 <th>From / Payer</th>
                                 <th>Payment Mode</th>
+                                <th>Received By</th>
                                 <th>Particulars</th>
-                                <th>Category</th>
                                 <th>Cr. (In)</th>
-
                                 <th>Dr. (Out)</th>
                                 <th>Balance (₹)</th>
+                                <th>Maintenance</th>
+                                <th>Emergency</th>
+                                <th>Zepto / Blinkit</th>
+                                <th>Project Dr.</th>
                                 <th>Project ID</th>
-                                <th>P/L Analytics</th>
+                                <th>Budget Dispatch</th>
+                                <th>Profit / Loss</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
-
-
                         <tbody id="site-cash-body"></tbody>
                     </table>
-                </div>
-            </div>
-
-            <!-- 📊 REPORTS VIEW -->
-            <div id="view-reports" class="view-container">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-label">Project Yield</span>
-                        <span class="stat-value">84.2%</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-label">Stock Turnover</span>
-                        <span class="stat-value">12.5x</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-label">Profitability Index</span>
-                        <span class="stat-value">1.12</span>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header"><span class="card-title">Monthly Revenue Trend</span></div>
-                    <div style="padding:2.5rem; height:300px;"><canvas id="reportsChart"></canvas></div>
-                </div>
-            </div>
-
-            <!-- 🛡️ AUDIT VIEW -->
-            <div id="view-audit" class="view-container">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Forensic Activity Watchdog</span>
-                        <button class="btn btn-outline" onclick="exportAuditLog()">Export Logs</button>
-                    </div>
-                    <table id="audit-table">
-                        <thead>
-                            <tr>
-                                <th>Timestamp</th>
-                                <th>User</th>
-                                <th>Action</th>
-                                <th>Details</th>
-                            </tr>
-                        </thead>
-                        <tbody id="audit-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ⚙️ ADMIN VIEW -->
-            <div id="view-admin" class="view-container">
-                <div class="card">
-                    <div class="card-header"><span class="card-title">ERP Control Center</span></div>
-                    <div style="padding: 2.5rem;">
-                        <div class="form-group">
-                            <label>System Lock Protocol</label>
-                            <div style="display:flex; gap:1.5rem; align-items:center;">
-                                <span class="badge badge-success">UNLOCKED (PRIMARY)</span>
-                                <button class="btn btn-outline">ENGAGE LOCK</button>
-                            </div>
-                        </div>
-                        <div class="form-group" style="margin-top:2.5rem;">
-                            <label>Database Lifecycle</label>
-                            <div style="display:flex; gap:1.5rem;">
-                                <button class="btn btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="InventoryEngine.reset(); location.reload();">Perform Hard Reset</button>
-                                <button class="btn btn-primary">Archive & Backup</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 📂 FOLDERS VIEW -->
-            <div id="view-folders" class="view-container">
-                <div class="stats-grid">
-                    <div class="stat-card"><span class="stat-label">Sync Status</span><span class="stat-value">STABLE</span></div>
-                    <div class="stat-card"><span class="stat-label">Active Modules</span><span class="stat-value">10/10</span></div>
-                </div>
-                <div class="card">
-                    <div class="card-header"><span class="card-title">Directory Health Check</span></div>
-                    <div style="padding: 2rem;">
-                        <ul style="list-style: none; display: grid; gap: 1rem;">
-                            <li style="display:flex; justify-content:space-between; padding: 1rem; background: #f8fafc; border-radius: 12px; border: 1px solid var(--border);">
-                                <span>/01_Projects</span> <span class="badge badge-success">ACTIVE</span>
-                            </li>
-                            <li style="display:flex; justify-content:space-between; padding: 1rem; background: #f8fafc; border-radius: 12px; border: 1px solid var(--border);">
-                                <span>/03_Inventory</span> <span class="badge badge-success">STABLE</span>
-                            </li>
-                            <li style="display:flex; justify-content:space-between; padding: 1rem; background: #f8fafc; border-radius: 12px; border: 1px solid var(--border);">
-                                <span>/09_Exports</span> <span class="badge badge-warning">SCANNING</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+
 
         </section>
     </div>
 
     <!-- MODALS -->
-    <div id="item-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 2rem; color: var(--primary);">Register Inventory Item</h3>
-            <form onsubmit="handleItemSubmit(event)">
-                <div class="form-group"><label>ITEM NAME</label><input type="text" id="i_name" class="form-input" required></div>
-                <div class="form-group"><label>CATEGORY</label><select id="i_category" class="form-input" required><option value="">Select Category</option><option>Construction Materials</option><option>Electrical & Lighting</option><option>Plumbing & Sanitization</option><option>Tools & Equipment</option></select></div>
-                <div class="form-group"><label>MIN STOCK ALERT LEVEL</label><input type="number" id="i_min" class="form-input" required></div>
-                <div class="form-group"><label>UNIT</label><select id="i_unit" class="form-input" required><option>Nos</option><option>Kg</option><option>Mtr</option><option>Bag</option></select></div>
-                <div style="display: flex; gap: 1.5rem; margin-top: 2.5rem;"><button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button><button type="submit" class="btn btn-primary" style="flex: 1;">Save Item</button></div>
-            </form>
-        </div>
-    </div>
 
-    <div id="voucher-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 2rem; color: var(--primary);">Double-Entry Voucher</h3>
-            <form onsubmit="handleVoucherSubmit(event)">
-                <div class="form-group"><label>DEBIT ACCOUNT</label><select id="v_dr" class="form-input" required><option value="CASH">Cash</option><option value="BANK">Bank</option><option value="PURCHASE">Purchase Account</option></select></div>
-                <div class="form-group"><label>CREDIT ACCOUNT</label><select id="v_cr" class="form-input" required><option value="CASH">Cash</option><option value="BANK">Bank</option><option value="INCOME">Project Income</option></select></div>
-                <div class="form-group"><label>AMOUNT (₹)</label><input type="number" id="v_amount" class="form-input" required></div>
-                <div class="form-group"><label>DESCRIPTION</label><input type="text" id="v_desc" class="form-input" required></div>
-                <div style="display: flex; gap: 1.5rem; margin-top: 2.5rem;"><button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button><button type="submit" class="btn btn-primary" style="flex: 1;">Post Voucher</button></div>
-            </form>
-        </div>
-    </div>
 
     <div id="project-modal" class="modal-overlay">
         <div class="modal-content">
-            <h3 style="margin-bottom: 2rem; color: var(--primary);">Register New Project</h3>
+            <h3 style="margin-bottom: 2rem; color: var(--primary);" id="pm_title">Register New Project</h3>
             <form onsubmit="handleProjectSubmit(event)">
+                <input type="hidden" id="p_id">
                 <div class="form-group"><label>PROJECT NAME</label><input type="text" id="p_name" class="form-input" required></div>
                 <div class="form-group"><label>TOTAL BUDGET (₹)</label><input type="number" id="p_budget" class="form-input" required></div>
                 <div class="form-group"><label>START DATE</label><input type="date" id="p_date" class="form-input" required></div>
@@ -461,7 +148,14 @@
         <div class="modal-content">
             <h3 style="margin-bottom: 2rem; color: var(--primary);">Log Site Cash Transaction</h3>
             <form onsubmit="handleSiteCashSubmit(event)">
-                <div class="form-group"><label>PROJECT</label><select id="sc_project" class="form-input" required></select></div>
+                <div class="form-group">
+                    <label>PROJECT</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <select id="sc_project" class="form-input" style="flex: 1;" required></select>
+                        <button type="button" class="btn btn-outline" style="padding: 0 1rem;" onclick="openProjectModal(true)" title="Add Project"><i data-lucide="plus"></i></button>
+                        <button type="button" class="btn btn-outline" style="padding: 0 1rem;" onclick="openProjectModal(false)" title="Edit Selected Project"><i data-lucide="edit-3"></i></button>
+                    </div>
+                </div>
                 <div class="form-group"><label>TYPE</label><select id="sc_type" class="form-input" required><option value="IN">Cash Receipt (Float)</option><option value="OUT">Expense / Site Purchase</option></select></div>
                 <div class="form-group"><label>AMOUNT (₹)</label><input type="number" id="sc_amount" class="form-input" required></div>
                 <div class="form-group"><label>DESCRIPTION</label><input type="text" id="sc_desc" class="form-input" required></div>
@@ -470,62 +164,57 @@
         </div>
     </div>
 
-    <div id="issue-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 2rem; color: var(--primary);">Issue Material to Project</h3>
-            <form onsubmit="handleIssueSubmit(event)">
-                <input type="hidden" id="iss_item_id">
-                <div class="form-group"><label>ITEM</label><input type="text" id="iss_item_name" class="form-input" readonly></div>
-                <div class="form-group"><label>PROJECT</label><select id="iss_project" class="form-input" required></select></div>
-                <div class="form-group"><label>ISSUE QUANTITY</label><input type="number" id="iss_qty" class="form-input" required></div>
-                <div style="display: flex; gap: 1.5rem; margin-top: 2.5rem;"><button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button><button type="submit" class="btn btn-primary" style="flex: 1;">Issue Stocks</button></div>
-            </form>
-        </div>
-    </div>
 
-    <div id="po-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 2rem; color: var(--primary);">Create Purchase Order</h3>
-            <form onsubmit="handlePOSubmit(event)">
-                <div class="form-group"><label>VENDOR</label><select id="po_vendor" class="form-input" required></select></div>
-                <div class="form-group"><label>TOTAL AMOUNT (₹)</label><input type="number" id="po_amount" class="form-input" required></div>
-                <div class="form-group"><label>REMARKS</label><input type="text" id="po_remarks" class="form-input" required></div>
-                <div style="display: flex; gap: 1.5rem; margin-top: 2.5rem;"><button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button><button type="submit" class="btn btn-primary" style="flex: 1;">Create PO</button></div>
-            </form>
-        </div>
-    </div>
 
-    <div id="invoice-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 2rem; color: var(--primary);">Generate Project Invoice</h3>
-            <form onsubmit="handleInvoiceSubmit(event)">
-                <div class="form-group"><label>PROJECT</label><select id="inv_project" class="form-input" required></select></div>
-                <div class="form-group"><label>CLIENT NAME</label><input type="text" id="inv_client" class="form-input" required></div>
-                <div class="form-group"><label>TOTAL AMOUNT (₹)</label><input type="number" id="inv_amount" class="form-input" required></div>
-                <div style="display: flex; gap: 1.5rem; margin-top: 2.5rem;"><button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button><button type="submit" class="btn btn-primary" style="flex: 1;">Generate Invoice</button></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Forensic Photo Modal -->
-    <div id="photo-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 600px; text-align: center;">
-            <h3 style="margin-bottom: 2rem; color: var(--primary);">Forensic Item Verification</h3>
-            <div id="photo-content">
-                <img id="forensic-img" src="https://images.unsplash.com/photo-1586769852044-692d6e692453?q=80&w=1000" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-lg); margin-bottom: 1.5rem;">
-                <p id="forensic-details" style="font-weight: 600; color: var(--text-dark);"></p>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Forensic Identity: <span id="forensic-id"></span></p>
+    <div id="import-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <h3 style="margin-bottom: 0.5rem; color: var(--primary);">Intelligent Data Import</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Upload statements. The system will automatically map transactions to Projects (CXXX), Zepto, Blinkit, and categorize inflows/outflows.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('Google Pay')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" style="height: 24px; margin-right: 12px; width: 24px; object-fit: contain;"> Google Pay
+                </button>
+                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('PhonePe')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" style="height: 24px; margin-right: 12px; width: 24px; object-fit: contain;"> PhonePe
+                </button>
+                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('BharatPe')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/BharatPe_logo.svg" style="height: 24px; margin-right: 12px; width: 24px; object-fit: contain;"> BharatPe
+                </button>
+                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('BHIM UPI')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_of_BHIM.svg" style="height: 24px; margin-right: 12px; width: 24px; object-fit: contain;"> BHIM UPI
+                </button>
+                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('Universal Excel / CSV')">
+                    <i data-lucide="file-spreadsheet" style="margin-right: 12px; color: var(--success);"></i> Universal Excel / CSV
+                </button>
+                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('HTML Format')">
+                    <i data-lucide="file-code" style="margin-right: 12px; color: #f97316;"></i> HTML Web Format
+                </button>
+                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem; grid-column: span 2;" onclick="triggerUpload('Word Document')">
+                    <i data-lucide="file-text" style="margin-right: 12px; color: #3b82f6;"></i> MS Word Document
+                </button>
             </div>
-            <button class="btn btn-primary" style="margin-top: 2rem; width: 100%;" onclick="hideModals()">Close Verification</button>
+            
+            <input type="file" id="stmt_upload" style="display: none;" onchange="handleStatementUpload(event)">
+            
+            <div id="import-loader" style="display: none; text-align: center; padding: 2rem 0;">
+                <i data-lucide="loader" style="animation: spin 1s linear infinite; width: 32px; height: 32px; color: var(--primary); margin-bottom: 1rem;"></i>
+                <p style="font-weight: 600; color: var(--primary);">Executing Forensic Parsing...</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Mapping Zepto/Blinkit and assigning Project IDs...</p>
+            </div>
+
+            <button type="button" class="btn btn-outline" style="width: 100%;" onclick="hideModals()">Cancel</button>
         </div>
     </div>
+
+
 
     <!-- SCRIPTS -->
 
-    <script type="module" src="js/data.js?v=forensic_2.1"></script>
-    <script type="module" src="js/seed_data.js?v=forensic_2.1"></script>
-    <script type="module" src="js/engine.js?v=forensic_2.1"></script>
-    <script type="module" src="js/app.js?v=forensic_2.1"></script>
+    <script type="module" src="js/data.js?v=forensic_2.2"></script>
+    <script type="module" src="js/seed_data.js?v=forensic_2.2"></script>
+    <script type="module" src="js/engine.js?v=forensic_2.2"></script>
+    <script type="module" src="js/app.js?v=forensic_2.2"></script>
 
 
     <script> lucide.createIcons(); </script>
