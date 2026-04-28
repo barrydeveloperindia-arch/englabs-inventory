@@ -3,220 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Englabs_Accounts_Team | Industrial Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>EngLabs | Forensic Financial Intelligence</title>
+    <link rel="stylesheet" href="index.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <!-- 🔐 ERP SECURE ENTRY (Active) -->
-    <div id="login-overlay" style="display: none;">
-
-        <div class="login-card">
-            <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Englabs_Accounts_Team</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Secure Forensic Entry Required</p>
-            <div id="token-display" class="pin-display"></div>
-            <div class="pin-pad">
-                <button class="pin-btn" onclick="addPin('1')">1</button>
-                <button class="pin-btn" onclick="addPin('2')">2</button>
-                <button class="pin-btn" onclick="addPin('3')">3</button>
-                <button class="pin-btn" onclick="addPin('4')">4</button>
-                <button class="pin-btn" onclick="addPin('5')">5</button>
-                <button class="pin-btn" onclick="addPin('6')">6</button>
-                <button class="pin-btn" onclick="addPin('7')">7</button>
-                <button class="pin-btn" onclick="addPin('8')">8</button>
-                <button class="pin-btn" onclick="addPin('9')">9</button>
-                <button class="pin-btn" style="color: var(--danger)" onclick="clearPin()">C</button>
-                <button class="pin-btn" onclick="addPin('0')">0</button>
-                <button class="pin-btn" style="color: var(--success)" onclick="submitLogin()">↲</button>
-            </div>
-            <div style="background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px dashed var(--border);">
-                <p style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700;">DEFAULT KEYS</p>
-                <p style="font-size: 0.65rem; color: var(--primary); font-weight: 800; letter-spacing: 1px; margin-top: 5px;">Adm: 1234 | Man: 5678 | Store: 0000</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🛡️ NAVIGATION SIDEBAR -->
-    <aside id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">
-                <i data-lucide="shield-check"></i>
-                <span>Englabs_Accounts_Team</span>
-            </div>
-            <div style="font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2.5px; opacity: 0.4; margin-top: 8px; font-weight: 800;">
-                Accounts Team v3.1.0
-            </div>
-        </div>
-        <nav class="nav-menu">
-            <li class="nav-item active" onclick="switchView('site-cash')">
-                <i data-lucide="coins"></i> Site Cash Details
-            </li>
-        </nav>
-    </aside>
-
-    <div id="main-wrapper">
-        <header class="top-header">
-            <div class="view-title">
-                <h1 id="active-title">Central Gateway</h1>
-            </div>
-            <div style="display: flex; gap: 1.5rem; align-items: center;">
-                <div id="user-display" class="badge badge-success" style="padding: 0.6rem 1.2rem; font-weight: 800;">
-                    MANAGER: SAM
+    <div id="app-shell">
+        <!-- 🏔️ SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo-container">
+                    <div class="sidebar-logo" id="logo-placeholder" style="background: var(--accent); display: flex; align-items: center; justify-content: center; color: white;">E</div>
+                    <div class="sidebar-title">EngLabs</div>
                 </div>
-                <button class="btn btn-outline" style="padding: 0.6rem;" onclick="logout()">
-                    <i data-lucide="log-out" style="width: 20px; height: 20px;"></i>
-                </button>
+                <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em;">Forensic Accounts v2.2</div>
             </div>
-        </header>
 
-        <section class="main-scroll-area">
-            
+            <nav class="nav-menu">
+                <li class="nav-item active" onclick="switchView('dashboard')">
+                    <i data-lucide="layout-dashboard"></i> Central Gateway
+                </li>
+                <li class="nav-item" onclick="switchView('site-cash')">
+                    <i data-lucide="coins"></i> Site Cash Ledger
+                </li>
+            </nav>
 
+            <div style="padding: 2rem;">
+                <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.25rem;">Manager</div>
+                    <div style="font-size: 0.85rem; color: var(--accent);">Sam Wilson</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 🚀 MAIN CONTENT -->
+        <main id="main-wrapper">
+            <header class="main-header">
+                <h1 id="active-title" class="view-title">Central Gateway</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">SW</div>
+                    <div style="font-size: 0.85rem; font-weight: 600;">Site Command</div>
+                </div>
+            </header>
+
+            <!-- 🏠 DASHBOARD VIEW -->
+            <div id="view-dashboard" class="view-container active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Total Site Liquidity</span>
+                        <div class="stat-value" id="stat-cash">₹0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Material Valuation</span>
+                        <div class="stat-value" id="stat-stock">₹0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Active Deployments</span>
+                        <div class="stat-value" id="stat-projects">0</div>
+                    </div>
+                </div>
+
+                <div class="table-card" style="padding: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem;">Cash Flow Monitor</h3>
+                    <div style="height: 350px;">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+            </div>
 
             <!-- 🪙 SITE CASH VIEW -->
             <div id="view-site-cash" class="view-container">
                 <div class="stats-grid">
                     <div class="stat-card">
                         <span class="stat-label">Current Site Float</span>
-                        <span class="stat-value" id="site-cash-bal">₹0.00</span>
+                        <div class="stat-value" id="site-cash-bal">₹0.00</div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Site Cash Ledger</span>
-                        <div style="display: flex; gap: 0.75rem;">
-                            <button class="btn btn-outline" onclick="showModal('import-modal')">
-                                <i data-lucide="upload-cloud"></i> Import Statement
-                            </button>
-                            <button class="btn btn-primary" onclick="showModal('site-cash-modal')">
-                                <i data-lucide="plus"></i> Log Daily Cash
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3 style="font-size: 1.1rem;">Forensic Statement Ledger</h3>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-primary" onclick="showModal('import-modal')">
+                                <i data-lucide="upload-cloud"></i> Ingest Statement
                             </button>
                         </div>
                     </div>
-                    <div style="overflow-x: auto; padding-bottom: 1rem;">
-                    <table id="site-cash-table" style="min-width: 1400px; font-size: 0.85rem;">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>From / Payer</th>
-                                <th>Payment Mode</th>
-                                <th>Received By</th>
-                                <th>Particulars</th>
-                                <th>Cr. (In)</th>
-                                <th>Dr. (Out)</th>
-                                <th>Balance (₹)</th>
-                                <th>Maintenance</th>
-                                <th>Emergency</th>
-                                <th>Zepto / Blinkit</th>
-                                <th>Project Dr.</th>
-                                <th>Project ID</th>
-                                <th>Budget Dispatch</th>
-                                <th>Profit / Loss</th>
-                                <th>Remarks</th>
-                            </tr>
-                        </thead>
-                        <tbody id="site-cash-body"></tbody>
-                    </table>
+                    <div style="overflow-x: auto;">
+                        <table id="site-cash-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Source / Payer</th>
+                                    <th>Mode</th>
+                                    <th>Details</th>
+                                    <th>Cr (In)</th>
+                                    <th>Dr (Out)</th>
+                                    <th>Balance</th>
+                                    <th>Project</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="site-cash-body"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
-
-
-        </section>
+        </main>
     </div>
 
-    <!-- MODALS -->
-
-
-    <div id="project-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 2rem; color: var(--primary);" id="pm_title">Register New Project</h3>
-            <form onsubmit="handleProjectSubmit(event)">
-                <input type="hidden" id="p_id">
-                <div class="form-group"><label>PROJECT NAME</label><input type="text" id="p_name" class="form-input" required></div>
-                <div class="form-group"><label>TOTAL BUDGET (₹)</label><input type="number" id="p_budget" class="form-input" required></div>
-                <div class="form-group"><label>START DATE</label><input type="date" id="p_date" class="form-input" required></div>
-                <div style="display: flex; gap: 1.5rem; margin-top: 2.5rem;"><button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button><button type="submit" class="btn btn-primary" style="flex: 1;">Create Project</button></div>
-            </form>
-        </div>
-    </div>
-
-    <div id="site-cash-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 2rem; color: var(--primary);">Log Site Cash Transaction</h3>
-            <form onsubmit="handleSiteCashSubmit(event)">
-                <div class="form-group">
-                    <label>PROJECT</label>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <select id="sc_project" class="form-input" style="flex: 1;" required></select>
-                        <button type="button" class="btn btn-outline" style="padding: 0 1rem;" onclick="openProjectModal(true)" title="Add Project"><i data-lucide="plus"></i></button>
-                        <button type="button" class="btn btn-outline" style="padding: 0 1rem;" onclick="openProjectModal(false)" title="Edit Selected Project"><i data-lucide="edit-3"></i></button>
-                    </div>
-                </div>
-                <div class="form-group"><label>TYPE</label><select id="sc_type" class="form-input" required><option value="IN">Cash Receipt (Float)</option><option value="OUT">Expense / Site Purchase</option></select></div>
-                <div class="form-group"><label>AMOUNT (₹)</label><input type="number" id="sc_amount" class="form-input" required></div>
-                <div class="form-group"><label>DESCRIPTION</label><input type="text" id="sc_desc" class="form-input" required></div>
-                <div style="display: flex; gap: 1.5rem; margin-top: 2.5rem;"><button type="button" class="btn btn-outline" style="flex: 1;" onclick="hideModals()">Cancel</button><button type="submit" class="btn btn-primary" style="flex: 1;">Save Log</button></div>
-            </form>
-        </div>
-    </div>
-
-
-
-    <div id="import-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 600px;">
-            <h3 style="margin-bottom: 0.5rem; color: var(--primary);">Intelligent Data Import</h3>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Upload statements. The system will automatically map transactions to Projects (CXXX), Zepto, Blinkit, and categorize inflows/outflows.</p>
+    <!-- 📥 IMPORT MODAL -->
+    <div id="import-modal" class="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+        <div class="glass-panel" style="width:500px; padding:2rem; border-radius:24px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:2rem;">
+                <h3 style="font-size:1.2rem;">Import Transaction Data</h3>
+                <i data-lucide="x" style="cursor:pointer;" onclick="hideModals()"></i>
+            </div>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('Google Pay')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" style="height: 24px; margin-right: 12px; width: 24px; object-fit: contain;"> Google Pay
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
+                <button class="btn btn-outline" style="justify-content:center; padding:1.5rem;" onclick="triggerUpload('BHIM')">
+                    BHIM UPI
                 </button>
-                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('PhonePe')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" style="height: 24px; margin-right: 12px; width: 24px; object-fit: contain;"> PhonePe
+                <button class="btn btn-outline" style="justify-content:center; padding:1.5rem;" onclick="triggerUpload('GPAY')">
+                    Google Pay
                 </button>
-                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('BharatPe')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/BharatPe_logo.svg" style="height: 24px; margin-right: 12px; width: 24px; object-fit: contain;"> BharatPe
+                <button class="btn btn-outline" style="justify-content:center; padding:1.5rem;" onclick="triggerUpload('PHONEPE')">
+                    PhonePe
                 </button>
-                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('BHIM UPI')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_of_BHIM.svg" style="height: 24px; margin-right: 12px; width: 24px; object-fit: contain;"> BHIM UPI
-                </button>
-                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('Universal Excel / CSV')">
-                    <i data-lucide="file-spreadsheet" style="margin-right: 12px; color: var(--success);"></i> Universal Excel / CSV
-                </button>
-                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem;" onclick="triggerUpload('HTML Format')">
-                    <i data-lucide="file-code" style="margin-right: 12px; color: #f97316;"></i> HTML Web Format
-                </button>
-                <button class="btn btn-outline" style="justify-content: flex-start; padding: 1rem; grid-column: span 2;" onclick="triggerUpload('Word Document')">
-                    <i data-lucide="file-text" style="margin-right: 12px; color: #3b82f6;"></i> MS Word Document
+                <button class="btn btn-outline" style="justify-content:center; padding:1.5rem;" onclick="triggerUpload('EXCEL')">
+                    Excel / CSV
                 </button>
             </div>
             
-            <input type="file" id="stmt_upload" style="display: none;" onchange="handleStatementUpload(event)">
-            
-            <div id="import-loader" style="display: none; text-align: center; padding: 2rem 0;">
-                <i data-lucide="loader" style="animation: spin 1s linear infinite; width: 32px; height: 32px; color: var(--primary); margin-bottom: 1rem;"></i>
-                <p style="font-weight: 600; color: var(--primary);">Executing Forensic Parsing...</p>
-                <p style="font-size: 0.8rem; color: var(--text-muted);">Mapping Zepto/Blinkit and assigning Project IDs...</p>
+            <div id="import-loader" style="display:none; text-align:center;">
+                <div class="loader" style="border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--accent); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Decrypting statement forensics...</div>
             </div>
-
-            <button type="button" class="btn btn-outline" style="width: 100%;" onclick="hideModals()">Cancel</button>
         </div>
     </div>
 
+    <input type="file" id="stmt_upload" style="display: none;" onchange="handleStatementUpload(event)">
+    <div id="toast" class="toast"></div>
 
+    <style>
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 
-    <!-- SCRIPTS -->
-
-    <script type="module" src="js/data.js?v=forensic_2.2"></script>
-    <script type="module" src="js/seed_data.js?v=forensic_2.2"></script>
-    <script type="module" src="js/engine.js?v=forensic_2.2"></script>
-    <script type="module" src="js/app.js?v=forensic_2.2"></script>
-
-
-    <script> lucide.createIcons(); </script>
+    <script type="module" src="js/engine.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
