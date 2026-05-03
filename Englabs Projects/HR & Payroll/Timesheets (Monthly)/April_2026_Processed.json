@@ -1,0 +1,2869 @@
+[
+  {
+    "name": "Thakur",
+    "totalRegular": "212.80",
+    "totalOT": "20.00",
+    "grandTotal": "232.80",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:05 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.17",
+        "regHours": "9.00",
+        "otHours": "0.17"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:05 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.08",
+        "regHours": "9.00",
+        "otHours": "1.08"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:40 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "8.67",
+        "regHours": "8.67",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:10 AM",
+        "out": "09:30 PM",
+        "break": "1 hr",
+        "totalHours": "12.33",
+        "regHours": "9.00",
+        "otHours": "3.33"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "0.00",
+        "otHours": "9.00"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:07 AM",
+        "out": "06:13 PM",
+        "break": "1 hr",
+        "totalHours": "9.10",
+        "regHours": "9.00",
+        "otHours": "0.10"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:57 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.05",
+        "regHours": "9.00",
+        "otHours": "0.05"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:07 PM",
+        "break": "1 hr",
+        "totalHours": "9.12",
+        "regHours": "9.00",
+        "otHours": "0.12"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:05 AM",
+        "out": "06:05 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:05 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "9.05",
+        "regHours": "9.00",
+        "otHours": "0.05"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:10 AM",
+        "out": "06:10 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:10 AM",
+        "out": "06:10 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "break": "1 hr",
+        "totalHours": "9.22",
+        "regHours": "9.00",
+        "otHours": "0.22"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "07:00 PM",
+        "break": "1 hr",
+        "totalHours": "10.00",
+        "regHours": "9.00",
+        "otHours": "1.00"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:10 PM",
+        "break": "1 hr",
+        "totalHours": "9.17",
+        "regHours": "9.00",
+        "otHours": "0.17"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "07:00 PM",
+        "break": "1 hr",
+        "totalHours": "10.00",
+        "regHours": "9.00",
+        "otHours": "1.00"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "break": "1 hr",
+        "totalHours": "9.22",
+        "regHours": "9.00",
+        "otHours": "0.22"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "12:00 PM",
+        "out": "06:08 PM",
+        "break": "0.5 hr",
+        "totalHours": "6.13",
+        "regHours": "6.13",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:10 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "06:37 PM",
+        "break": "1 hr",
+        "totalHours": "9.62",
+        "regHours": "9.00",
+        "otHours": "0.62"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "break": "1 hr",
+        "totalHours": "9.30",
+        "regHours": "9.00",
+        "otHours": "0.30"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.67",
+        "regHours": "9.00",
+        "otHours": "0.67"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:10 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:05 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.58",
+        "regHours": "9.00",
+        "otHours": "0.58"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:10 AM",
+        "out": "07:20 PM",
+        "break": "1 hr",
+        "totalHours": "10.17",
+        "regHours": "9.00",
+        "otHours": "1.17"
+      }
+    ]
+  },
+  {
+    "name": "Rajinder",
+    "totalRegular": "207.00",
+    "totalOT": "44.35",
+    "grandTotal": "251.35",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:15 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "9.92",
+        "regHours": "9.00",
+        "otHours": "0.92"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:00 AM",
+        "out": "09:30 PM",
+        "break": "1 hr",
+        "totalHours": "12.50",
+        "regHours": "9.00",
+        "otHours": "3.50"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:10 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.67",
+        "regHours": "0.00",
+        "otHours": "9.67"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:00 AM",
+        "out": "08:00 PM",
+        "break": "1 hr",
+        "totalHours": "11.00",
+        "regHours": "9.00",
+        "otHours": "2.00"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:00 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "9.33",
+        "regHours": "9.00",
+        "otHours": "0.33"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:15 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.42",
+        "regHours": "9.00",
+        "otHours": "0.42"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:07 PM",
+        "break": "1 hr",
+        "totalHours": "9.12",
+        "regHours": "9.00",
+        "otHours": "0.12"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.67",
+        "regHours": "9.00",
+        "otHours": "0.67"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "9.13",
+        "regHours": "9.00",
+        "otHours": "0.13"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.17",
+        "regHours": "9.00",
+        "otHours": "1.17"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "07:00 PM",
+        "break": "1 hr",
+        "totalHours": "10.00",
+        "regHours": "9.00",
+        "otHours": "1.00"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "break": "1 hr",
+        "totalHours": "9.30",
+        "regHours": "9.00",
+        "otHours": "0.30"
+      },
+      {
+        "date": "2026-04-19",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "0.00",
+        "otHours": "9.50"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.17",
+        "regHours": "9.00",
+        "otHours": "1.17"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "08:50 AM",
+        "out": "07:58 PM",
+        "break": "1 hr",
+        "totalHours": "11.13",
+        "regHours": "9.00",
+        "otHours": "2.13"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:22 PM",
+        "break": "1 hr",
+        "totalHours": "9.37",
+        "regHours": "9.00",
+        "otHours": "0.37"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "0.00",
+        "otHours": "9.00"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:25 PM",
+        "break": "1 hr",
+        "totalHours": "9.42",
+        "regHours": "9.00",
+        "otHours": "0.42"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "break": "1 hr",
+        "totalHours": "9.30",
+        "regHours": "9.00",
+        "otHours": "0.30"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      }
+    ]
+  },
+  {
+    "name": "Roshni",
+    "totalRegular": "34.33",
+    "totalOT": "0.00",
+    "grandTotal": "34.33",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "08:00 AM",
+        "out": "Missing",
+        "break": "1 hr",
+        "totalHours": "0.00",
+        "regHours": "0.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "08:10 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "8.83",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      }
+    ]
+  },
+  {
+    "name": "Poonam",
+    "totalRegular": "208.40",
+    "totalOT": "10.40",
+    "grandTotal": "218.80",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:00 AM",
+        "out": "Missing",
+        "break": "1 hr",
+        "totalHours": "0.00",
+        "regHours": "0.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "08:00 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "08:00 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "08:30 AM",
+        "out": "05:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "08:30 AM",
+        "out": "05:58 PM",
+        "break": "1 hr",
+        "totalHours": "9.47",
+        "regHours": "9.00",
+        "otHours": "0.47"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "08:21 AM",
+        "out": "05:52 PM",
+        "break": "1 hr",
+        "totalHours": "9.52",
+        "regHours": "9.00",
+        "otHours": "0.52"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "08:30 AM",
+        "out": "05:24 PM",
+        "break": "1 hr",
+        "totalHours": "8.90",
+        "regHours": "8.90",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "08:30 AM",
+        "out": "05:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "0.00",
+        "otHours": "8.50"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "08:30 AM",
+        "out": "05:53 PM",
+        "break": "1 hr",
+        "totalHours": "9.38",
+        "regHours": "9.00",
+        "otHours": "0.38"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "08:30 AM",
+        "out": "05:52 PM",
+        "break": "1 hr",
+        "totalHours": "9.37",
+        "regHours": "9.00",
+        "otHours": "0.37"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "08:20 AM",
+        "out": "05:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.17",
+        "regHours": "9.00",
+        "otHours": "0.17"
+      }
+    ]
+  },
+  {
+    "name": "Arjun",
+    "totalRegular": "233.92",
+    "totalOT": "19.42",
+    "grandTotal": "253.33",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:06 AM",
+        "out": "06:24 PM",
+        "break": "1 hr",
+        "totalHours": "9.30",
+        "regHours": "9.00",
+        "otHours": "0.30"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:05 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.08",
+        "regHours": "9.00",
+        "otHours": "1.08"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:13 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "8.92",
+        "regHours": "8.92",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:05 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.42",
+        "regHours": "9.00",
+        "otHours": "0.42"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:30 AM",
+        "out": "06:10 PM",
+        "break": "1 hr",
+        "totalHours": "8.67",
+        "regHours": "0.00",
+        "otHours": "8.67"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:00 AM",
+        "out": "06:28 PM",
+        "break": "1 hr",
+        "totalHours": "9.47",
+        "regHours": "9.00",
+        "otHours": "0.47"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "break": "1 hr",
+        "totalHours": "9.22",
+        "regHours": "9.00",
+        "otHours": "0.22"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:57 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.05",
+        "regHours": "9.00",
+        "otHours": "0.05"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:07 PM",
+        "break": "1 hr",
+        "totalHours": "9.12",
+        "regHours": "9.00",
+        "otHours": "0.12"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "9.13",
+        "regHours": "9.00",
+        "otHours": "0.13"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "9.13",
+        "regHours": "9.00",
+        "otHours": "0.13"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "break": "1 hr",
+        "totalHours": "9.22",
+        "regHours": "9.00",
+        "otHours": "0.22"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.17",
+        "regHours": "9.00",
+        "otHours": "1.17"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "9.13",
+        "regHours": "9.00",
+        "otHours": "0.13"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.17",
+        "regHours": "9.00",
+        "otHours": "1.17"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:00 AM",
+        "out": "06:13 PM",
+        "break": "1 hr",
+        "totalHours": "9.22",
+        "regHours": "9.00",
+        "otHours": "0.22"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "9.13",
+        "regHours": "9.00",
+        "otHours": "0.13"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "06:53 PM",
+        "break": "1 hr",
+        "totalHours": "9.88",
+        "regHours": "9.00",
+        "otHours": "0.88"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:22 PM",
+        "break": "1 hr",
+        "totalHours": "9.37",
+        "regHours": "9.00",
+        "otHours": "0.37"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:25 PM",
+        "break": "1 hr",
+        "totalHours": "9.42",
+        "regHours": "9.00",
+        "otHours": "0.42"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "break": "1 hr",
+        "totalHours": "9.30",
+        "regHours": "9.00",
+        "otHours": "0.30"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.67",
+        "regHours": "9.00",
+        "otHours": "0.67"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.17",
+        "regHours": "9.00",
+        "otHours": "1.17"
+      }
+    ]
+  },
+  {
+    "name": "Kunwarlal",
+    "totalRegular": "225.00",
+    "totalOT": "38.83",
+    "grandTotal": "263.83",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:00 AM",
+        "out": "06:12 PM",
+        "break": "1 hr",
+        "totalHours": "9.20",
+        "regHours": "9.00",
+        "otHours": "0.20"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.83",
+        "regHours": "9.00",
+        "otHours": "0.83"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:10 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "0.00",
+        "otHours": "8.83"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.67",
+        "regHours": "9.00",
+        "otHours": "0.67"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.83",
+        "regHours": "9.00",
+        "otHours": "0.83"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.83",
+        "regHours": "9.00",
+        "otHours": "0.83"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.83",
+        "regHours": "9.00",
+        "otHours": "0.83"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "06:16 PM",
+        "break": "1 hr",
+        "totalHours": "9.27",
+        "regHours": "9.00",
+        "otHours": "0.27"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "9.13",
+        "regHours": "9.00",
+        "otHours": "0.13"
+      },
+      {
+        "date": "2026-04-19",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "0.00",
+        "otHours": "9.50"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "06:19 PM",
+        "break": "1 hr",
+        "totalHours": "9.32",
+        "regHours": "9.00",
+        "otHours": "0.32"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.83",
+        "regHours": "9.00",
+        "otHours": "0.83"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "07:30 PM",
+        "break": "1 hr",
+        "totalHours": "10.50",
+        "regHours": "9.00",
+        "otHours": "1.50"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "9.33",
+        "regHours": "9.00",
+        "otHours": "0.33"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "09:00 AM",
+        "out": "06:02 PM",
+        "break": "1 hr",
+        "totalHours": "9.03",
+        "regHours": "0.00",
+        "otHours": "9.03"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:25 PM",
+        "break": "1 hr",
+        "totalHours": "9.42",
+        "regHours": "9.00",
+        "otHours": "0.42"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:00 AM",
+        "out": "06:18 PM",
+        "break": "1 hr",
+        "totalHours": "9.30",
+        "regHours": "9.00",
+        "otHours": "0.30"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:00 AM",
+        "out": "06:05 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "06:45 PM",
+        "break": "1 hr",
+        "totalHours": "9.75",
+        "regHours": "9.00",
+        "otHours": "0.75"
+      }
+    ]
+  },
+  {
+    "name": "Anurag",
+    "totalRegular": "218.42",
+    "totalOT": "10.17",
+    "grandTotal": "228.58",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:45 AM",
+        "out": "06:25 PM",
+        "break": "1 hr",
+        "totalHours": "8.67",
+        "regHours": "8.67",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:40 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "8.83",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "10:00 AM",
+        "out": "09:50 PM",
+        "break": "1 hr",
+        "totalHours": "11.83",
+        "regHours": "9.00",
+        "otHours": "2.83"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:30 AM",
+        "out": "08:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.67",
+        "regHours": "9.00",
+        "otHours": "1.67"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:20 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "10:30 AM",
+        "out": "07:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:45 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:55 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "8.58",
+        "regHours": "8.58",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "10:00 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "8.67",
+        "regHours": "8.67",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:50 AM",
+        "out": "06:35 PM",
+        "break": "1 hr",
+        "totalHours": "8.75",
+        "regHours": "8.75",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:30 AM",
+        "out": "07:30 PM",
+        "break": "1 hr",
+        "totalHours": "10.00",
+        "regHours": "9.00",
+        "otHours": "1.00"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:15 AM",
+        "out": "06:45 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:35 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:30 AM",
+        "out": "09:30 PM",
+        "break": "1 hr",
+        "totalHours": "12.00",
+        "regHours": "9.00",
+        "otHours": "3.00"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:30 AM",
+        "out": "04:40 PM",
+        "break": "1 hr",
+        "totalHours": "7.17",
+        "regHours": "7.17",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:45 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.25",
+        "regHours": "8.25",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:30 AM",
+        "out": "07:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "11:00 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "7.00",
+        "regHours": "7.00",
+        "otHours": "0.00"
+      }
+    ]
+  },
+  {
+    "name": "Shubham",
+    "totalRegular": "223.93",
+    "totalOT": "37.83",
+    "grandTotal": "261.77",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:15 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.42",
+        "regHours": "9.00",
+        "otHours": "0.42"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.83",
+        "regHours": "9.00",
+        "otHours": "0.83"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "08:50 AM",
+        "out": "09:30 PM",
+        "break": "1 hr",
+        "totalHours": "12.67",
+        "regHours": "9.00",
+        "otHours": "3.67"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:15 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:05 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.58",
+        "regHours": "9.00",
+        "otHours": "0.58"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "08:50 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "10.00",
+        "regHours": "9.00",
+        "otHours": "1.00"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:50 AM",
+        "out": "09:00 PM",
+        "break": "1 hr",
+        "totalHours": "12.17",
+        "regHours": "9.00",
+        "otHours": "3.17"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "01:00 AM",
+        "break": "1 hr",
+        "totalHours": "16.00",
+        "regHours": "9.00",
+        "otHours": "7.00"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:50 AM",
+        "out": "06:21 PM",
+        "break": "1 hr",
+        "totalHours": "8.52",
+        "regHours": "8.52",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "08:45 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "10.08",
+        "regHours": "9.00",
+        "otHours": "1.08"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "08:50 AM",
+        "out": "08:10 PM",
+        "break": "1 hr",
+        "totalHours": "11.33",
+        "regHours": "9.00",
+        "otHours": "2.33"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "08:55 AM",
+        "out": "08:15 PM",
+        "break": "1 hr",
+        "totalHours": "11.33",
+        "regHours": "9.00",
+        "otHours": "2.33"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "08:50 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.33",
+        "regHours": "9.00",
+        "otHours": "1.33"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "08:50 AM",
+        "out": "05:15 PM",
+        "break": "1 hr",
+        "totalHours": "8.42",
+        "regHours": "8.42",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "08:35 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.92",
+        "regHours": "9.00",
+        "otHours": "0.92"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "08:45 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.75",
+        "regHours": "9.00",
+        "otHours": "0.75"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "08:45 AM",
+        "out": "06:05 PM",
+        "break": "1 hr",
+        "totalHours": "9.33",
+        "regHours": "9.00",
+        "otHours": "0.33"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "08:45 AM",
+        "out": "08:25 PM",
+        "break": "1 hr",
+        "totalHours": "11.67",
+        "regHours": "9.00",
+        "otHours": "2.67"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "08:30 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "10.33",
+        "regHours": "9.00",
+        "otHours": "1.33"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "08:45 AM",
+        "out": "08:25 PM",
+        "break": "1 hr",
+        "totalHours": "11.67",
+        "regHours": "9.00",
+        "otHours": "2.67"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "08:50 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.67",
+        "regHours": "9.00",
+        "otHours": "0.67"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "08:50 AM",
+        "out": "08:20 PM",
+        "break": "1 hr",
+        "totalHours": "11.50",
+        "regHours": "9.00",
+        "otHours": "2.50"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "08:55 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.58",
+        "regHours": "9.00",
+        "otHours": "0.58"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "08:50 AM",
+        "out": "07:00 PM",
+        "break": "1 hr",
+        "totalHours": "10.17",
+        "regHours": "9.00",
+        "otHours": "1.17"
+      }
+    ]
+  },
+  {
+    "name": "Ratnesh",
+    "totalRegular": "227.50",
+    "totalOT": "79.15",
+    "grandTotal": "306.65",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:20 AM",
+        "out": "07:25 PM",
+        "break": "1 hr",
+        "totalHours": "10.08",
+        "regHours": "9.00",
+        "otHours": "1.08"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:25 AM",
+        "out": "08:30 AM",
+        "break": "1 hr",
+        "totalHours": "23.08",
+        "regHours": "9.00",
+        "otHours": "14.08"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "04:30 PM",
+        "out": "09:30 PM",
+        "break": "1 hr",
+        "totalHours": "5.00",
+        "regHours": "5.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "06:30 AM",
+        "out": "10:00 PM",
+        "break": "1 hr",
+        "totalHours": "15.50",
+        "regHours": "9.00",
+        "otHours": "6.50"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "10:30 AM",
+        "out": "08:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "0.00",
+        "otHours": "9.50"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "08:30 AM",
+        "out": "09:30 PM",
+        "break": "1 hr",
+        "totalHours": "13.00",
+        "regHours": "9.00",
+        "otHours": "4.00"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "08:45 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.75",
+        "regHours": "9.00",
+        "otHours": "0.75"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "08:30 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "10.00",
+        "regHours": "9.00",
+        "otHours": "1.00"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "08:30 AM",
+        "out": "09:30 PM",
+        "break": "1 hr",
+        "totalHours": "13.00",
+        "regHours": "9.00",
+        "otHours": "4.00"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "9.33",
+        "regHours": "9.00",
+        "otHours": "0.33"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "10:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "8.25",
+        "regHours": "8.25",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "10:00 AM",
+        "out": "08:30 PM",
+        "break": "1 hr",
+        "totalHours": "10.50",
+        "regHours": "9.00",
+        "otHours": "1.50"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:05 AM",
+        "out": "09:00 PM",
+        "break": "1 hr",
+        "totalHours": "11.92",
+        "regHours": "9.00",
+        "otHours": "2.92"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:40 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "8.83",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:55 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "8.58",
+        "regHours": "8.58",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "10:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:55 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "8.58",
+        "regHours": "8.58",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "10:15 AM",
+        "out": "10:00 PM",
+        "break": "1 hr",
+        "totalHours": "11.75",
+        "regHours": "9.00",
+        "otHours": "2.75"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "10:00 AM",
+        "out": "07:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "10:30 AM",
+        "out": "08:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.75",
+        "regHours": "9.00",
+        "otHours": "0.75"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "10:00 AM",
+        "out": "08:20 PM",
+        "break": "1 hr",
+        "totalHours": "10.33",
+        "regHours": "9.00",
+        "otHours": "1.33"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:40 AM",
+        "out": "09:40 PM",
+        "break": "1 hr",
+        "totalHours": "12.00",
+        "regHours": "9.00",
+        "otHours": "3.00"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:50 AM",
+        "out": "10:40 PM",
+        "break": "1 hr",
+        "totalHours": "12.83",
+        "regHours": "9.00",
+        "otHours": "3.83"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "10:05 AM",
+        "out": "10:10 PM",
+        "break": "1 hr",
+        "totalHours": "12.08",
+        "regHours": "0.00",
+        "otHours": "12.08"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "10:10 AM",
+        "out": "10:20 PM",
+        "break": "1 hr",
+        "totalHours": "12.17",
+        "regHours": "9.00",
+        "otHours": "3.17"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "10:55 AM",
+        "out": "07:40 PM",
+        "break": "1 hr",
+        "totalHours": "8.75",
+        "regHours": "8.75",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "11:00 AM",
+        "out": "09:50 PM",
+        "break": "1 hr",
+        "totalHours": "10.83",
+        "regHours": "9.00",
+        "otHours": "1.83"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "10:05 AM",
+        "out": "11:49 PM",
+        "break": "1 hr",
+        "totalHours": "13.73",
+        "regHours": "9.00",
+        "otHours": "4.73"
+      }
+    ]
+  },
+  {
+    "name": "Devarshu",
+    "totalRegular": "174.50",
+    "totalOT": "35.75",
+    "grandTotal": "210.25",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:15 AM",
+        "out": "07:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.75",
+        "regHours": "9.00",
+        "otHours": "0.75"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:05 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.42",
+        "regHours": "9.00",
+        "otHours": "0.42"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:20 AM",
+        "out": "06:10 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "8.83",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:15 AM",
+        "out": "07:30 PM",
+        "break": "1 hr",
+        "totalHours": "10.25",
+        "regHours": "9.00",
+        "otHours": "1.25"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:30 AM",
+        "out": "07:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.75",
+        "regHours": "0.00",
+        "otHours": "9.75"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:40 AM",
+        "out": "08:25 PM",
+        "break": "1 hr",
+        "totalHours": "10.75",
+        "regHours": "9.00",
+        "otHours": "1.75"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:20 AM",
+        "out": "01:15 PM",
+        "break": "0.5 hr",
+        "totalHours": "3.92",
+        "regHours": "3.92",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:15 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-12",
+        "in": "10:00 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.00",
+        "regHours": "0.00",
+        "otHours": "8.00"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:15 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:05 AM",
+        "out": "06:10 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:20 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "9.83",
+        "regHours": "9.00",
+        "otHours": "0.83"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "10:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "07:00 PM",
+        "break": "1 hr",
+        "totalHours": "10.00",
+        "regHours": "9.00",
+        "otHours": "1.00"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "01:00 PM",
+        "break": "0.5 hr",
+        "totalHours": "4.00",
+        "regHours": "4.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "01:00 PM",
+        "out": "06:15 PM",
+        "break": "0.5 hr",
+        "totalHours": "5.25",
+        "regHours": "5.25",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:00 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "9.33",
+        "regHours": "9.00",
+        "otHours": "0.33"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "07:40 PM",
+        "break": "1 hr",
+        "totalHours": "10.67",
+        "regHours": "9.00",
+        "otHours": "1.67"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.67",
+        "regHours": "9.00",
+        "otHours": "0.67"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "10:30 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "7.50",
+        "regHours": "0.00",
+        "otHours": "7.50"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "07:10 PM",
+        "break": "1 hr",
+        "totalHours": "10.17",
+        "regHours": "9.00",
+        "otHours": "1.17"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:05 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:05 AM",
+        "out": "06:10 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      }
+    ]
+  },
+  {
+    "name": "Shiv Kumar",
+    "totalRegular": "153.78",
+    "totalOT": "6.72",
+    "grandTotal": "160.50",
+    "records": [
+      {
+        "date": "2026-04-06",
+        "in": "09:10 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:20 AM",
+        "out": "07:30 PM",
+        "break": "1 hr",
+        "totalHours": "10.17",
+        "regHours": "9.00",
+        "otHours": "1.17"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "10:40 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "7.33",
+        "regHours": "7.33",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:30 AM",
+        "out": "04:45 PM",
+        "break": "1 hr",
+        "totalHours": "7.25",
+        "regHours": "7.25",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:30 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "8.83",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:40 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "8.67",
+        "regHours": "8.67",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:30 AM",
+        "out": "07:50 PM",
+        "break": "1 hr",
+        "totalHours": "10.33",
+        "regHours": "9.00",
+        "otHours": "1.33"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:15 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:50 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "8.50",
+        "regHours": "8.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:50 AM",
+        "out": "04:20 PM",
+        "break": "1 hr",
+        "totalHours": "6.50",
+        "regHours": "6.50",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:15 AM",
+        "out": "06:18 PM",
+        "break": "1 hr",
+        "totalHours": "9.05",
+        "regHours": "9.00",
+        "otHours": "0.05"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:40 AM",
+        "out": "06:12 PM",
+        "break": "1 hr",
+        "totalHours": "8.53",
+        "regHours": "8.53",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "10:00 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "8.33",
+        "regHours": "8.33",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:30 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "8.83",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:25 AM",
+        "out": "06:35 PM",
+        "break": "1 hr",
+        "totalHours": "9.17",
+        "regHours": "9.00",
+        "otHours": "0.17"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:50 AM",
+        "out": "10:00 PM",
+        "break": "1 hr",
+        "totalHours": "12.17",
+        "regHours": "9.00",
+        "otHours": "3.17"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "10:00 AM",
+        "out": "07:45 PM",
+        "break": "1 hr",
+        "totalHours": "9.75",
+        "regHours": "9.00",
+        "otHours": "0.75"
+      }
+    ]
+  },
+  {
+    "name": "Uditanshu",
+    "totalRegular": "226.02",
+    "totalOT": "29.80",
+    "grandTotal": "255.82",
+    "records": [
+      {
+        "date": "2026-04-01",
+        "in": "09:18 AM",
+        "out": "07:09 PM",
+        "break": "1 hr",
+        "totalHours": "9.85",
+        "regHours": "9.00",
+        "otHours": "0.85"
+      },
+      {
+        "date": "2026-04-02",
+        "in": "09:24 AM",
+        "out": "12:48 PM",
+        "break": "0 hr",
+        "totalHours": "3.40",
+        "regHours": "3.40",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-03",
+        "in": "09:15 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-04",
+        "in": "09:14 AM",
+        "out": "09:30 PM",
+        "break": "1 hr",
+        "totalHours": "12.27",
+        "regHours": "9.00",
+        "otHours": "3.27"
+      },
+      {
+        "date": "2026-04-05",
+        "in": "09:30 AM",
+        "out": "06:20 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "0.00",
+        "otHours": "8.83"
+      },
+      {
+        "date": "2026-04-06",
+        "in": "09:10 AM",
+        "out": "08:30 PM",
+        "break": "1 hr",
+        "totalHours": "11.33",
+        "regHours": "9.00",
+        "otHours": "2.33"
+      },
+      {
+        "date": "2026-04-07",
+        "in": "09:18 AM",
+        "out": "06:35 PM",
+        "break": "1 hr",
+        "totalHours": "9.28",
+        "regHours": "9.00",
+        "otHours": "0.28"
+      },
+      {
+        "date": "2026-04-08",
+        "in": "09:06 AM",
+        "out": "06:35 PM",
+        "break": "1 hr",
+        "totalHours": "9.48",
+        "regHours": "9.00",
+        "otHours": "0.48"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:15 AM",
+        "out": "06:12 PM",
+        "break": "1 hr",
+        "totalHours": "8.95",
+        "regHours": "8.95",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:15 AM",
+        "out": "06:35 PM",
+        "break": "1 hr",
+        "totalHours": "9.33",
+        "regHours": "9.00",
+        "otHours": "0.33"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:20 AM",
+        "out": "06:35 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:15 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:25 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:10 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.33",
+        "regHours": "9.00",
+        "otHours": "0.33"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:30 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:15 AM",
+        "out": "06:12 PM",
+        "break": "1 hr",
+        "totalHours": "8.95",
+        "regHours": "8.95",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:22 AM",
+        "out": "06:12 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "8.83",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:50 AM",
+        "out": "06:35 PM",
+        "break": "1 hr",
+        "totalHours": "8.75",
+        "regHours": "8.75",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:43 AM",
+        "out": "08:16 PM",
+        "break": "1 hr",
+        "totalHours": "10.55",
+        "regHours": "9.00",
+        "otHours": "1.55"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:41 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "8.98",
+        "regHours": "8.98",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:35 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:23 AM",
+        "out": "07:01 PM",
+        "break": "1 hr",
+        "totalHours": "9.63",
+        "regHours": "9.00",
+        "otHours": "0.63"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "10:21 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "8.15",
+        "regHours": "8.15",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "09:29 AM",
+        "out": "06:43 PM",
+        "break": "1 hr",
+        "totalHours": "9.23",
+        "regHours": "0.00",
+        "otHours": "9.23"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:32 AM",
+        "out": "06:35 PM",
+        "break": "1 hr",
+        "totalHours": "9.05",
+        "regHours": "9.00",
+        "otHours": "0.05"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:24 AM",
+        "out": "06:45 PM",
+        "break": "1 hr",
+        "totalHours": "9.35",
+        "regHours": "9.00",
+        "otHours": "0.35"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "10:02 AM",
+        "out": "06:02 PM",
+        "break": "1 hr",
+        "totalHours": "8.00",
+        "regHours": "8.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:54 AM",
+        "out": "07:05 PM",
+        "break": "1 hr",
+        "totalHours": "9.18",
+        "regHours": "9.00",
+        "otHours": "0.18"
+      }
+    ]
+  },
+  {
+    "name": "RAM",
+    "totalRegular": "179.83",
+    "totalOT": "26.45",
+    "grandTotal": "206.28",
+    "records": [
+      {
+        "date": "2026-04-08",
+        "in": "09:10 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "8.83",
+        "regHours": "8.83",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-09",
+        "in": "09:00 AM",
+        "out": "06:00 PM",
+        "break": "1 hr",
+        "totalHours": "9.00",
+        "regHours": "9.00",
+        "otHours": "0.00"
+      },
+      {
+        "date": "2026-04-10",
+        "in": "09:00 AM",
+        "out": "06:07 PM",
+        "break": "1 hr",
+        "totalHours": "9.12",
+        "regHours": "9.00",
+        "otHours": "0.12"
+      },
+      {
+        "date": "2026-04-11",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-13",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "9.13",
+        "regHours": "9.00",
+        "otHours": "0.13"
+      },
+      {
+        "date": "2026-04-14",
+        "in": "09:05 AM",
+        "out": "06:10 PM",
+        "break": "1 hr",
+        "totalHours": "9.08",
+        "regHours": "9.00",
+        "otHours": "0.08"
+      },
+      {
+        "date": "2026-04-15",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-16",
+        "in": "09:00 AM",
+        "out": "06:12 PM",
+        "break": "1 hr",
+        "totalHours": "9.20",
+        "regHours": "9.00",
+        "otHours": "0.20"
+      },
+      {
+        "date": "2026-04-17",
+        "in": "09:00 AM",
+        "out": "06:16 PM",
+        "break": "1 hr",
+        "totalHours": "9.27",
+        "regHours": "9.00",
+        "otHours": "0.27"
+      },
+      {
+        "date": "2026-04-18",
+        "in": "09:00 AM",
+        "out": "06:08 PM",
+        "break": "1 hr",
+        "totalHours": "9.13",
+        "regHours": "9.00",
+        "otHours": "0.13"
+      },
+      {
+        "date": "2026-04-19",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "0.00",
+        "otHours": "9.50"
+      },
+      {
+        "date": "2026-04-20",
+        "in": "09:00 AM",
+        "out": "06:19 PM",
+        "break": "1 hr",
+        "totalHours": "9.32",
+        "regHours": "9.00",
+        "otHours": "0.32"
+      },
+      {
+        "date": "2026-04-21",
+        "in": "09:00 AM",
+        "out": "06:30 PM",
+        "break": "1 hr",
+        "totalHours": "9.50",
+        "regHours": "9.00",
+        "otHours": "0.50"
+      },
+      {
+        "date": "2026-04-22",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-23",
+        "in": "09:00 AM",
+        "out": "06:50 PM",
+        "break": "1 hr",
+        "totalHours": "9.83",
+        "regHours": "9.00",
+        "otHours": "0.83"
+      },
+      {
+        "date": "2026-04-24",
+        "in": "09:00 AM",
+        "out": "07:15 PM",
+        "break": "1 hr",
+        "totalHours": "10.25",
+        "regHours": "9.00",
+        "otHours": "1.25"
+      },
+      {
+        "date": "2026-04-25",
+        "in": "09:00 AM",
+        "out": "06:25 PM",
+        "break": "1 hr",
+        "totalHours": "9.42",
+        "regHours": "9.00",
+        "otHours": "0.42"
+      },
+      {
+        "date": "2026-04-26",
+        "in": "09:00 AM",
+        "out": "06:02 PM",
+        "break": "1 hr",
+        "totalHours": "9.03",
+        "regHours": "0.00",
+        "otHours": "9.03"
+      },
+      {
+        "date": "2026-04-27",
+        "in": "09:00 AM",
+        "out": "06:15 PM",
+        "break": "1 hr",
+        "totalHours": "9.25",
+        "regHours": "9.00",
+        "otHours": "0.25"
+      },
+      {
+        "date": "2026-04-28",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.67",
+        "regHours": "9.00",
+        "otHours": "0.67"
+      },
+      {
+        "date": "2026-04-29",
+        "in": "09:00 AM",
+        "out": "06:40 PM",
+        "break": "1 hr",
+        "totalHours": "9.67",
+        "regHours": "9.00",
+        "otHours": "0.67"
+      },
+      {
+        "date": "2026-04-30",
+        "in": "09:00 AM",
+        "out": "07:20 PM",
+        "break": "1 hr",
+        "totalHours": "10.33",
+        "regHours": "9.00",
+        "otHours": "1.33"
+      }
+    ]
+  }
+]

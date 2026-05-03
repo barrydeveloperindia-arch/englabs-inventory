@@ -1,0 +1,23 @@
+{
+    "company": "Englabs India Pvt Ltd",
+    "period": "April 2026",
+    "standard_day_hours": 9,
+    "holidays": ["2026-04-02", "2026-04-03", "2026-04-14"],
+    "sunday_multiplier": 1.5,
+    "holiday_multiplier": 2.0,
+    "staff": [
+        { "name": "Thakur", "daily_rate": 1000, "ot_hourly_rate": 150, "casual_leaves": 1, "designation": "Project Manager" },
+        { "name": "Rajinder", "daily_rate": 1100, "ot_hourly_rate": 165, "casual_leaves": 0, "designation": "Sr. Engineer" },
+        { "name": "Roshni", "daily_rate": 800, "ot_hourly_rate": 120, "casual_leaves": 2, "designation": "Office Admin" },
+        { "name": "Poonam", "daily_rate": 800, "ot_hourly_rate": 120, "casual_leaves": 0, "designation": "Junior Engineer" },
+        { "name": "Arjun", "daily_rate": 1050, "ot_hourly_rate": 155, "casual_leaves": 1, "designation": "Site Engineer" },
+        { "name": "Kunwarlal", "daily_rate": 900, "ot_hourly_rate": 135, "casual_leaves": 0, "designation": "Site Engineer" },
+        { "name": "Anurag", "daily_rate": 1500, "ot_hourly_rate": 225, "casual_leaves": 1, "designation": "Operations Engineer" },
+        { "name": "Shubham", "daily_rate": 1400, "ot_hourly_rate": 210, "casual_leaves": 0, "designation": "Project Engineer" },
+        { "name": "Ratnesh", "daily_rate": 1200, "ot_hourly_rate": 180, "casual_leaves": 0, "designation": "Project Lead" },
+        { "name": "Devarshu", "daily_rate": 950, "ot_hourly_rate": 140, "casual_leaves": 1, "designation": "Site Engineer" },
+        { "name": "Shiv Kumar", "daily_rate": 850, "ot_hourly_rate": 125, "casual_leaves": 0, "designation": "Assistant Engineer" },
+        { "name": "Uditanshu", "daily_rate": 900, "ot_hourly_rate": 135, "casual_leaves": 0, "designation": "Site Engineer" },
+        { "name": "RAM", "daily_rate": 850, "ot_hourly_rate": 125, "casual_leaves": 0, "designation": "Maintenance Staff" }
+    ]
+}

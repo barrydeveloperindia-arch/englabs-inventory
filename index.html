@@ -27,6 +27,12 @@
                 <li class="nav-item" onclick="switchView('site-cash')">
                     <i data-lucide="coins"></i> Site Cash Ledger
                 </li>
+                <li class="nav-item" onclick="switchView('attendance')">
+                    <i data-lucide="calendar-check"></i> Attendance
+                </li>
+                <li class="nav-item" onclick="switchView('payroll')">
+                    <i data-lucide="banknote"></i> Payroll & Payslips
+                </li>
             </nav>
 
             <div style="padding: 2rem;">
@@ -61,6 +67,10 @@
                     <div class="stat-card">
                         <span class="stat-label">Active Deployments</span>
                         <div class="stat-value" id="stat-projects">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Workforce OT (Apr)</span>
+                        <div class="stat-value" id="stat-total-ot-dash">0.0h</div>
                     </div>
                 </div>
 
@@ -106,6 +116,87 @@
                                 </tr>
                             </thead>
                             <tbody id="site-cash-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 👥 ATTENDANCE VIEW -->
+            <div id="view-attendance" class="view-container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Active Workforce</span>
+                        <div class="stat-value">13 Staff</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Total April OT</span>
+                        <div class="stat-value" id="stat-total-ot">0.0h</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3 style="font-size: 1.1rem;">April 2026 Attendance Audit</h3>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-outline" onclick="window.open('Englabs Projects/HR & Payroll/Timesheets (Monthly)/April_2026_Audit_Summary.md')">
+                                <i data-lucide="file-text"></i> Audit Report
+                            </button>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table id="attendance-table">
+                            <thead>
+                                <tr>
+                                    <th>Staff Name</th>
+                                    <th>Reg Hours</th>
+                                    <th>OT Hours</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 💸 PAYROLL VIEW -->
+            <div id="view-payroll" class="view-container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Total Salary Expense</span>
+                        <div class="stat-value" id="stat-total-salary">₹0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Total OT Payout</span>
+                        <div class="stat-value" id="stat-total-ot-pay">₹0.00</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3 style="font-size: 1.1rem;">Payroll & Forensic Disbursements</h3>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-primary" onclick="window.open('Englabs Projects/HR & Payroll/Payroll_Master_Report_April_2026.csv')">
+                                <i data-lucide="download"></i> Export Master
+                            </button>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table id="payroll-table">
+                            <thead>
+                                <tr>
+                                    <th>Staff Name</th>
+                                    <th>Days</th>
+                                    <th>Basic Salary</th>
+                                    <th>OT Pay</th>
+                                    <th>Special Duty</th>
+                                    <th>Leave Benefit</th>
+                                    <th>Net Payable</th>
+                                    <th>Documents</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payroll-body"></tbody>
                         </table>
                     </div>
                 </div>

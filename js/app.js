@@ -28,6 +28,8 @@ function switchView(viewId) {
     const titles = {
         'dashboard': 'Central Gateway',
         'site-cash': 'Forensic Statement Ledger',
+        'attendance': 'Attendance Ledger',
+        'payroll': 'Payroll & Forensic Disbursements'
     };
     document.getElementById('active-title').textContent = titles[viewId] || 'EngLabs Command';
     
@@ -40,6 +42,8 @@ function switchView(viewId) {
 function updateUI() {
     if (currentView === 'dashboard') renderDashboard();
     if (currentView === 'site-cash') renderSiteCash();
+    if (currentView === 'attendance') renderAttendance();
+    if (currentView === 'payroll') renderPayroll();
 }
 
 // 📊 DASHBOARD RENDERING
@@ -49,6 +53,15 @@ function renderDashboard() {
     document.getElementById('stat-cash').textContent = `₹${stats.cashLiquidity.toLocaleString()}`;
     document.getElementById('stat-stock').textContent = `₹${stats.stockValuation.toLocaleString()}`;
     document.getElementById('stat-projects').textContent = stats.activeProjects;
+
+    // Async load total OT for dashboard if needed
+    fetch('Englabs Projects/HR & Payroll/Timesheets (Monthly)/April_2026_Processed.json')
+        .then(res => res.json())
+        .then(data => {
+            const totalOT = data.reduce((acc, s) => acc + parseFloat(s.totalOT), 0);
+            const otEl = document.getElementById('stat-total-ot-dash');
+            if (otEl) otEl.textContent = `${totalOT.toFixed(1)}h`;
+        }).catch(() => {});
 
     renderMainChart(stats);
 }
@@ -178,6 +191,87 @@ function showToast(msg) {
     t.textContent = msg;
     t.style.display = 'block';
     setTimeout(() => t.style.display = 'none', 3000);
+}
+
+// 👥 ATTENDANCE RENDERING
+async function renderAttendance() {
+    const body = document.getElementById('attendance-body');
+    const otEl = document.getElementById('stat-total-ot');
+    if (!body) return;
+
+    try {
+        const response = await fetch('Englabs Projects/HR & Payroll/Timesheets (Monthly)/April_2026_Processed.json');
+        const data = await response.json();
+        
+        let grandTotalOT = 0;
+        body.innerHTML = data.map(staff => {
+            grandTotalOT += parseFloat(staff.totalOT);
+            const status = parseFloat(staff.totalOT) > 20 ? 'HIGH OT' : 'NORMAL';
+            const badgeClass = status === 'HIGH OT' ? 'badge-danger' : 'badge-success';
+            const statusColor = status === 'HIGH OT' ? 'danger' : 'success';
+
+            return `
+                <tr>
+                    <td style="font-weight: 700;">${staff.name}</td>
+                    <td>${staff.totalRegular}h</td>
+                    <td style="color: var(--${statusColor}); font-weight: 700;">${staff.totalOT}h</td>
+                    <td style="font-weight: 600; color: var(--accent);">${staff.grandTotal}h</td>
+                    <td><span class="badge ${badgeClass}">${status}</span></td>
+                </tr>
+            `;
+        }).join('');
+
+        if (otEl) otEl.textContent = `${grandTotalOT.toFixed(1)}h`;
+    } catch (err) {
+        console.error("Attendance Load Error:", err);
+        body.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem;">Error loading attendance data.</td></tr>';
+    }
+}
+
+// 💸 PAYROLL RENDERING
+async function renderPayroll() {
+    const body = document.getElementById('payroll-body');
+    const totalSalaryEl = document.getElementById('stat-total-salary');
+    const totalOTPayEl = document.getElementById('stat-total-ot-pay');
+    if (!body) return;
+
+    try {
+        const response = await fetch('Englabs Projects/HR & Payroll/Payroll_Master_Report_April_2026.json');
+        const data = await response.json();
+
+        let totalSalary = 0;
+        let totalOTPay = 0;
+
+        body.innerHTML = data.map(staff => {
+            totalSalary += staff.netPay;
+            totalOTPay += staff.otPay + staff.specialDutyPay;
+
+            return `
+                <tr>
+                    <td style="font-weight: 700;">${staff.name}</td>
+                    <td>${staff.workingDays}d <span style="font-size: 0.7rem; color: var(--text-muted);">+${staff.casualLeaves}L</span></td>
+                    <td>₹${staff.basicSalary.toLocaleString()}</td>
+                    <td>₹${staff.otPay.toLocaleString()}</td>
+                    <td style="color: var(--accent); font-weight: 700;">₹${staff.specialDutyPay.toLocaleString()}</td>
+                    <td style="color: #10b981; font-weight: 700;">₹${staff.leaveBenefit.toLocaleString()}</td>
+                    <td style="font-weight: 800; color: #fff;">₹${staff.netPay.toLocaleString()}</td>
+                    <td>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-outline btn-sm" onclick="window.open('Englabs Projects/HR & Payroll/Timesheets (Monthly)/${staff.name}_April_2026_Timesheet.html')">TS</button>
+                            <button class="btn btn-accent btn-sm" onclick="window.open('Englabs Projects/HR & Payroll/Payslips/${staff.name}_April_2026_Payslip.html')">Slip</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        if (totalSalaryEl) totalSalaryEl.textContent = `₹${totalSalary.toLocaleString()}`;
+        if (totalOTPayEl) totalOTPayEl.textContent = `₹${totalOTPay.toLocaleString()}`;
+        lucide.createIcons();
+    } catch (err) {
+        console.error("Payroll Load Error:", err);
+        body.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:2rem;">Error loading payroll data.</td></tr>';
+    }
 }
 
 // EXPOSE TO WINDOW

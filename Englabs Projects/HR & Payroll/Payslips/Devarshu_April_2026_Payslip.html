@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; color: #0f172a; padding: 40px; background: #f8fafc; }
+        .payslip { background: white; max-width: 800px; margin: auto; padding: 50px; border-radius: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; position: relative; }
+        .payslip::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #0f172a; }
+        .header { display: flex; justify-content: space-between; margin-bottom: 40px; }
+        .logo { width: 150px; }
+        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 20px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; margin-bottom: 30px; }
+        .info-item label { display: block; font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
+        .info-item span { font-size: 13px; font-weight: 700; }
+        .table-wrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 2px; background: #e2e8f0; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-bottom: 30px; }
+        .table-side { background: white; padding: 20px; }
+        .side-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 15px; display: flex; justify-content: space-between; }
+        .row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #f8fafc; }
+        .row:last-child { border-bottom: none; }
+        .amount { font-weight: 700; }
+        .net-pay-box { background: #0f172a; color: white; padding: 25px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .net-val { font-size: 32px; font-weight: 800; }
+        .signatory-block { margin-top: 50px; display: flex; justify-content: flex-end; text-align: center; }
+        .signature-line { width: 220px; border-top: 1.5px solid #0f172a; padding-top: 10px; }
+        .signature-font { font-family: 'Dancing Script', cursive; font-size: 32px; color: #3b82f6; margin-bottom: -5px; transform: rotate(-2deg); }
+        .footer { margin-top: 50px; font-size: 11px; color: #94a3b8; text-align: center; }
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 100px; font-weight: 900; color: rgba(0,0,0,0.02); pointer-events: none; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="payslip">
+        <div class="watermark">ENGLABS</div>
+        <div class="header">
+            <div>
+                <img src="data:image/png;base64,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" class="logo">
+                <div style="font-size: 12px; font-weight: 700; color: #3b82f6; margin-top: 5px;">Forensic Project Audit Report</div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase;">Pay Period</div>
+                <div style="font-size: 22px; font-weight: 800;">April 2026</div>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item"><label>Staff Name</label><span>Devarshu</span></div>
+            <div class="info-item"><label>Employee ID</label><span>EL-JF34K</span></div>
+            <div class="info-item"><label>Designation</label><span>Site Engineer</span></div>
+            <div class="info-item"><label>Audit Cycle</label><span>Monthly</span></div>
+        </div>
+
+        <div class="table-wrap">
+            <div class="table-side">
+                <div class="side-title"><span>Earnings Component</span><span>INR</span></div>
+                <div class="row"><span>Basic (Days: 18)</span><span class="amount">₹15,587</span></div>
+                <div class="row"><span>Overtime (Normal Duty)</span><span class="amount">₹1,400</span></div>
+                <div class="row"><span style="color: #3b82f6;">Special Duty (Sun: 3d, Hol: 3d)</span><span class="amount">₹12,955</span></div>
+                <div class="row"><span style="color: #16a34a;">Casual Leave Benefit (1d)</span><span class="amount">₹950</span></div>
+            </div>
+            <div class="table-side" style="background: #fafafa;">
+                <div class="side-title"><span>Deductions</span><span>INR</span></div>
+                <div class="row"><span>Professional Tax</span><span class="amount">₹0.00</span></div>
+                <div class="row"><span>Advance Adjusted</span><span class="amount">₹0.00</span></div>
+                <div class="row"><span>Security Deposit</span><span class="amount">₹0.00</span></div>
+            </div>
+        </div>
+
+        <div class="net-pay-box">
+            <div>
+                <div style="font-size: 11px; text-transform: uppercase; opacity: 0.6;">Net Audit Disbursement</div>
+                <div style="font-size: 13px; font-weight: 600; margin-top: 5px;">Rupees Thirty Thousand Eight Hundred and Ninety Two Only</div>
+            </div>
+            <div class="net-val">₹30,892</div>
+        </div>
+
+        <div class="signatory-block">
+            <div class="signature-line">
+                <div class="signature-font">SWilson</div>
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase;">Authorized Signatory</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Digital Forensic Verification: <strong>EL-AUDIT-RQBGY2</strong><br>
+            © 2026 EngLabs India Pvt Ltd | Forensic Financial Intelligence
+        </div>
+    </div>
+</body>
+</html>
+    

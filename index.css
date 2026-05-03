@@ -207,6 +207,20 @@ td {
     font-size: 0.9rem;
 }
 
+#payroll-table th, #payroll-table td {
+    padding: 0.8rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+#payroll-table td:first-child {
+    min-width: 120px;
+    padding-left: 1rem;
+}
+
+#payroll-table td:last-child {
+    padding-right: 1rem;
+}
+
 tr:hover { background: rgba(255,255,255,0.01); }
 
 /* 🔘 BUTTONS */

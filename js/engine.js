@@ -188,8 +188,8 @@ const InventoryEngine = (() => {
             const bank = finance.getBalance('BANK');
             const stockVal = _cache.items.reduce((acc, i) => acc + (i.qty * i.avgRate), 0);
             return {
-                totalCash: cash + bank,
-                stockValue: stockVal,
+                cashLiquidity: cash + bank + finance.getBalance('SITE_CASH'),
+                stockValuation: stockVal,
                 activeProjects: _cache.projects.filter(p => p.status === 'ACTIVE').length
             };
         }
